@@ -1,3 +1,5 @@
 # Summary
 
-* [First Chapter](chapter1.md)
+* [开发过程文档](README.md)
+* [参考资料](reference-material.md)
+
