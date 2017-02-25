@@ -4,7 +4,10 @@ use Illuminate\Support\Facades\Schema;
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Database\Migrations\Migration;
 
-class CreateUsersTable extends Migration
+/**
+ * 专家领域表
+ */
+class CreateExpertAreasTable extends Migration
 {
     /**
      * Run the migrations.
@@ -13,13 +16,9 @@ class CreateUsersTable extends Migration
      */
     public function up()
     {
-        Schema::create('users', function (Blueprint $table) {
+        Schema::create('expert_areas', function (Blueprint $table) {
             $table->increments('id');
-            $table->string('name', 20)->unique();
-            $table->string('email', 50)->unique();
-            $table->string('password');
-            $table->integer('active')->default(0); //是否冻结用户的标志，0：否，1：是，默认0
-            $table->rememberToken();
+            $table->string('name', 20); // 领域名称
             $table->timestamps();
         });
     }
@@ -31,6 +30,6 @@ class CreateUsersTable extends Migration
      */
     public function down()
     {
-        Schema::dropIfExists('users');
+        Schema::dropIfExists('expert_areas');
     }
 }

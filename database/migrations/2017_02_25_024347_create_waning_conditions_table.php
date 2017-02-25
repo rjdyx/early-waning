@@ -4,7 +4,10 @@ use Illuminate\Support\Facades\Schema;
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Database\Migrations\Migration;
 
-class CreateUsersTable extends Migration
+/**
+ * 预警条件表
+ */
+class CreateWaningConditionsTable extends Migration
 {
     /**
      * Run the migrations.
@@ -13,13 +16,11 @@ class CreateUsersTable extends Migration
      */
     public function up()
     {
-        Schema::create('users', function (Blueprint $table) {
+        Schema::create('waning_conditions', function (Blueprint $table) {
             $table->increments('id');
-            $table->string('name', 20)->unique();
-            $table->string('email', 50)->unique();
-            $table->string('password');
-            $table->integer('active')->default(0); //是否冻结用户的标志，0：否，1：是，默认0
-            $table->rememberToken();
+            $table->string('code', 50); // 预警条件编码
+            $table->string('description', 50); // 条件描述
+            $table->integer('type'); // 条件出发的事件类型，1：预警事件，2：突发事件
             $table->timestamps();
         });
     }
@@ -31,6 +32,6 @@ class CreateUsersTable extends Migration
      */
     public function down()
     {
-        Schema::dropIfExists('users');
+        Schema::dropIfExists('waning_conditions');
     }
 }
