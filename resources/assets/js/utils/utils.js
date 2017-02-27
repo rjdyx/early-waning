@@ -34,21 +34,14 @@ export default {
          * 自动生成完整的后台url
          *
          * @param url {string}
-         * @param type {string} url的类型，c为接口类型，p为视图类型
          * @returns {string}
          */
-        Vue.prototype.$adminUrl = (url, type = 'c') => {
+        Vue.prototype.$adminUrl = (url) => {
 
             let regx = /^\/{1,}/g;
             url = url.replace(regx, '');
 
-            if (type == 'c' || type == 'C') {
-                return host + '/admin/c/' + url;
-            }
-
-            if (type == 'p' || type == 'P') {
-                return host + '/admin/p/' + url;
-            }
+            return host + '/admin/' + url;
         };
 
 

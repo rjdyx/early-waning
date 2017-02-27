@@ -33,7 +33,7 @@
                         tab: '用户管理',
                         url: '',
                         newComponent: null,
-                        typeComponent: [{component: TypeManage, params: {title: '机构类别管理'}}],
+                        typeComponent: [{component: TypeManage, params: {title: '机构类别管理', type: 1}}],
                         theads: ['日期', '姓名', '地址'],
                         protos: ['date', 'name', 'address'],
                         widths: [120, 120, 120],

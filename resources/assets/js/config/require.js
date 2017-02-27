@@ -50,8 +50,11 @@ switch (require('projectRoot/env.js').app_lang) {
 		locale.use(zhLocale);
 }
 import * as elementComponent from './element-ui.js'
+/**
+ * 饿了么组件按需引用组件有两种方式，其中Vue.use可能会导致属性冲突，故不推荐使用
+ */
 Object.keys(elementComponent).forEach(function (component) {
-  Vue.use(elementComponent[component])
+  Vue.component(elementComponent[component].name, elementComponent[component])
 })
 
 

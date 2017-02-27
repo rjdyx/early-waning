@@ -17,6 +17,7 @@ export
 	Table,
   	TableColumn,
   	Pagination,
-  	Dialog 
+  	Dialog,
+  	Message
 } 
 from 'element-ui'

@@ -23,6 +23,7 @@ Vue.component('type-manage', require('components/public/type-manage.vue'));
 
 
 
+
 // 注册自定义验证规则
 import { Validator } from 'vee-validate';
 import validates from '../utils/validate.js';

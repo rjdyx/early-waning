@@ -8,8 +8,14 @@
  */
 <template>
     <div>
-    	<el-button @click="dialogVisible=true">{{btnName}}</el-button>
-    	<el-dialog v-model="dialogVisible" size="tiny" :show-close="false" class="cus-dialog">
+    	<el-button @click="openDialog">{{btnName}}</el-button>
+    	<el-dialog 
+    		v-model="dialogVisible" 
+    		size="tiny" 
+    		:show-close="false" 
+    		:lock-scroll="true"
+    		@close="closeDialog" 
+    		class="cus-dialog">
 			<!-- dialog title -->
 		  	<div slot="title" class="cus-title">{{params.title}}</div>
 
@@ -19,16 +25,15 @@
 		  			<li v-for="(data, index) in datas">
 		  				<span>
 		  					<el-input 
-		  						v-model="editInput" 
-		  						:value="data" 
+		  						v-model="data.name" 
 		  						:class="{'data-input': true, 'data-input-border': index != editIndex}" 
-		  						@focus="edit(data, index)"
-		  						@blur="editIndex=-1"
+		  						@focus="focusType(data, index)"
 		  						placeholder="请输入内容">
 	  						</el-input>
 	  					</span>
 		  				<span>
-			  				<i class="el-icon-close" @click="delete(data, index)"></i>
+			  				<i v-if="index == editIndex" class="el-icon-check" @click="editType(data)"></i>
+			  				<i class="el-icon-close" @click="deleteType(data, index)"></i>
 		  				</span>
 		  			</li>
 		  		</ul>
@@ -41,10 +46,9 @@
 		  			v-else 
 		  			v-model="newInput"
 		  			:autofocus="true"
-		  			@blur="showNewModel=false" 
 		  			placeholder="最多20个字" 
 		  			class="new-input">
-				    <el-button slot="append" @click="showNewModel=false">新建</el-button>
+				    <el-button slot="append" @click="addType">新建</el-button>
 				 </el-input>
 		  	</div>
 
@@ -132,6 +136,8 @@
 
 <script>
 
+	
+
     export default{
         name:'TypeManage',
         props: {
@@ -143,17 +149,18 @@
         		type: Object,
         		default () {
         			return {
-        				title: '机构类型管理'
+        				title: '机构类型管理',
+        				type: 1
         			}
         		}
-        	}
+        	},
         },
         data () {
         	return {
         		dialogVisible: false,
-        		datas: ['总局', '直属局', '分局口岸'],
-        		// 编辑输入框的值
-        		editInput: '',
+        		datas: [],
+        		// 临时保存原先的值
+        		originValue: '',
         		// 某个编辑框的下标
         		editIndex: -1,
         		// 新增输入框的值
@@ -163,13 +170,97 @@
         	}
         },
         methods: {
-        	edit (data, index) {
-        		this.editInput = data;
-        		this.editIndex = index;
+
+        	/**
+        	 * 打开弹窗
+        	 */
+        	openDialog () {
+        		this.dialogVisible = true
+				axios.get(this.$adminUrl('normal-type') + '?type=' + this.params.type)
+	        	.then((response) => {
+	        		this.$set(this, 'datas', response.data)
+	        	})
         	},
 
-        	delete () {
+        	/**
+        	 * 新增
+        	 */
+        	addType () {
+        		if(this.newInput.length == 0) {
+        			return this.$message({
+				          message: '必填',
+				          type: 'error'
+			        })
+        		}
+        		if(this.newInput.length > 20) {
+        			return this.$message({
+				          message: '最多20个字',
+				          type: 'error'
+			        })
+        		}
+        		this.showNewModel=false;
+        		axios.post(this.$adminUrl('normal-type'), {
+        			name: this.newInput,
+        			type: this.params.type})
+        		.then((response) => {
+        			this.datas.push({id: response.data, name: this.newInput})
+        			this.newInput = ''
+        		})
+        	},
 
+        	/**
+        	 * 获取编辑焦点
+        	 */
+        	focusType (data, index) {
+        		this.editIndex = index
+        		this.originValue = data.name
+        	},
+
+        	/**
+        	 * 编辑
+        	 */
+        	editType (data) {
+        		this.editIndex = -1
+        		if(this.originValue == data.name) {
+        			return this.$message('无修改')
+        		}
+        		axios.put(this.$adminUrl('normal-type/') + data.id, {
+        			name: data.name})
+        		.then((response) => {
+        			if(response.data) {
+        				this.$message({
+				          message: '修改成功',
+				          type: 'success'
+				        })
+        			}else {
+        				this.$message(response.data)
+        			}
+        		})
+        	},
+
+        	deleteType (data, index) {
+        		axios.delete(this.$adminUrl('normal-type/') + data.id)
+        		.then((response) => {
+        			if(response.data) {
+        				this.$message({
+				          message: '删除成功',
+				          type: 'success'
+				        });
+				        this.datas.splice(index, 1)
+        			}else {
+        				this.$message(response.data)
+        			}
+        		})
+        	},
+
+        	/**
+        	 * 关闭弹窗
+        	 */
+        	closeDialog () {
+        		this.$set(this, 'datas' , [])
+        		this.editIndex = -1
+        		this.newInput = ''
+        		this.showNewModel = false
         	}
         }
     }
