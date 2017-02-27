@@ -7,7 +7,7 @@ use Illuminate\Database\Migrations\Migration;
 /**
  * 机构类别表
  */
-class CreateOrgLevelsTable extends Migration
+class CreateNormalTypesTable extends Migration
 {
     /**
      * Run the migrations.
@@ -16,9 +16,18 @@ class CreateOrgLevelsTable extends Migration
      */
     public function up()
     {
-        Schema::create('org_levels', function (Blueprint $table) {
+        Schema::create('normal_types', function (Blueprint $table) {
             $table->increments('id');
             $table->string('name', 10); //机构类别名
+            /**
+             * 1：机构类型
+             * 2：专家领域
+             * 3：预案类型
+             * 4：专题类型
+             * 5：事件等级
+             * 6：事件类型
+             */
+            $table->integer('type')->unsigned();
             $table->timestamps();
         });
     }
@@ -30,6 +39,6 @@ class CreateOrgLevelsTable extends Migration
      */
     public function down()
     {
-        Schema::dropIfExists('org_levels');
+        Schema::dropIfExists('normal_types');
     }
 }

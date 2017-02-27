@@ -7,39 +7,96 @@
  * 
  */
 <template>
-    <div id="main">
+    <div id="index">
+    	<!-- 顶部栏目 -->
+    	<my-header></my-header>
+
+    	<!-- 左栏目 -->
+    	<slider-bar
+			:show="show"
+            :navbars="navbars"
+            @getSubNavbars="getSubNavbars"
+    	></slider-bar>
+
+    	<!-- 路由 -->
+        <router-view></router-view>
     </div>
 </template>
 
 <style lang="sass" scoped>
     @import "../../sass/function";
-    #main {
-    	width: pxToRem(600);
-    	height: pxToRem(400);
-    }
+	#index {
+		height: 100%;
+	}
 </style>
 
 <script>
 
     export default{
         name:'Index',
-        mounted () {
-        	// 基于准备好的dom，初始化echarts实例
-			var myChart = echarts.init(document.getElementById('main'));
-			// 绘制图表
-			myChart.setOption({
-			    title: { text: 'ECharts 入门示例' },
-			    tooltip: {},
-			    xAxis: {
-			        data: ["衬衫","羊毛衫","雪纺衫","裤子","高跟鞋","袜子"]
-			    },
-			    yAxis: {},
-			    series: [{
-			        name: '销量',
-			        type: 'bar',
-			        data: [5, 20, 36, 10, 10, 20]
-			    }]
-			});
+        data () {
+        	return {
+        		// 是否显示侧边栏
+                show: true,
+                // 侧边栏数据
+                navbars: [
+                    {
+                        name:'信息管理',
+                        role: 'plantation',
+                        isEvent: false,
+                        children: [
+                            {
+                                path: '/index/message/org',
+                                name:'机构管理'
+                            },
+                            {
+                                path: '/index/message/crew',
+                                name:'人员管理'
+                            },
+                            {
+                                path: '/index/message/condition',
+                                name:'预警条件管理'
+                            },
+                            {
+                                path: '/index/message/command',
+                                name:'应急指挥管理'
+                            }
+                        ]
+                    },
+                    {
+                        name:'反应系统',
+                        role: 'plantation',
+                        isEvent: false,
+                        children: [
+                            {
+                                path: '/webapp/vegetable-harvest',
+                                name:'预警事件管理'
+                            },
+                            {
+                                path: '/webapp/vegetable-detection',
+                                name:'突发事件管理'
+                            }
+                        ]
+                    },
+                    {
+                        name:'分析系统',
+                        role: 'beast',
+                        isEvent: false,
+                        children: [
+                            {
+                                path: '/webapp/beast',
+                                name:'预警分析子系统'
+                            },
+                        ]
+                    }
+                ],
+        	}
+        },
+        methods: {
+
+        	getSubNavbars () {
+
+        	}
         }
     }
 

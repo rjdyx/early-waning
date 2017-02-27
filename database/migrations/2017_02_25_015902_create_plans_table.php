@@ -20,7 +20,7 @@ class CreatePlansTable extends Migration
             $table->integer('plan_type_id')->unsigned(); // 预案类型
             $table->timestamps();
 
-            $table->foreign('plan_type_id')->references('id')->on('plan_types')
+            $table->foreign('plan_type_id')->references('id')->on('normal_types')
                 ->onUpdate('cascade')->onDelete('cascade');
         });
     }

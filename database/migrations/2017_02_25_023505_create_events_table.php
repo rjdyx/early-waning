@@ -26,9 +26,9 @@ class CreateEventsTable extends Migration
             $table->integer('event_sort_id')->unsigned(); // 事件类别
             $table->timestamps();
 
-            $table->foreign('event_level_id')->references('id')->on('event_levels')
+            $table->foreign('event_level_id')->references('id')->on('normal_types')
                 ->onUpdate('cascade')->onDelete('cascade');
-            $table->foreign('event_sort_id')->references('id')->on('event_sorts')
+            $table->foreign('event_sort_id')->references('id')->on('normal_types')
                 ->onUpdate('cascade')->onDelete('cascade');
         });
     }

@@ -4,8 +4,8 @@ namespace App;
 
 use Illuminate\Database\Eloquent\Model;
 
-class EventSort extends Model
+class NormalType extends Model
 {
     //绑定表
-    protected $table='event_sorts';
+    protected $table='normal_types';
 }

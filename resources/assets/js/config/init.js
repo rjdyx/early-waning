@@ -16,6 +16,10 @@ if (process.env.NODE_ENV === 'production') {
 Vue.component('passport-clients', require('components/passport/Clients.vue'));
 Vue.component('passport-authorized-clients', require('components/passport/AuthorizedClients.vue'));
 Vue.component('passport-personal-access-tokens', require('components/passport/PersonalAccessTokens.vue'));
+Vue.component('my-header', require('components/public/header.vue'));
+Vue.component('slider-bar', require('components/public/slider-bar.vue'));
+Vue.component('basic-model', require('components/public/basic-model.vue'));
+Vue.component('type-manage', require('components/public/type-manage.vue'));
 
 
 

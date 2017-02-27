@@ -23,7 +23,7 @@ class CreateInformationsTable extends Migration
             $table->integer('information_type_id')->unsigned(); // 专题知识类型
             $table->timestamps();
 
-            $table->foreign('information_type_id')->references('id')->on('information_types')
+            $table->foreign('information_type_id')->references('id')->on('normal_types')
                 ->onUpdate('cascade')->onDelete('cascade');
         });
     }

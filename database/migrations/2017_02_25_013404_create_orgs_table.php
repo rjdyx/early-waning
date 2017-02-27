@@ -31,7 +31,7 @@ class CreateOrgsTable extends Migration
 
             $table->foreign('pid')->references('id')->on('orgs')
                 ->onUpdate('cascade')->onDelete('cascade');
-            $table->foreign('org_level_id')->references('id')->on('org_levels')
+            $table->foreign('org_level_id')->references('id')->on('normal_types')
                 ->onUpdate('cascade')->onDelete('cascade');
         });
     }

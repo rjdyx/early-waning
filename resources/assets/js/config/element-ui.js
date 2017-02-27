@@ -3,7 +3,20 @@
  */
 
 export 
-{ 
-	Button 
+{
+	Button,
+	Input,
+	Menu,
+	Submenu,
+	MenuItem,
+	MenuItemGroup,
+	Breadcrumb,
+	BreadcrumbItem,
+	Tabs,
+	TabPane,
+	Table,
+  	TableColumn,
+  	Pagination,
+  	Dialog 
 } 
 from 'element-ui'

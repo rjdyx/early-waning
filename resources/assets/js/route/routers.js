@@ -11,6 +11,12 @@ const index = resolve => {
     }, 'index');
 };
 
+const message = resolve => {
+    require.ensure(['../views/message.vue'], () =>{
+        resolve(require('../views/message.vue'));
+    }, 'message');
+};
+
 //---------------------------登录组件----------------------------------
 const login = resolve => {
     require.ensure(['../views/login.vue'], () =>{
@@ -36,8 +42,14 @@ const routes = [
     },
     {
         path: '/index',
-        name: 'index',
-        component: index
+        component: index,
+        children: [
+            {
+                path: 'message/:model',
+                component: message,
+                meta: { requiresAuth: true }
+            }
+        ]
     },
     {
         path: '/login',

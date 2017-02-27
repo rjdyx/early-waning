@@ -37,7 +37,7 @@ class CreateExpertsTable extends Migration
 
             $table->foreign('org_id')->references('id')->on('orgs')
                 ->onUpdate('cascade')->onDelete('cascade');
-            $table->foreign('expert_area_id')->references('id')->on('expert_areas')
+            $table->foreign('expert_area_id')->references('id')->on('normal_types')
                 ->onUpdate('cascade')->onDelete('cascade');
         });
     }

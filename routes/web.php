@@ -18,3 +18,13 @@ Route::get('/', function () {
 Auth::routes();
 
 Route::get('/home', 'HomeController@index');
+
+Route::group(['prefix' => 'admin', 'namespace' => 'Admin'], function () {
+
+	// 机构类型
+	Route::resource('normal-type', 'NormalTypeController');
+
+	
+});
+
+
