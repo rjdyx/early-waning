@@ -22,6 +22,7 @@
 <script>
 
     import TypeManage from 'components/public/type-manage.vue'
+    import PopOrg from 'components/message/pop-org.vue'
 
     export default{
         name:'Message',
@@ -29,14 +30,15 @@
         	return {
                 models: [
                     {
-                        key: 'userManage',
-                        tab: '用户管理',
-                        url: '',
-                        newComponent: null,
+                        key: 'orgManage',
+                        tab: '机构管理',
+                        url: 'org',
+                        searchPlaceholder: '请输入机构名称',
+                        newComponent: PopOrg,
                         typeComponent: [{component: TypeManage, params: {title: '机构类别管理', type: 1}}],
-                        theads: ['日期', '姓名', '地址'],
-                        protos: ['date', 'name', 'address'],
-                        widths: [120, 120, 120],
+                        theads: ['机构名称', '机构类型', '地址', '邮编', '固定电话', '手机', '传真', '备注'],
+                        protos: ['name', 'org_level', 'address', 'zipcode', 'phone', 'cellphone', 'fax', 'meno'],
+                        widths: [50, 50, 50, 50, 50, 50, 50, 50],
                         colComponent: []
                     }
                 ]

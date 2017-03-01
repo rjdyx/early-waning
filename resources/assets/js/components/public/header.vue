@@ -30,7 +30,7 @@
 		font-size: pxToRem(14);
 	    background-color: #2F3847;
 	    color: white;
-        z-index: 10;
+        z-index: 102;
 
 		#title {
 		    float: left;

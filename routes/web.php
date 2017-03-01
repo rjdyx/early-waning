@@ -24,7 +24,10 @@ Route::group(['prefix' => 'admin', 'namespace' => 'Admin'], function () {
 	// 机构类型
 	Route::resource('normal-type', 'NormalTypeController');
 
-	
+	// 机构
+	Route::get('org/query', 'OrgController@query');
+	Route::delete('org', 'OrgController@destroy');
+	Route::resource('org', 'OrgController');
 });
 
 

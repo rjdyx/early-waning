@@ -67,6 +67,16 @@ export default {
         };
 
         /**
+         * 根据传过来的属性参数对对象数组继续正序排序
+         * @param arrObj 对象数组
+         * @param proto 对象的属性
+         * @returns {Array.<T>}
+         */
+        Vue.prototype.$sortObj = (arrObj, proto) => {
+            return arrObj.sort(compare(proto));
+        };
+
+        /**
          * 把对象变成url参数
          * @param object
          * @returns {string}

@@ -23,8 +23,11 @@
         <!-- 操作模块 -->
         <div id="operate">
             <div id="btns">
-                <el-button type="primary" icon="plus">新增</el-button>
-                <el-button type="primary" icon="delete">删除</el-button>
+                <router-link :to="'/index/new-form/' + url + '/new'" exact>
+                    <el-button type="primary" icon="plus">新增</el-button>
+                </router-link>
+                
+                <el-button type="primary" icon="delete" @click="handleDelete">删除</el-button>
                 <component 
                 	v-for="typeOperate in typeComponent" 
                 	:is="typeOperate.component" 
@@ -34,7 +37,7 @@
             </div>
             <div id="inputs">
                 <el-input
-                  placeholder="请选择日期"
+                  :placeholder="searchPlaceholder"
                   icon="search"
                   v-model="inputValue"
                   :on-icon-click="search">
@@ -43,9 +46,9 @@
         </div>
 
         <!-- 列表模块 -->
-        <div id="list">
+        <vue-perfect-scrollbar id="list">
             <el-table
-                :data="tableData3"
+                :data="tableData" 
                 @selection-change="handleSelectionChange">
                 <el-table-column
                   type="selection"
@@ -69,21 +72,34 @@
 		                </el-table-column>
                 	</template>
                 </template>
+                <el-table-column
+                    label="操作"
+                    :width="150">
+                  <template scope="scope">
+                    <el-button
+                        size="small"
+                        @click="handleEdit(scope)">编辑</el-button>
+                </el-table-column>
               </el-table>
-        </div>
+        </vue-perfect-scrollbar>
 
         <!-- 分页模块 -->
         <el-pagination
-            :current-page="3"
-            :page-size="15"
+            :current-page="paginator.current_page"
+            :page-size="paginator.per_page"
             layout="prev, pager, next, jumper"
-            :total="100"
+            :total="paginator.total"
+            @current-change="pageChange"
             class="pagination">
         </el-pagination>
 
         <!-- 新增弹窗 -->
+        <el-dialog title="新增" v-model="dialogFormVisible" size="tiny">
 
-        <!-- 删除弹窗 -->
+            <component :is="newComponent" @cancel="dialogFormVisible=false"></component>
+
+        </el-dialog>
+        <!-- 删除确认弹窗 -->
 
     </div>
 </template>
@@ -91,13 +107,6 @@
 <style lang="sass" scoped>
     @import "../../../sass/function";
 
-    .middle {
-        position: absolute;
-        top: pxToRem(48);
-        right: 0;
-        bottom: 0;
-        left: pxToRem(180);
-    }
 
     #nav {
         height: pxToRem(62);
@@ -132,11 +141,6 @@
         }
     }
 
-    #list {
-        overflow: hidden;
-        padding: 0 pxToRem(25);
-    }
-
     .pagination {
         position: absolute;
         bottom: 35px;
@@ -148,6 +152,8 @@
 </style>
 
 <script>
+
+    import {mapMutations} from 'vuex'
 
     export default{
         name:'BasicModel',
@@ -165,14 +171,15 @@
             	default () {
             		return [
             			{
-            				key: 'userManage',
+            				key: 'orgManage',
             				tab: '用户管理',
-            				url: '',
+            				url: 'org',
+                            searchPlaceholder: '',
             				newComponent: null,
             				typeComponent: [{component: null, params: {}}],
-            				theads: ['日期', '姓名', '地址'],
-            				protos: ['date', 'name', 'address'],
-            				widths: [120, 120, 120],
+            				theads: ['机构名称'],
+            				protos: ['name'],
+            				widths: [50],
             				colComponent: []
             			}
             		]
@@ -181,44 +188,42 @@
         },
         data () {
         	return {
+                // 搜索框内容
         		inputValue: '',
+                // tab模块选择标志
                 activeName: 'index0',
+                // tab对应的模块下标
                 modelIndex: 0,
-                tableData3: [{
-                      date: '2016-05-03',
-                      name: '王小虎',
-                      address: '上海市普陀区金沙江路 1518 弄'
-                    }, {
-                      date: '2016-05-02',
-                      name: '王小虎',
-                      address: '上海市普陀区金沙江路 1518 弄'
-                    }, {
-                      date: '2016-05-04',
-                      name: '王小虎',
-                      address: '上海市普陀区金沙江路 1518 弄'
-                    }, {
-                      date: '2016-05-01',
-                      name: '王小虎',
-                      address: '上海市普陀区金沙江路 1518 弄'
-                    }, {
-                      date: '2016-05-08',
-                      name: '王小虎',
-                      address: '上海市普陀区金沙江路 1518 弄'
-                    }, {
-                      date: '2016-05-06',
-                      name: '王小虎',
-                      address: '上海市普陀区金沙江路 1518 弄'
-                    }, {
-                      date: '2016-05-07',
-                      name: '王小虎',
-                      address: '上海市普陀区金沙江路 1518 弄'
-                }], 
-                multipleSelection: []
+                // 列表数据
+                tableData: [], 
+                // 被选中的列表项数组
+                multipleSelection: [],
+                // 分页对象
+                paginator: {
+                    // 当前页
+                    current_page: 0,
+                    // 总页数
+                    total: 0,
+                    // 每页数目
+                    per_page: 0
+                },
+                // 是否显示新增dialog
+                dialogFormVisible: false
+                
         	}
         },
         computed: {
-            model () {
+
+            modelUrlParams () {
                 return this.$route.params.model
+            },
+
+            url () {
+                return this.models[this.modelIndex].url
+            },
+
+            searchPlaceholder () {
+                return this.models[this.modelIndex].searchPlaceholder
             },
 
             theads () {
@@ -238,27 +243,118 @@
             },
 
             typeComponent () {
-            	return this.models[this.modelIndex].typeComponent
+                return this.models[this.modelIndex].typeComponent
+            },
+
+            newComponent () {
+            	return this.models[this.modelIndex].newComponent
             }
         },
+        mounted () {
+            this.getAllMsg()
+        },
         methods: {
-            search () {
 
+            ...mapMutations([
+                'setFormMsg'
+            ]),
+
+            /**
+             * 获取所有数据
+             */
+            getAllMsg (params='') {
+                let host = '/query'
+                if(params.length) host += '?' + params
+                axios.get(this.$adminUrl(this.models[0].url) + host)
+                    .then((responce) => {
+                        this.$set(this, 'tableData', responce.data.data)
+                        this.paginator = responce.data
+                    })
+            },
+
+            /**
+             * 搜索
+             */
+            search () {
+                this.getAllMsg('query_text=' + this.inputValue)
             },
 
             /**
              * 列表选择事件
              */
-            handleSelectionChange () {
-
+            handleSelectionChange (val) {
+                this.multipleSelection = val
             },
 
             /**
              * tab点击事件
              */
             tabClick(tab, event) {
-            	console.log(tab.$data.index);
             	this.modelIndex = tab.$data.index
+                axios.get(this.$adminUrl(this.models[this.modelIndex].url) + '/query')
+                    .then((responce) => {
+                        this.$set(this, 'tableData', responce.data.data)
+                        this.paginator = responce.data
+                    })
+            },
+
+            /**
+             * 编辑
+             */
+            handleEdit ({ $index, row }) {
+                this.setFormMsg(row)
+                this.$router.push('/index/new-form/' + this.url + '/edit')
+            },
+
+            /**
+             * 删除
+             */
+            handleDelete () {
+                let ids = []
+                this.multipleSelection.forEach((item) => {
+                    ids.push(item.id)
+                })
+                if(!ids.length) {
+                    return this.$message('请选择')
+                }
+                this.$confirm('确定删除?', '提示', {
+                    confirmButtonText: '确定',
+                    cancelButtonText: '取消',
+                    type: 'warning'
+                }).then(() => {
+                    axios.delete(this.$adminUrl(this.url), {data: {ids: ids}})
+                    .then((responce) => {
+                        this.$message({
+                          message: '成功删除' + responce.data + '条',
+                          type: 'success'
+                        })
+                        // multipleSelection数组正序排序，tableData数组逆序排序
+                        // 连续使用splice方法删除tableData数组里的某一项需从尾部开始，
+                        // 否则会删错，故multipleSelection从头遍历，tableData从尾部遍历
+                        // 此方法虽然使用两个循环，但时间复杂度是O(multipleSelection.length + tableData.length) + k
+                        // 而不是O(multipleSelection.length * tableData.length) + k
+                        this.multipleSelection = this.$sortObj(this.multipleSelection, 'id')
+                        let tableDataIndex = this.tableData.length - 1
+                        for(let selectItem of this.multipleSelection) {
+                            for(; tableDataIndex >= 0; tableDataIndex--) {
+                                if(selectItem.id == this.tableData[tableDataIndex].id) {
+                                    this.tableData.splice(tableDataIndex, 1)
+                                    tableDataIndex--
+                                    break
+                                }
+                            }
+                        }
+                        this.multipleSelection = []
+                    })
+                })
+                
+            },
+
+            /**
+             * 点击分页
+             */
+            pageChange (val) {
+                this.getAllMsg('page='+ val +'&query_text=' + this.inputValue)
             }
         }
     }

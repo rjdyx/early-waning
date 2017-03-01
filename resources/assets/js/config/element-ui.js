@@ -18,6 +18,8 @@ export
   	TableColumn,
   	Pagination,
   	Dialog,
-  	Message
+  	Message,
+  	Select,
+  	Option
 } 
 from 'element-ui'

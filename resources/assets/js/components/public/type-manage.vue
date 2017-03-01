@@ -21,22 +21,24 @@
 
 		  	<!-- dialog body -->
 		  	<div class="cus-body">
-		  		<ul>
-		  			<li v-for="(data, index) in datas">
-		  				<span>
-		  					<el-input 
-		  						v-model="data.name" 
-		  						:class="{'data-input': true, 'data-input-border': index != editIndex}" 
-		  						@focus="focusType(data, index)"
-		  						placeholder="请输入内容">
-	  						</el-input>
-	  					</span>
-		  				<span>
-			  				<i v-if="index == editIndex" class="el-icon-check" @click="editType(data)"></i>
-			  				<i class="el-icon-close" @click="deleteType(data, index)"></i>
-		  				</span>
-		  			</li>
-		  		</ul>
+                <vue-perfect-scrollbar class="cus-body-ul" :settings="settings">
+    		  		<ul>
+    		  			<li v-for="(data, index) in datas">
+    		  				<span>
+    		  					<el-input 
+    		  						v-model="data.name" 
+    		  						:class="{'data-input': true, 'data-input-border': index != editIndex}" 
+    		  						@focus="focusType(data, index)"
+    		  						placeholder="请输入内容">
+    	  						</el-input>
+    	  					</span>
+    		  				<span>
+    			  				<i v-if="index == editIndex" class="el-icon-check" @click="editType(data)"></i>
+    			  				<i class="el-icon-close" @click="deleteType(data, index)"></i>
+    		  				</span>
+    		  			</li>
+    		  		</ul>
+                </vue-perfect-scrollbar>
 		  		<el-button 
 		  			v-if="!showNewModel" 
 		  			icon="plus" 
@@ -67,7 +69,7 @@
 		line-height: initial;
 
 		&>div.el-dialog {
-			width: 20%;
+			width: 25%;
 		}
 
 		.cus-title {
@@ -81,9 +83,7 @@
 			margin: auto;
 
 			ul {
-				height: pxToRem(150);
-			    overflow-y: auto;
-			    overflow-x: hidden;
+				
 
 				li {
 					padding: pxToRem(6) 0;
@@ -132,11 +132,15 @@
     		text-align: center;
 		}
 	}
+
+    .cus-body-ul {
+        position: relative;
+        height: pxToRem(150);
+    }
 </style>
 
 <script>
 
-	
 
     export default{
         name:'TypeManage',
@@ -166,7 +170,11 @@
         		// 新增输入框的值
         		newInput: '',
         		// 是否显示新增模块
-        		showNewModel: false
+        		showNewModel: false,
+                // 滚动条配置
+                settings: {
+                    wheelSpeed: 0.2
+                }
         	}
         },
         methods: {
@@ -205,6 +213,10 @@
         		.then((response) => {
         			this.datas.push({id: response.data, name: this.newInput})
         			this.newInput = ''
+                    this.$message({
+                      message: '新增成功',
+                      type: 'success'
+                    })
         		})
         	},
 
@@ -221,6 +233,18 @@
         	 */
         	editType (data) {
         		this.editIndex = -1
+        		if(data.name.length == 0) {
+        			return this.$message({
+				          message: '必填',
+				          type: 'error'
+			        })
+        		}
+        		if(data.name.length > 20) {
+        			return this.$message({
+				          message: '最多20个字',
+				          type: 'error'
+			        })
+        		}
         		if(this.originValue == data.name) {
         			return this.$message('无修改')
         		}
@@ -241,14 +265,14 @@
         	deleteType (data, index) {
         		axios.delete(this.$adminUrl('normal-type/') + data.id)
         		.then((response) => {
-        			if(response.data) {
+        			if(response.data !== 'been used!') {
         				this.$message({
 				          message: '删除成功',
 				          type: 'success'
 				        });
 				        this.datas.splice(index, 1)
         			}else {
-        				this.$message(response.data)
+        				this.$message('被使用，无法删除')
         			}
         		})
         	},

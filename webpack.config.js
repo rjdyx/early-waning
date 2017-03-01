@@ -23,7 +23,7 @@ let config = {
     },
     output: {
         path: projectRoot + '/public/build',
-        publicPath: (process.env.NODE_ENV == 'development' ? 'http://127.0.0.1:8080/build' : '/build/'),
+        publicPath: (process.env.NODE_ENV == 'development' ? 'http://localhost:8080/build/' : '/build/'),
         filename: 'js/[name].js',
         chunkFilename: 'js/[id].[name].js'
     },
@@ -55,6 +55,10 @@ let config = {
             {
                 test: /\.scss$/,
                 loader: ExtractTextPlugin.extract('style-loader', 'css-loader!sass-loader?sourceMap')
+            },
+            {
+                test: /\.less$/,
+                loader: ExtractTextPlugin.extract('style-loader', 'css-loader!less-loader?sourceMap')
             },
             {
                 test: /\.(eot|svg|ttf|woff|woff2)(\?\S*)?$/,
@@ -97,9 +101,10 @@ let config = {
         loaders: {
             // 用 babel-loader 加载所有没有 "lang" 属性的 <script>
             js: 'babel',
-            // 将vue里面的css和sass抽离出来组成一个独立的css文件
+            // 将vue里面的css、sass和less抽离出来组成一个独立的css文件
             css: ExtractTextPlugin.extract('vue-style-loader', 'css-loader'),
-            sass: ExtractTextPlugin.extract('vue-style-loader', 'css-loader!sass-loader')
+            sass: ExtractTextPlugin.extract('vue-style-loader', 'css-loader!sass-loader'),
+            less: ExtractTextPlugin.extract('vue-style-loader', 'css-loader!less-loader')
         }
     },
 

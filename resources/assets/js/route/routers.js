@@ -17,6 +17,12 @@ const message = resolve => {
     }, 'message');
 };
 
+const newForm = resolve => {
+    require.ensure(['../views/new-form.vue'], () =>{
+        resolve(require('../views/new-form.vue'));
+    }, 'pop-org');
+};
+
 //---------------------------登录组件----------------------------------
 const login = resolve => {
     require.ensure(['../views/login.vue'], () =>{
@@ -48,7 +54,12 @@ const routes = [
                 path: 'message/:model',
                 component: message,
                 meta: { requiresAuth: true }
-            }
+            },
+            {
+                path: 'new-form/:model/:type',
+                component: newForm,
+                meta: { requiresAuth: true }
+            },
         ]
     },
     {

@@ -16,3 +16,86 @@ input[type=text] {
   -webkit-appearance: none;
 }
 
+.vue-scrollbar__scrollbar-vertical {
+	width: 5px;
+
+	.vue-scrollbar-transition {
+	    background: rgba(137, 137, 137, 0.5);
+	}
+}
+
+.middle {
+    position: absolute;
+    top: pxToRem(48);
+    right: 0;
+    bottom: 0;
+    left: pxToRem(180);
+    overflow-y: auto;
+}
+
+.form-pop {
+    height: 100%;
+	width: 50%;
+    margin: auto;
+    padding-top: pxToRem(65);
+
+	.form-table {
+		margin: auto;
+
+		.form-body {
+
+			tr {
+			    height: pxToRem(55);
+			}
+			
+			.form-label {
+			    min-width: pxToRem(120);
+			    padding-right: pxToRem(10);
+			}
+
+			.form-input {
+				
+			}
+
+			.error {
+				height: pxToRem(20);
+				color: red;
+			}
+		}
+	}
+	
+
+	.form-footer {
+		text-align: center;
+
+		tr {
+		    height: pxToRem(80);
+		}
+	}
+
+}
+
+#list {
+	position: relative;
+	height: pxToRem(485);
+	margin: 0 pxToRem(25);
+	margin-top: pxToRem(41);
+
+	.el-table__header-wrapper {
+        position: fixed;
+		margin-top: pxToRem(-41);
+		margin-left: -1px;
+		z-index: 100;
+		border: 1px solid #dfe6ec;
+	}
+
+	.el-table__body-wrapper {
+		// top: pxToRem(41);
+	}
+}
+
+@media screen and (max-width: 1366px) {
+    #list {
+		height: pxToRem(250);
+	}
+}

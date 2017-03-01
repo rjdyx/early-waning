@@ -137,6 +137,7 @@
         width: pxToRem(180);
         height: 100%;
         padding-top: pxToRem(48);
+        z-index: 101;
     }
 
     .subNavbar {

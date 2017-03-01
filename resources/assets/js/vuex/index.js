@@ -3,29 +3,15 @@ import Vuex from 'vuex';
 
 const store = new Vuex.Store({
     state: {
-        userInfo: {userId: ''},
-        title: ''
+        formMsg: null
     },
     mutations: {
 
     	/**
-    	 * 设置标题
+    	 * 设置表单对象信息
     	 */
-        setTitle(state, title) {
-        	state.title = title;
-        },
-
-        /**
-         * 设置用户登录信息
-         */
-        setUserInfo(state, userInfo) {
-            state.userInfo.userId = userInfo;
-        }
-    },
-    
-    actions: {
-        setUserInfo(context, user) {
-            context.commit('setUserInfo', user);
+        setFormMsg(state, formMsg) {
+        	state.formMsg = formMsg;
         }
     }
     
