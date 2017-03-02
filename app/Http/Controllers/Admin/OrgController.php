@@ -3,6 +3,7 @@
 namespace App\Http\Controllers\Admin;
 
 use App\Org;
+use App\Expert;
 use App\NormalType;
 use Illuminate\Http\Request;
 use App\Http\Controllers\Controller;
@@ -87,6 +88,12 @@ class OrgController extends Controller
     public function destroy(Request $request)
     {
         $ids = $request->input('ids');
+        foreach ($ids as $id) {
+            // return response()->json(Expert::where('org_id', $id)->first());
+            if(Expert::where('org_id', $id)->first()) {
+                return response()->json('been used!');
+            }
+        }
         $results = Org::destroy($ids);
         foreach ($ids as $id) {
             Org::where('pid', $id)->delete();
@@ -106,8 +113,8 @@ class OrgController extends Controller
             'name' => 'required|string|max:50',
             'address' => 'max:50',
             'zipcode' => 'max:20',
-            'phone' => 'max:15',
-            'cellphone' => 'max:15',
+            'phone' => 'sometimes|phone|max:15',
+            'cellphone' => 'sometimes|cellphone|max:15',
             'fax' => 'max:15',
             'meno' => 'max:255',
             'pid' => 'integer|max:10',
@@ -130,7 +137,7 @@ class OrgController extends Controller
         }
 
         // 检查机构类型是否存在
-        if(!NormalType::where('id', $org_level_id)->where('type', 1)) {
+        if(!NormalType::where('id', $org_level_id)->where('type', 1)->first()) {
             return response()->json('org level dose not exist!');
         }
 

@@ -8,7 +8,7 @@
  */
 <template>
     <div>
-    	<el-button @click="openDialog">{{btnName}}</el-button>
+    	<el-button @click="openDialog">{{params.title}}</el-button>
     	<el-dialog 
     		v-model="dialogVisible" 
     		size="tiny" 
@@ -145,10 +145,6 @@
     export default{
         name:'TypeManage',
         props: {
-        	btnName: {
-        		type: String,
-        		default: '机构类型管理'
-        	},
         	params: {
         		type: Object,
         		default () {

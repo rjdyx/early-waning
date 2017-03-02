@@ -235,6 +235,8 @@
                     return false
                 }else {
 
+                    this.form = this.$filterObj(this.form)
+
                     if(this.edit) {
                         axios.put(this.$adminUrl('org/') + this.form.id, this.form)
                         .then((responce) => {

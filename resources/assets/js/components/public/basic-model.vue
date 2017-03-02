@@ -250,6 +250,12 @@
             	return this.models[this.modelIndex].newComponent
             }
         },
+        watch: {
+            url () {
+                this.tableData = []
+                this.getAllMsg()
+            }
+        },
         mounted () {
             this.getAllMsg()
         },
@@ -324,6 +330,10 @@
                 }).then(() => {
                     axios.delete(this.$adminUrl(this.url), {data: {ids: ids}})
                     .then((responce) => {
+                        if(typeof responce.data !== 'number') {
+                            this.$message('被使用，无法删除')
+                            return false
+                        }
                         this.$message({
                           message: '成功删除' + responce.data + '条',
                           type: 'success'

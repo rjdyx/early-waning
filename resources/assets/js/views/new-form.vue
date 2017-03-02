@@ -73,6 +73,7 @@
 
     import {mapState, mapMutations} from 'vuex'
     import PopOrg from 'components/message/pop-org.vue'
+    import PopExpert from 'components/message/pop-expert.vue'
 
     export default {
         name: 'NewForm',
@@ -109,6 +110,9 @@
             switch(this.model) {
                 case 'org':
                     this.popComponent = PopOrg
+                    break
+                case 'expert':
+                    this.popComponent = PopExpert
                     break
             }
         },

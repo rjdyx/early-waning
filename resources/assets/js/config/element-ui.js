@@ -20,6 +20,8 @@ export
   	Dialog,
   	Message,
   	Select,
-  	Option
+  	Option,
+  	RadioGroup,
+  	RadioButton
 } 
 from 'element-ui'

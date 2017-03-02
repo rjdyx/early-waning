@@ -99,7 +99,7 @@ class NormalTypeController extends Controller
 
         $normalType = NormalType::find($id);
 
-        $type = $normalType && $normalType->type | 0;
+        $type = $normalType ? $normalType->type : 0;
 
         $results = [];
 

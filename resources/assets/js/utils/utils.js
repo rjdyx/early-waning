@@ -88,6 +88,19 @@ export default {
         };
 
         /**
+         * 把对象里值为null或空字符串的属性删除
+         * @param object
+         * @param except 这里面的属性的值即使是null或空字符串也不删除
+         * @returns {string}
+         */
+        Vue.prototype.$filterObj = (object, except=[]) => {
+            for(let proto of Object.keys(object)) {
+                if((!object[proto] || object[proto] == '') && !except.includes(proto)) delete object[proto]
+            }
+            return object
+        };
+
+        /**
          *
          * 组合图片路径
          *

@@ -20,7 +20,7 @@ const message = resolve => {
 const newForm = resolve => {
     require.ensure(['../views/new-form.vue'], () =>{
         resolve(require('../views/new-form.vue'));
-    }, 'pop-org');
+    }, 'newForm');
 };
 
 //---------------------------登录组件----------------------------------
