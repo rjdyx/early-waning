@@ -38,6 +38,16 @@ Route::group(['prefix' => 'admin', 'namespace' => 'Admin'], function () {
 	Route::get('emergencycrew/query', 'EmergencyCrewController@query');
 	Route::delete('emergencycrew', 'EmergencyCrewController@destroy');
 	Route::resource('emergencycrew', 'EmergencyCrewController');
+
+	// 预案
+	Route::get('plan/query', 'PlanController@query');
+	Route::delete('plan', 'PlanController@destroy');
+	Route::resource('plan', 'PlanController');
+
+	// 预案
+	Route::get('information/query', 'InformationController@query');
+	Route::delete('information', 'InformationController@destroy');
+	Route::resource('information', 'InformationController');
 });
 
 

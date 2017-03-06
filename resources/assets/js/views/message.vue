@@ -66,7 +66,30 @@
                             colComponent: []
                         }
                     ],
-
+                    command:[
+                        {
+                            key: 'planManage',
+                            tab: '预案管理',
+                            url: 'plan',
+                            searchPlaceholder: '请输入预案名称',
+                            typeComponent: [{component: TypeManage, params: {title: '预案类型管理', type: 3}}],
+                            theads: ['类型', '名称', '内容'],
+                            protos: ['plan_type_name', 'name', 'content'],
+                            widths: [50, 80, 100],
+                            colComponent: []
+                        },
+                        {
+                            key: 'informationManage',
+                            tab: '专题知识管理',
+                            url: 'information',
+                            searchPlaceholder: '请输入专题知识名称',
+                            typeComponent: [{component: TypeManage, params: {title: '专题知识类型管理', type: 4}}],
+                            theads: ['类型', '名称', '内容'],
+                            protos: ['information_type_name', 'name', 'content'],
+                            widths: [50, 80, 100],
+                            colComponent: []
+                        }
+                    ]
                 }
         	}
         },
