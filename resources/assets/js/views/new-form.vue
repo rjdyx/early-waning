@@ -74,6 +74,7 @@
     import {mapState, mapMutations} from 'vuex'
     import PopOrg from 'components/message/pop-org.vue'
     import PopExpert from 'components/message/pop-expert.vue'
+    import PopEmergencyCrew from 'components/message/pop-emergencycrew.vue'
 
     export default {
         name: 'NewForm',
@@ -113,6 +114,9 @@
                     break
                 case 'expert':
                     this.popComponent = PopExpert
+                    break
+                case 'emergencycrew':
+                    this.popComponent = PopEmergencyCrew
                     break
             }
         },

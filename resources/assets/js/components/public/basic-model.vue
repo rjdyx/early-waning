@@ -93,13 +93,6 @@
             class="pagination">
         </el-pagination>
 
-        <!-- 新增弹窗 -->
-        <el-dialog title="新增" v-model="dialogFormVisible" size="tiny">
-
-            <component :is="newComponent" @cancel="dialogFormVisible=false"></component>
-
-        </el-dialog>
-        <!-- 删除确认弹窗 -->
 
     </div>
 </template>
@@ -191,9 +184,9 @@
                 // 搜索框内容
         		inputValue: '',
                 // tab模块选择标志
-                activeName: 'index0',
+                activeName: 'index' + this.$route.params.index,
                 // tab对应的模块下标
-                modelIndex: 0,
+                modelIndex: this.$route.params.index,
                 // 列表数据
                 tableData: [], 
                 // 被选中的列表项数组
@@ -206,9 +199,7 @@
                     total: 0,
                     // 每页数目
                     per_page: 0
-                },
-                // 是否显示新增dialog
-                dialogFormVisible: false
+                }
                 
         	}
         },
@@ -266,12 +257,23 @@
             ]),
 
             /**
+             * 初始化
+             */
+            init (index=0) {
+                this.inputValue = ''
+                this.activeName = 'index' + index
+                this.modelIndex = index
+                this.$set(this, 'tableData', [])
+                this.$set(this, 'multipleSelection', [])
+            },
+
+            /**
              * 获取所有数据
              */
             getAllMsg (params='') {
                 let host = '/query'
                 if(params.length) host += '?' + params
-                axios.get(this.$adminUrl(this.models[0].url) + host)
+                axios.get(this.$adminUrl(this.url) + host)
                     .then((responce) => {
                         this.$set(this, 'tableData', responce.data.data)
                         this.paginator = responce.data
@@ -297,11 +299,8 @@
              */
             tabClick(tab, event) {
             	this.modelIndex = tab.$data.index
-                axios.get(this.$adminUrl(this.models[this.modelIndex].url) + '/query')
-                    .then((responce) => {
-                        this.$set(this, 'tableData', responce.data.data)
-                        this.paginator = responce.data
-                    })
+                let model = this.$route.params.model
+                this.$router.push('/index/message/' + model + '/' + this.modelIndex)
             },
 
             /**

@@ -46,19 +46,19 @@
                         isEvent: false,
                         children: [
                             {
-                                path: '/index/message/org',
+                                path: '/index/message/org/0',
                                 name:'机构管理'
                             },
                             {
-                                path: '/index/message/crew',
+                                path: '/index/message/crew/0',
                                 name:'人员管理'
                             },
                             {
-                                path: '/index/message/condition',
+                                path: '/index/message/condition/0',
                                 name:'预警条件管理'
                             },
                             {
-                                path: '/index/message/command',
+                                path: '/index/message/command/0',
                                 name:'应急指挥管理'
                             }
                         ]

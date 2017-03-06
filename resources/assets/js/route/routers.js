@@ -51,7 +51,7 @@ const routes = [
         component: index,
         children: [
             {
-                path: 'message/:model',
+                path: 'message/:model/:index',
                 component: message,
                 meta: { requiresAuth: true }
             },

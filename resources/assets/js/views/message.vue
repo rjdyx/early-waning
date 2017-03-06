@@ -53,16 +53,31 @@
                             protos: ['name', 'expert_area', 'org_name', 'sex', 'degree', 'duty', 'title', 'address', 'zipcode', 'company', 'officephone', 'homephone', 'cellphone', 'email', 'meno'],
                             widths: [50, 50, 50, 50, 50, 50, 50, 50, 50, 50, 50, 50, 50, 50, 50],
                             colComponent: []
+                        },
+                        {
+                            key: 'emergencyCrewManage',
+                            tab: '应急人员管理',
+                            url: 'emergencycrew',
+                            searchPlaceholder: '请输入应急人员姓名',
+                            typeComponent: [{}],
+                            theads: ['姓名', '所属机构', '年龄', '性别', '职责', '职务', '固定电话', '手机', '邮箱', '备注'],
+                            protos: ['name', 'org_name', 'age', 'sex', 'duty', 'title', 'phone', 'cellphone', 'email', 'meno'],
+                            widths: [50, 50, 50, 50, 50, 50, 50, 50, 50, 50],
+                            colComponent: []
                         }
                     ],
 
-                } 
+                }
         	}
         },
         computed: {
             type () {
                 return this.$route.params.model
             }
+        },
+        beforeRouteUpdate (to, from, next) {
+            this.$refs.basicModel.init(to.params.index)
+            next()
         },
         methods: {
 

@@ -4,6 +4,7 @@ namespace App\Http\Controllers\Admin;
 
 use App\Org;
 use App\Expert;
+use App\EmergencyCrew;
 use App\NormalType;
 use Illuminate\Http\Request;
 use App\Http\Controllers\Controller;
@@ -89,8 +90,7 @@ class OrgController extends Controller
     {
         $ids = $request->input('ids');
         foreach ($ids as $id) {
-            // return response()->json(Expert::where('org_id', $id)->first());
-            if(Expert::where('org_id', $id)->first()) {
+            if(Expert::where('org_id', $id)->first() || EmergencyCrew::where('org_id', $id)->first()) {
                 return response()->json('been used!');
             }
         }

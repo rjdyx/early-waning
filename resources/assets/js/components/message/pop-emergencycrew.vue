@@ -8,39 +8,22 @@
 
         <table class="form-table">
             <tbody class="form-body">
-
-            
                 <tr v-show="requireMsg">
                     <td class="form-label">
-                        <label for="name">专家姓名</label>
+                        <label for="name">应急人员姓名</label>
                     </td>
                     <td class="form-input" colspan="2">
                         <input 
                         v-model="form.name" 
                         v-validate.initial="form.name" 
                         data-vv-rules="required|max:50" 
-                        data-vv-as="专家姓名" 
+                        data-vv-as="应急人员姓名" 
                         type="text" id="name" class="el-input__inner" name="name" placeholder="必填">
                     </td>
                 </tr>
 
                 <tr v-show="requireMsg && verrors.has('name')" class="error">
                     <td colspan="3">{{ verrors.first('name') }}</td>
-                </tr>
-
-                <tr v-show="requireMsg">
-                    <td class="form-label">
-                        <label for="expert_area_id">专家领域</label>
-                    </td>
-                    <td class="form-input" colspan="2">
-                        <el-select v-model="form.expert_area_id" placeholder="请选择专家领域">
-                            <el-option 
-                                v-for="expertArea in expertAreas" 
-                                :label="expertArea.name" 
-                                :value="expertArea.id">
-                            </el-option>
-                        </el-select>
-                    </td>
                 </tr>
 
                 <tr v-show="requireMsg">
@@ -109,111 +92,38 @@
             
                 <tr v-show="!requireMsg">
                     <td class="form-label">
-                        <label for="degree">学历</label>
+                        <label for="age">年龄</label>
                     </td>
                     <td class="form-input" colspan="2">
                         <input 
-                        v-model="form.degree" 
-                        v-validate.initial="form.degree" 
-                        data-vv-rules="max:20" 
-                        data-vv-as="学历" 
-                        type="text" id="degree" class="el-input__inner" name="degree">
+                        v-model="form.age" 
+                        v-validate.initial="form.age" 
+                        data-vv-rules="decimal:0" 
+                        data-vv-as="年龄" 
+                        type="text" id="age" class="el-input__inner" name="age">
                     </td>
                 </tr>
 
-                <tr v-show="!requireMsg && verrors.has('degree')" class="error">
-                    <td colspan="3">{{ verrors.first('degree') }}</td>
-                </tr>
-
-
-                <tr v-show="!requireMsg">
-                    <td class="form-label">
-                        <label for="address">住址</label>
-                    </td>
-                    <td class="form-input" colspan="2">
-                        <input 
-                        v-model="form.address" 
-                        v-validate.initial="form.address" 
-                        data-vv-rules="max:50" 
-                        data-vv-as="住址" 
-                        type="text" id="address" class="el-input__inner" name="address">
-                    </td>
-                </tr>
-
-                <tr v-show="!requireMsg && verrors.has('address')" class="error">
-                    <td colspan="3">{{ verrors.first('address') }}</td>
+                <tr v-show="!requireMsg && verrors.has('age')" class="error">
+                    <td colspan="3">{{ verrors.first('age') }}</td>
                 </tr>
 
                 <tr v-show="!requireMsg">
                     <td class="form-label">
-                        <label for="zipcode">邮编</label>
+                        <label for="phone">固定电话</label>
                     </td>
                     <td class="form-input" colspan="2">
                         <input 
-                        v-model="form.zipcode" 
-                        v-validate.initial="form.zipcode" 
-                        data-vv-rules="max:20" 
-                        data-vv-as="邮编" 
-                        type="text" id="zipcode" class="el-input__inner" name="zipcode">
-                    </td>
-                </tr>
-
-                <tr v-show="!requireMsg && verrors.has('zipcode')" class="error">
-                    <td colspan="3">{{ verrors.first('zipcode') }}</td>
-                </tr>
-
-                <tr v-show="!requireMsg">
-                    <td class="form-label">
-                        <label for="company">单位</label>
-                    </td>
-                    <td class="form-input" colspan="2">
-                        <input 
-                        v-model="form.company" 
-                        v-validate.initial="form.company" 
-                        data-vv-rules="max:50" 
-                        data-vv-as="单位" 
-                        type="text" id="company" class="el-input__inner" name="company">
-                    </td>
-                </tr>
-
-                <tr v-show="!requireMsg && verrors.has('company')" class="error">
-                    <td colspan="3">{{ verrors.first('company') }}</td>
-                </tr>
-
-                <tr v-show="!requireMsg">
-                    <td class="form-label">
-                        <label for="officephone">办公电话</label>
-                    </td>
-                    <td class="form-input" colspan="2">
-                        <input 
-                        v-model="form.officephone" 
-                        v-validate.initial="form.officephone" 
-                        data-vv-rules="phones" 
-                        data-vv-as="办公电话" 
-                        type="text" id="officephone" class="el-input__inner" name="officephone">
-                    </td>
-                </tr>
-
-                <tr v-show="!requireMsg && verrors.has('officephone')" class="error">
-                    <td colspan="3">{{ verrors.first('officephone') }}</td>
-                </tr>
-
-                <tr v-show="!requireMsg">
-                    <td class="form-label">
-                        <label for="homephone">宅电</label>
-                    </td>
-                    <td class="form-input" colspan="2">
-                        <input 
-                        v-model="form.homephone" 
-                        v-validate.initial="form.homephone" 
+                        v-model="form.phone" 
+                        v-validate.initial="form.phone" 
                         data-vv-rules="phone" 
-                        data-vv-as="宅电" 
-                        type="text" id="homephone" class="el-input__inner" name="homephone">
+                        data-vv-as="固定电话" 
+                        type="text" id="phone" class="el-input__inner" name="phone">
                     </td>
                 </tr>
 
-                <tr v-show="!requireMsg && verrors.has('homephone')" class="error">
-                    <td colspan="3">{{ verrors.first('homephone') }}</td>
+                <tr v-show="!requireMsg && verrors.has('phone')" class="error">
+                    <td colspan="3">{{ verrors.first('phone') }}</td>
                 </tr>
 
                 <tr v-show="!requireMsg">
@@ -296,20 +206,15 @@
                     return {
                         id: '',
                         name: '',
+                        age: 0,
                         sex: 1,
-                        degree: '',
                         duty: '',
                         title: '',
-                        address: '',
-                        zipcode: '',
-                        company: '',
-                        officephone: '',
-                        homephone: '',
+                        phone: '',
                         cellphone: '',
                         email: '',
                         meno: '',
-                        org_id: 0,
-                        expert_area_id: 0
+                        org_id: 0
                     }
                 }
             },
@@ -326,27 +231,25 @@
                 tmp: {
                     id: '',
                     name: '',
+                    age: 0,
                     sex: 1,
-                    degree: '',
                     duty: '',
                     title: '',
-                    address: '',
-                    zipcode: '',
-                    company: '',
-                    officephone: '',
-                    homephone: '',
+                    phone: '',
                     cellphone: '',
                     email: '',
                     meno: '',
-                    org_id: 0,
-                    expert_area_id: 0
+                    org_id: 0
                 },
                 // 机构
                 orgs: [],
-                // 专家领域
-                expertAreas: [],
                 active: '0',
-                requireMsg: true
+                // 是否显示必填信息
+                requireMsg: true,
+                // 必填信息有误
+                requireMsgError: false,
+                // 详细信息有误
+                detailMsgError: false
             }
         },
         computed: {
@@ -363,12 +266,8 @@
                 }else {
                     this.requireMsgError = false
                 }
-                if(this.requireMsg && (this.verrors.has('degree') || 
-                    this.verrors.has('address') ||
-                    this.verrors.has('zipcode') ||
-                    this.verrors.has('company') ||
-                    this.verrors.has('officephone') ||
-                    this.verrors.has('homephone') ||
+                if(this.requireMsg && (this.verrors.has('age') || 
+                    this.verrors.has('phone') ||
                     this.verrors.has('cellphone') ||
                     this.verrors.has('email') ||
                     this.verrors.has('meno'))) {
@@ -383,7 +282,6 @@
                 this.tmp[key] = this.form[key]
             }
             this.getOrgs()
-            this.getExpertAreas()
         },
         methods: {
 
@@ -392,14 +290,6 @@
                     .then((responce) => {
                         this.$set(this, 'orgs', responce.data.data)
                         if(!(this.form.org_id))this.form.org_id = this.orgs[0].id
-                    })
-            },
-
-            getExpertAreas () {
-                axios.get(this.$adminUrl('normal-type?type=2'))
-                    .then((responce) => {
-                        this.$set(this, 'expertAreas', responce.data)
-                        if(!(this.form.expert_area_id))this.form.expert_area_id = this.expertAreas[0].id
                     })
             },
 
@@ -418,7 +308,7 @@
                     this.form = this.$filterObj(this.form, ['sex'])
 
                     if(this.edit) {
-                        axios.put(this.$adminUrl('expert/') + this.form.id, this.form)
+                        axios.put(this.$adminUrl('emergencycrew/') + this.form.id, this.form)
                         .then((responce) => {
                             if(responce.data) {
                                 this.$message({
@@ -429,7 +319,7 @@
                             }
                         })
                     }else {
-                        axios.post(this.$adminUrl('expert'), this.form)
+                        axios.post(this.$adminUrl('emergencycrew'), this.form)
                         .then((responce) => {
                             if(responce.data) {
                                 this.$message({

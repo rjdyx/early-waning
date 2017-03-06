@@ -33,6 +33,11 @@ Route::group(['prefix' => 'admin', 'namespace' => 'Admin'], function () {
 	Route::get('expert/query', 'ExpertController@query');
 	Route::delete('expert', 'ExpertController@destroy');
 	Route::resource('expert', 'ExpertController');
+
+	// 应急人员
+	Route::get('emergencycrew/query', 'EmergencyCrewController@query');
+	Route::delete('emergencycrew', 'EmergencyCrewController@destroy');
+	Route::resource('emergencycrew', 'EmergencyCrewController');
 });
 
 
