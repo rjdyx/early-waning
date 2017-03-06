@@ -75,6 +75,7 @@
     import PopOrg from 'components/message/pop-org.vue'
     import PopExpert from 'components/message/pop-expert.vue'
     import PopEmergencyCrew from 'components/message/pop-emergencycrew.vue'
+    import PopCondition from 'components/message/pop-condition.vue'
     import PopPlan from 'components/message/pop-plan.vue'
     import PopInformation from 'components/message/pop-information.vue'
 
@@ -119,6 +120,9 @@
                     break
                 case 'emergencycrew':
                     this.popComponent = PopEmergencyCrew
+                    break
+                case 'waningcondition':
+                    this.popComponent = PopCondition
                     break
                 case 'plan':
                     this.popComponent = PopPlan

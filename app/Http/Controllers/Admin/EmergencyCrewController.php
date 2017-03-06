@@ -49,6 +49,7 @@ class EmergencyCrewController extends Controller
         $queryText && $emergencyCrews->where('emergency_crews.name', 'like', '%'.$queryText.'%');
 
         $results = $emergencyCrews->orderBy('emergency_crew_created_at', 'desc')
+            ->orderBy('id', 'desc')
             ->paginate(config('app.page_size'));
 
         return $results;

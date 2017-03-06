@@ -24,6 +24,7 @@
 
     import TypeManage from 'components/public/type-manage.vue'
     import Sex from 'components/public/sex.vue'
+    import EventType from 'components/message/event-type.vue'
 
     export default{
         name:'Message',
@@ -65,6 +66,21 @@
                             protos: ['name', 'org_name', 'age', 'sex', 'duty', 'title', 'phone', 'cellphone', 'email', 'meno'],
                             widths: [50, 50, 50, 50, 50, 50, 50, 50, 50, 50],
                             colComponent: {sex: Sex}
+                        }
+                    ],
+                    condition:[
+                        {
+                            key: 'waningConditionManage',
+                            tab: '预警条件管理',
+                            url: 'waningcondition',
+                            searchPlaceholder: '请输入预警条件名称',
+                            typeComponent: [
+                                {component: TypeManage, params: {title: '事件等级管理', type: 5}}, 
+                                {component: TypeManage, params: {title: '事件类别管理', type: 6}}],
+                            theads: ['事件类型', '条件编码', '条件描述'],
+                            protos: ['type', 'code', 'description'],
+                            widths: [50, 80, 100],
+                            colComponent: {type: EventType}
                         }
                     ],
                     command:[

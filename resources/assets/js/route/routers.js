@@ -17,6 +17,12 @@ const message = resolve => {
     }, 'message');
 };
 
+const reaction = resolve => {
+    require.ensure(['../views/reaction.vue'], () =>{
+        resolve(require('../views/reaction.vue'));
+    }, 'reaction');
+};
+
 const newForm = resolve => {
     require.ensure(['../views/new-form.vue'], () =>{
         resolve(require('../views/new-form.vue'));
@@ -53,6 +59,11 @@ const routes = [
             {
                 path: 'message/:model/:index',
                 component: message,
+                meta: { requiresAuth: true }
+            },
+            {
+                path: 'reaction/:model/:index',
+                component: reaction,
                 meta: { requiresAuth: true }
             },
             {

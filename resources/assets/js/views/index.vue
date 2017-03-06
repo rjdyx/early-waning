@@ -42,8 +42,7 @@
                 navbars: [
                     {
                         name:'信息管理',
-                        role: 'plantation',
-                        isEvent: false,
+                        role: 'message',
                         children: [
                             {
                                 path: '/index/message/org/0',
@@ -65,15 +64,14 @@
                     },
                     {
                         name:'反应系统',
-                        role: 'plantation',
-                        isEvent: false,
+                        role: 'reaction',
                         children: [
                             {
-                                path: '/webapp/vegetable-harvest',
+                                path: '/index/reaction/early-warning/0',
                                 name:'预警事件管理'
                             },
                             {
-                                path: '/webapp/vegetable-detection',
+                                path: '/index/reaction/emergency/0',
                                 name:'突发事件管理'
                             }
                         ]

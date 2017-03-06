@@ -2,7 +2,7 @@
 
 namespace App\Http\Controllers\Admin;
 
-use App\information;
+use App\Information;
 use App\NormalType;
 use Illuminate\Http\Request;
 use App\Http\Controllers\Controller;
@@ -41,6 +41,7 @@ class InformationController extends Controller
         $queryText && $informations->where('informations.name', 'like', '%'.$queryText.'%');
 
         $results = $informations->orderBy('informations_created_at', 'desc')
+            ->orderBy('id', 'desc')
             ->paginate(config('app.page_size'));
 
         return $results;
@@ -107,7 +108,7 @@ class InformationController extends Controller
             return response()->json('information type dose not exist!');
         }
 
-        $information = $id? information::find($id): new information();
+        $information = $id? Information::find($id): new Information();
 
         $information->name = $name;
         $information->content = $content;

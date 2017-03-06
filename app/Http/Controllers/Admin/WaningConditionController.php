@@ -2,13 +2,13 @@
 
 namespace App\Http\Controllers\Admin;
 
-use App\Plan;
+use App\WaningCondition;
 use App\NormalType;
 use Illuminate\Http\Request;
 use App\Http\Controllers\Controller;
 use Illuminate\Support\Facades\DB;
 
-class PlanController extends Controller
+class WaningConditionController extends Controller
 {
     /**
      * Display a listing of the resource.
@@ -25,22 +25,20 @@ class PlanController extends Controller
         // 查询条件：预案名称
         $queryText = $request->input('query_text');
 
-        $plans = DB::table('plans')
-            ->join('normal_types as plan_type', 'plan_type.id' , '=', 'plans.plan_type_id')
+        $waningConditions = DB::table('waning_conditions')
             ->select(
-                'plans.id',
-                'plans.name',
-                'plans.content',
-                'plans.created_at as plans_created_at',
-                'plan_type.id as plan_type_id',
-                'plan_type.name as plan_type_name'
+                'waning_conditions.id',
+                'waning_conditions.code',
+                'waning_conditions.description',
+                'waning_conditions.type',
+                'waning_conditions.created_at as waningConditions_created_at'
             )
             ->whereRaw('1=1');
 
 
-        $queryText && $plans->where('plans.name', 'like', '%'.$queryText.'%');
+        $queryText && $waningConditions->where('waning_conditions.name', 'like', '%'.$queryText.'%');
 
-        $results = $plans->orderBy('plans_created_at', 'desc')
+        $results = $waningConditions->orderBy('waningConditions_created_at', 'desc')
             ->orderBy('id', 'desc')
             ->paginate(config('app.page_size'));
 
@@ -95,31 +93,27 @@ class PlanController extends Controller
     private function storeOrUpdate(Request $request, $id=0) 
     {
         $this->validate($request, [
-            'name' => 'required|string|max:50',
-            'plan_type_id' => 'required|max:10',
+            'code' => 'required|string|max:50',
+            'description' => 'required|string|max:50',
+            'type' => 'required|integer|between:1,2',
         ]);
 
-        $name = $request->input('name');
-        $content = $request->input('content');
-        $plan_type_id = $request->input('plan_type_id');
+        $code = $request->input('code');
+        $description = $request->input('description');
+        $type = $request->input('type');
 
-        // 检查机构类型是否存在
-        if(!NormalType::where('id', $plan_type_id)->where('type', 3)->first()) {
-            return response()->json('plan type dose not exist!');
-        }
 
-        $plan = $id? Plan::find($id): new Plan();
+        $waningCondition = $id? WaningCondition::find($id): new WaningCondition();
+        $waningCondition->code = $code;
+        $waningCondition->description = $description;
+        $waningCondition->type = $type;
 
-        $plan->name = $name;
-        $plan->content = $content;
-        $plan->plan_type_id = $plan_type_id;
-
-        $plan->save();
+        $waningCondition->save();
 
         if($id) {
             return response()->json(true);
         }else {
-            return response()->json($plan->id);
+            return response()->json($waningCondition->id);
         }
         
     }

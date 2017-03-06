@@ -57,6 +57,7 @@ class ExpertController extends Controller
         $queryText && $experts->where('experts.name', 'like', '%'.$queryText.'%');
 
         $results = $experts->orderBy('expert_created_at', 'desc')
+            ->orderBy('id', 'desc')
             ->paginate(config('app.page_size'));
 
         return $results;

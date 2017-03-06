@@ -39,6 +39,11 @@ Route::group(['prefix' => 'admin', 'namespace' => 'Admin'], function () {
 	Route::delete('emergencycrew', 'EmergencyCrewController@destroy');
 	Route::resource('emergencycrew', 'EmergencyCrewController');
 
+	// 预警条件
+	Route::get('waningcondition/query', 'WaningConditionController@query');
+	Route::delete('waningcondition', 'WaningConditionController@destroy');
+	Route::resource('waningcondition', 'WaningConditionController');
+
 	// 预案
 	Route::get('plan/query', 'PlanController@query');
 	Route::delete('plan', 'PlanController@destroy');

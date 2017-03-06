@@ -49,6 +49,7 @@ class OrgController extends Controller
         $queryText && $orgs->where('orgs.name', 'like', '%'.$queryText.'%');
 
         $results = $orgs->orderBy('org_created_at', 'desc')
+            ->orderBy('id', 'desc')
             ->paginate(config('app.page_size'));
 
         return $results;

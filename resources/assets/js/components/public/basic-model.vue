@@ -342,18 +342,22 @@
                         // 否则会删错，故multipleSelection从头遍历，tableData从尾部遍历
                         // 此方法虽然使用两个循环，但时间复杂度是O(multipleSelection.length + tableData.length) + k
                         // 而不是O(multipleSelection.length * tableData.length) + k
-                        this.multipleSelection = this.$sortObj(this.multipleSelection, 'id')
-                        let tableDataIndex = this.tableData.length - 1
-                        for(let selectItem of this.multipleSelection) {
-                            for(; tableDataIndex >= 0; tableDataIndex--) {
-                                if(selectItem.id == this.tableData[tableDataIndex].id) {
-                                    this.tableData.splice(tableDataIndex, 1)
-                                    tableDataIndex--
-                                    break
+                        if(this.tableData.length == this.multipleSelection.length) {
+                            this.$set(this, 'tableData', [])
+                        } else {
+                            this.multipleSelection = this.$sortObj(this.multipleSelection, 'id')
+                            let tableDataIndex = this.tableData.length - 1
+                            for(let selectItem of this.multipleSelection) {
+                                for(; tableDataIndex >= 0; tableDataIndex--) {
+                                    if(selectItem.id == this.tableData[tableDataIndex].id) {
+                                        this.tableData.splice(tableDataIndex, 1)
+                                        tableDataIndex--
+                                        break
+                                    }
                                 }
                             }
                         }
-                        this.multipleSelection = []
+                        this.$set(this, 'multipleSelection', [])
                     })
                 })
                 
