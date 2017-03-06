@@ -23,6 +23,7 @@
 <script>
 
     import TypeManage from 'components/public/type-manage.vue'
+    import Sex from 'components/public/sex.vue'
 
     export default{
         name:'Message',
@@ -39,7 +40,7 @@
                             theads: ['机构名称', '机构类型', '地址', '邮编', '固定电话', '手机', '传真', '备注'],
                             protos: ['name', 'org_level', 'address', 'zipcode', 'phone', 'cellphone', 'fax', 'meno'],
                             widths: [50, 50, 50, 50, 50, 50, 50, 50],
-                            colComponent: []
+                            colComponent: {}
                         }
                     ],
                     crew:[
@@ -52,7 +53,7 @@
                             theads: ['姓名', '专家领域','所属机构','性别','学历', '职责', '职务', '住址', '邮编', '单位', '办公电话', '宅电', '手机', '邮箱', '备注'],
                             protos: ['name', 'expert_area', 'org_name', 'sex', 'degree', 'duty', 'title', 'address', 'zipcode', 'company', 'officephone', 'homephone', 'cellphone', 'email', 'meno'],
                             widths: [50, 50, 50, 50, 50, 50, 50, 50, 50, 50, 50, 50, 50, 50, 50],
-                            colComponent: []
+                            colComponent: {sex: Sex}
                         },
                         {
                             key: 'emergencyCrewManage',
@@ -63,7 +64,7 @@
                             theads: ['姓名', '所属机构', '年龄', '性别', '职责', '职务', '固定电话', '手机', '邮箱', '备注'],
                             protos: ['name', 'org_name', 'age', 'sex', 'duty', 'title', 'phone', 'cellphone', 'email', 'meno'],
                             widths: [50, 50, 50, 50, 50, 50, 50, 50, 50, 50],
-                            colComponent: []
+                            colComponent: {sex: Sex}
                         }
                     ],
                     command:[
@@ -76,7 +77,7 @@
                             theads: ['类型', '名称', '内容'],
                             protos: ['plan_type_name', 'name', 'content'],
                             widths: [50, 80, 100],
-                            colComponent: []
+                            colComponent: {}
                         },
                         {
                             key: 'informationManage',
@@ -87,7 +88,7 @@
                             theads: ['类型', '名称', '内容'],
                             protos: ['information_type_name', 'name', 'content'],
                             widths: [50, 80, 100],
-                            colComponent: []
+                            colComponent: {}
                         }
                     ]
                 }
