@@ -4,6 +4,7 @@ namespace App\Http\Controllers\Admin;
 
 use App\Plan;
 use App\NormalType;
+use App\EmergencyCrewPlan;
 use Illuminate\Http\Request;
 use App\Http\Controllers\Controller;
 use Illuminate\Support\Facades\DB;
@@ -82,7 +83,10 @@ class PlanController extends Controller
     public function destroy(Request $request)
     {
         $ids = $request->input('ids');
-        $results = plan::destroy($ids);
+        $results = Plan::destroy($ids);
+        foreach ($ids as $id) {
+            EmergencyCrewPlan::where('plan_id', $id)->delete();
+        }
         return response()->json($results);
     }
 
@@ -102,6 +106,9 @@ class PlanController extends Controller
         $name = $request->input('name');
         $content = $request->input('content');
         $plan_type_id = $request->input('plan_type_id');
+        $leader = $request->input('leader');
+        $subLeader = $request->input('subLeader');
+        $member = $request->input('member');
 
         // 检查机构类型是否存在
         if(!NormalType::where('id', $plan_type_id)->where('type', 3)->first()) {
@@ -116,11 +123,27 @@ class PlanController extends Controller
 
         $plan->save();
 
+        $id && EmergencyCrewPlan::where('plan_id', $id)->delete();
+        $leader && $this->storeEmergencyCrew($leader, $plan, 1);
+        $subLeader && $this->storeEmergencyCrew($subLeader, $plan, 2);
+        $member && $this->storeEmergencyCrew($member, $plan, 3);
+
         if($id) {
             return response()->json(true);
         }else {
             return response()->json($plan->id);
         }
         
+    }
+
+    private function storeEmergencyCrew($arr=[], $plan, $type=1)
+    {
+        foreach ($arr as $id) {
+            $emergencyCrewPlan = new EmergencyCrewPlan();
+            $emergencyCrewPlan->emergency_crew_id = $id;
+            $emergencyCrewPlan->plan_id = $plan->id;
+            $emergencyCrewPlan->title = $type;
+            $emergencyCrewPlan->save();
+        }
     }
 }

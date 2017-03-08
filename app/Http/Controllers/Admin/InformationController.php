@@ -82,7 +82,7 @@ class InformationController extends Controller
     public function destroy(Request $request)
     {
         $ids = $request->input('ids');
-        $results = information::destroy($ids);
+        $results = Information::destroy($ids);
         return response()->json($results);
     }
 

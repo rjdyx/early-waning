@@ -4,12 +4,14 @@ namespace App\Http\Controllers\Admin;
 
 use App\Org;
 use App\EmergencyCrew;
+use App\EmergencyCrewPlan;
 use Illuminate\Http\Request;
 use App\Http\Controllers\Controller;
 use Illuminate\Support\Facades\DB;
 
 class EmergencyCrewController extends Controller
 {
+
     /**
      * Display a listing of the resource.
      *
@@ -24,6 +26,11 @@ class EmergencyCrewController extends Controller
 
         // 查询条件：专家姓名
         $queryText = $request->input('query_text');
+        // 自定义分页数
+        $pageSize = $request->input('page_size');
+        $pageSize = $pageSize? $pageSize: config('app.page_size');
+        // 排除这些id
+        $exceptIds = $request->input('except_ids');
 
         $emergencyCrews = DB::table('emergency_crews')
             ->join('orgs', 'orgs.id' , '=', 'emergency_crews.org_id')
@@ -48,11 +55,43 @@ class EmergencyCrewController extends Controller
 
         $queryText && $emergencyCrews->where('emergency_crews.name', 'like', '%'.$queryText.'%');
 
+        $exceptIds && $emergencyCrews->whereNotIn('emergency_crews.id', $exceptIds);
+
         $results = $emergencyCrews->orderBy('emergency_crew_created_at', 'desc')
             ->orderBy('id', 'desc')
-            ->paginate(config('app.page_size'));
+            ->paginate((int)$pageSize);
 
         return $results;
+    }
+
+    /**
+     * 获取三种类型的应急人员
+     */
+    public function queryCrew($id)
+    {
+        $emergencyCrews = DB::table('emergency_crew_plans')
+            ->join('emergency_crews', 'emergency_crews.id', '=', 'emergency_crew_plans.emergency_crew_id')
+            ->select(
+                'emergency_crews.id',
+                'emergency_crews.name',
+                'emergency_crew_plans.title'
+            )
+            ->where('plan_id', $id)
+            ->orderBy('title')
+            ->get();
+        $leaders = array();
+        $subLeaders = array();
+        $members = array();
+        foreach ($emergencyCrews as $emergencyCrew) {
+            if($emergencyCrew->title == 1) array_push($leaders, $emergencyCrew);
+            if($emergencyCrew->title == 2) array_push($subLeaders, $emergencyCrew);
+            if($emergencyCrew->title == 3) array_push($members, $emergencyCrew);
+        }
+        return response()->json([
+            'leader' => $leaders,
+            'subLeader' => $subLeaders,
+            'member' => $members
+            ]);
     }
 
 

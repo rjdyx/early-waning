@@ -12,5 +12,10 @@ exports.getItemFromObject = (object, index) => {
     return arr[index];
 };
 
-
-
+exports.objectToString = (array) => {
+    let arrNames = [];
+    for(let item of array) {
+    	arrNames.push(item.name)
+    }
+    return arrNames.join('、');
+};

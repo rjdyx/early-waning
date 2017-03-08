@@ -80,7 +80,7 @@ class WaningConditionController extends Controller
     public function destroy(Request $request)
     {
         $ids = $request->input('ids');
-        $results = plan::destroy($ids);
+        $results = WaningCondition::destroy($ids);
         return response()->json($results);
     }
 

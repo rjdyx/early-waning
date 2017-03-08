@@ -5,6 +5,7 @@
 export 
 {
 	Button,
+	ButtonGroup,
 	Input,
 	Menu,
 	Submenu,

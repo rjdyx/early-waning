@@ -19,15 +19,14 @@ class CreateEmergencyCrewPlansTable extends Migration
         Schema::create('emergency_crew_plans', function (Blueprint $table) {
             $table->integer('emergency_crew_id')->unsigned();
             $table->integer('plan_id')->unsigned();
-            $table->string('duty', 20); // 职责
-            $table->string('title', 20); // 职务
+            $table->integer('title'); // 1：组长，2：副组长，3：成员
 
             $table->foreign('emergency_crew_id')->references('id')->on('emergency_crews')
                 ->onUpdate('cascade')->onDelete('cascade');
             $table->foreign('plan_id')->references('id')->on('plans')
                 ->onUpdate('cascade')->onDelete('cascade');
 
-            $table->primary(['emergency_crew_id', 'plan_id']);
+            $table->primary(['emergency_crew_id', 'plan_id', 'title']);
         });
     }
 

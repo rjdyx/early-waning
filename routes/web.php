@@ -12,7 +12,7 @@
 */
 
 Route::get('/', function () {
-    return view('welcome');
+    return view('index');
 });
 
 Auth::routes();
@@ -36,6 +36,7 @@ Route::group(['prefix' => 'admin', 'namespace' => 'Admin'], function () {
 
 	// 应急人员
 	Route::get('emergencycrew/query', 'EmergencyCrewController@query');
+	Route::get('emergencycrew/query-crew/{id}', 'EmergencyCrewController@queryCrew');
 	Route::delete('emergencycrew', 'EmergencyCrewController@destroy');
 	Route::resource('emergencycrew', 'EmergencyCrewController');
 
@@ -53,6 +54,11 @@ Route::group(['prefix' => 'admin', 'namespace' => 'Admin'], function () {
 	Route::get('information/query', 'InformationController@query');
 	Route::delete('information', 'InformationController@destroy');
 	Route::resource('information', 'InformationController');
+
+	// 事件
+	Route::get('event/query', 'EventController@query');
+	Route::delete('event', 'EventController@destroy');
+	Route::resource('event', 'EventController');
 });
 
 

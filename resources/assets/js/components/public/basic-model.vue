@@ -59,13 +59,15 @@
                 		<el-table-column
 		                	:prop="protos[index]"
 		                    :label="item"
-		                    :min-width="widths[index]">
+		                    :min-width="widths[index]"
+                            show-overflow-tooltip>
 		                </el-table-column>
                 	</template>
                 	<template v-else>
                 		<el-table-column
 		                    :label="item"
-		                    :min-width="widths[index]">
+		                    :min-width="widths[index]"
+                            show-overflow-tooltip>
 		                  <template scope="scope">
 		                  	<component :is="colComponent[protos[index]]" :scope="scope"></component>
 		                  </template>
