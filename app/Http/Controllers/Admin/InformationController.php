@@ -24,6 +24,9 @@ class InformationController extends Controller
 
         // 查询条件：专题名称
         $queryText = $request->input('query_text');
+        // 自定义分页数
+        $pageSize = $request->input('page_size');
+        $pageSize = $pageSize? $pageSize: config('app.page_size');
 
         $informations = DB::table('informations')
             ->join('normal_types as information_type', 'information_type.id' , '=', 'informations.information_type_id')
@@ -42,7 +45,7 @@ class InformationController extends Controller
 
         $results = $informations->orderBy('informations_created_at', 'desc')
             ->orderBy('id', 'desc')
-            ->paginate(config('app.page_size'));
+            ->paginate((int)$pageSize);
 
         return $results;
     }

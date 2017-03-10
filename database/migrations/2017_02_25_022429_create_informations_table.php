@@ -19,7 +19,7 @@ class CreateInformationsTable extends Migration
         Schema::create('informations', function (Blueprint $table) {
             $table->increments('id');
             $table->string('name', 50); // 专题知识名称
-            $table->text('content'); // 内容
+            $table->text('content')->nullable(); // 内容
             $table->integer('information_type_id')->unsigned(); // 专题知识类型
             $table->timestamps();
 

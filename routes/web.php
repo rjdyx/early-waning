@@ -59,6 +59,10 @@ Route::group(['prefix' => 'admin', 'namespace' => 'Admin'], function () {
 	Route::get('event/query', 'EventController@query');
 	Route::delete('event', 'EventController@destroy');
 	Route::resource('event', 'EventController');
+
+	// 事件处理
+	Route::get('eventhandle/query', 'EventHandleController@query');
+	Route::resource('eventhandle', 'EventHandleController');
 });
 
 

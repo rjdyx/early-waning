@@ -157,14 +157,13 @@
                 <el-button @click="deleteDialogTableVisible = false">返 回</el-button>
             </div>
         </el-dialog>
-
     </form>
 </template>
 
 <script>
 
     export default {
-        name: 'PopOrg',
+        name: 'PopPlan',
         props: {
             form: {
                 type: Object,

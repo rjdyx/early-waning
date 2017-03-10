@@ -28,7 +28,6 @@
             <component v-else :is="popComponent" :edit="edit" @addSuccess="addSuccess" ref="formPop"></component>
         </vue-perfect-scrollbar>
     </div>
-    
 </template>
 
 <style lang="sass" scoped>
@@ -78,6 +77,9 @@
     import PopCondition from 'components/message/pop-condition.vue'
     import PopPlan from 'components/message/pop-plan.vue'
     import PopInformation from 'components/message/pop-information.vue'
+    import PopEvent from 'components/reaction/pop-event.vue'
+    import EventHandle from 'components/reaction/event-handle.vue'
+    import EventProgress from 'components/reaction/event-progress.vue'
 
     export default {
         name: 'NewForm',
@@ -130,6 +132,24 @@
                 case 'information':
                     this.popComponent = PopInformation
                     break
+                case 'event-1':
+                    this.popComponent = PopEvent
+                    break
+                case 'event-4':
+                    this.popComponent = PopEvent
+                    break
+                case 'handle-1':
+                    this.popComponent = EventHandle
+                    break
+                case 'handle-4':
+                    this.popComponent = EventHandle
+                    break
+                case 'progress-2':
+                    this.popComponent = EventProgress
+                    break
+                case 'progress-5':
+                    this.popComponent = EventProgress
+                    break
             }
         },
         methods: {
@@ -150,5 +170,4 @@
             this.setFormMsg(null)
         }
     }
-
 </script>

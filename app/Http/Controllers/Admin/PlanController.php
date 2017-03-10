@@ -25,6 +25,9 @@ class PlanController extends Controller
 
         // 查询条件：预案名称
         $queryText = $request->input('query_text');
+        // 自定义分页数
+        $pageSize = $request->input('page_size');
+        $pageSize = $pageSize? $pageSize: config('app.page_size');
 
         $plans = DB::table('plans')
             ->join('normal_types as plan_type', 'plan_type.id' , '=', 'plans.plan_type_id')
@@ -43,7 +46,7 @@ class PlanController extends Controller
 
         $results = $plans->orderBy('plans_created_at', 'desc')
             ->orderBy('id', 'desc')
-            ->paginate(config('app.page_size'));
+            ->paginate((int)$pageSize);
 
         return $results;
     }

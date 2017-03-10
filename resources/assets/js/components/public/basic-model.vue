@@ -23,17 +23,28 @@
         <!-- 操作模块 -->
         <div id="operate">
             <div id="btns">
-                <router-link :to="'/index/new-form/' + url + '/new'" exact>
+                
+                <component 
+                    v-for="operate in operateComponent" 
+                    :is="operate.component" 
+                    :params="operate.params" 
+                    :model="models[modelIndex]" 
+                    class="operateBtns"
+                ></component>
+
+                <router-link v-if="!hideAddButton" :to="'/index/new-form/' + url + '/new'" exact>
                     <el-button type="primary" icon="plus">新增</el-button>
                 </router-link>
                 
-                <el-button type="primary" icon="delete" @click="handleDelete">删除</el-button>
+                <el-button v-if="!hideDeleteButton" type="primary" icon="delete" @click="handleDelete">删除</el-button>
+
                 <component 
                 	v-for="typeOperate in typeComponent" 
                 	:is="typeOperate.component" 
                 	:params="typeOperate.params" 
                 	class="operateBtns"
             	></component>
+
             </div>
             <div id="inputs">
                 <el-input
@@ -77,10 +88,10 @@
                 <el-table-column
                     label="操作"
                     :width="150">
-                  <template scope="scope">
-                    <el-button
-                        size="small"
-                        @click="handleEdit(scope)">编辑</el-button>
+                    <template scope="scope">
+                        <component v-if="colComponent.operation" :is="colComponent.operation" :scope="scope" :model="models[modelIndex]"></component>
+                        <edit v-else :scope="scope" :model="models[modelIndex]"></edit>
+                    </template>
                 </el-table-column>
               </el-table>
         </vue-perfect-scrollbar>
@@ -148,7 +159,7 @@
 
 <script>
 
-    import {mapMutations} from 'vuex'
+    import Edit from 'components/public/edit.vue'
 
     export default{
         name:'BasicModel',
@@ -168,9 +179,13 @@
             			{
             				key: 'orgManage',
             				tab: '用户管理',
-            				url: 'org',
+                            url: 'org',
+            				urlParams: {},
                             searchPlaceholder: '',
             				newComponent: null,
+                            operateComponent: [{component: null, params: {}}],
+                            hideAddButton: false,
+                            hideDeleteButton: false,
             				typeComponent: [{component: null, params: {}}],
             				theads: ['机构名称'],
             				protos: ['name'],
@@ -211,8 +226,16 @@
                 return this.$route.params.model
             },
 
+            key () {
+                return this.models[this.modelIndex].key
+            },
+
             url () {
                 return this.models[this.modelIndex].url
+            },
+
+            urlParams () {
+                return this.models[this.modelIndex].urlParams
             },
 
             searchPlaceholder () {
@@ -239,24 +262,35 @@
                 return this.models[this.modelIndex].typeComponent
             },
 
+            operateComponent () {
+                return this.models[this.modelIndex].operateComponent
+            },
+
+            hideAddButton () {
+                return this.models[this.modelIndex].hideAddButton
+            },
+
+            hideDeleteButton () {
+                return this.models[this.modelIndex].hideDeleteButton
+            },
+
             newComponent () {
             	return this.models[this.modelIndex].newComponent
             }
         },
         watch: {
-            url () {
+            key () {
                 this.tableData = []
                 this.getAllMsg()
             }
+        },
+        components: {
+            Edit
         },
         mounted () {
             this.getAllMsg()
         },
         methods: {
-
-            ...mapMutations([
-                'setFormMsg'
-            ]),
 
             /**
              * 初始化
@@ -275,7 +309,7 @@
             getAllMsg (params='') {
                 let host = '/query'
                 if(params.length) host += '?' + params
-                axios.get(this.$adminUrl(this.url) + host)
+                axios.get(this.$adminUrl(this.url) + host, {params: this.urlParams})
                     .then((responce) => {
                         this.$set(this, 'tableData', responce.data.data)
                         this.paginator = responce.data
@@ -302,16 +336,9 @@
             tabClick(tab, event) {
             	this.modelIndex = tab.$data.index
                 let model = this.$route.params.model
-                this.$router.push('/index/message/' + model + '/' + this.modelIndex)
+                this.$router.push('/index/' + this.$route.fullPath.split('/')[2] + '/' + model + '/' + this.modelIndex)
             },
 
-            /**
-             * 编辑
-             */
-            handleEdit ({ $index, row }) {
-                this.setFormMsg(row)
-                this.$router.push('/index/new-form/' + this.url + '/edit')
-            },
 
             /**
              * 删除

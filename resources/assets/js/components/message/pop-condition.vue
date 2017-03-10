@@ -75,7 +75,7 @@
 <script>
 
     export default {
-        name: 'PopOrg',
+        name: 'PopCondition',
         props: {
             form: {
                 type: Object,

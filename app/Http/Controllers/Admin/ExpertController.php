@@ -25,6 +25,11 @@ class ExpertController extends Controller
 
         // 查询条件：专家姓名
         $queryText = $request->input('query_text');
+        // 自定义分页数
+        $pageSize = $request->input('page_size');
+        $pageSize = $pageSize? $pageSize: config('app.page_size');
+        // 排除这些id
+        $exceptIds = $request->input('except_ids');
 
         $experts = DB::table('experts')
             ->join('normal_types as expert_area', 'expert_area.id' , '=', 'experts.expert_area_id')
@@ -56,9 +61,11 @@ class ExpertController extends Controller
 
         $queryText && $experts->where('experts.name', 'like', '%'.$queryText.'%');
 
+        $exceptIds && $experts->whereNotIn('experts.id', $exceptIds);
+
         $results = $experts->orderBy('expert_created_at', 'desc')
             ->orderBy('id', 'desc')
-            ->paginate(config('app.page_size'));
+            ->paginate((int)$pageSize);
 
         return $results;
     }

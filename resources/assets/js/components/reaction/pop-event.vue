@@ -4,16 +4,46 @@
         <table class="form-table">
             <tbody class="form-body">
 
-                 <tr>
+                <tr>
                     <td class="form-label">
-                        <label for="name">专题名称</label>
+                        <label for="event_level_id">事件等级</label>
+                    </td>
+                    <td class="form-input" colspan="2">
+                        <el-select v-model="form.event_level_id" placeholder="请选择事件等级">
+                            <el-option 
+                                v-for="eventLevel in eventLevels" 
+                                :label="eventLevel.name" 
+                                :value="eventLevel.id">
+                            </el-option>
+                        </el-select>
+                    </td>
+                </tr>
+
+                <tr>
+                    <td class="form-label">
+                        <label for="event_sort_id">事件类别</label>
+                    </td>
+                    <td class="form-input" colspan="2">
+                        <el-select v-model="form.event_sort_id" placeholder="请选择事件类别">
+                            <el-option 
+                                v-for="eventSort in eventSorts" 
+                                :label="eventSort.name" 
+                                :value="eventSort.id">
+                            </el-option>
+                        </el-select>
+                    </td>
+                </tr>
+
+                <tr>
+                    <td class="form-label">
+                        <label for="name">事件名称</label>
                     </td>
                     <td class="form-input" colspan="2">
                         <input 
                         v-model="form.name" 
                         v-validate.initial="form.name" 
                         data-vv-rules="required|max:50" 
-                        data-vv-as="专题名称" 
+                        data-vv-as="事件名称" 
                         type="text" id="name" class="el-input__inner" name="name" placeholder="必填">
                     </td>
                 </tr>
@@ -24,28 +54,40 @@
 
                 <tr>
                     <td class="form-label">
-                        <label for="information_type_id">专题类型</label>
+                        <label for="location">发生地区</label>
                     </td>
                     <td class="form-input" colspan="2">
-                        <el-select v-model="form.information_type_id" placeholder="请选择专题类型">
-                            <el-option 
-                                v-for="informationLevel in informationLevels" 
-                                :label="informationLevel.name" 
-                                :value="informationLevel.id">
-                            </el-option>
-                        </el-select>
+                        <input 
+                        v-model="form.location" 
+                        v-validate.initial="form.location" 
+                        data-vv-rules="required|max:50" 
+                        data-vv-as="发生地区" 
+                        type="text" id="location" class="el-input__inner" name="location" placeholder="必填">
                     </td>
+                </tr>
+
+                <tr v-show="verrors.has('location')" class="error">
+                    <td colspan="3">{{ verrors.first('location') }}</td>
                 </tr>
 
                 <tr>
                     <td class="form-label">
-                        <label for="content">内容</label>
+                        <label for="detail">事件详情</label>
                     </td>
                     <td class="form-input" colspan="2">
-                        <el-input type="textarea" v-model="form.content" id="content"></el-input>
+                        <input 
+                        v-model="form.detail" 
+                        v-validate.initial="form.detail" 
+                        data-vv-rules="required" 
+                        data-vv-as="事件详情" 
+                        type="text" id="detail" class="el-input__inner" name="detail" placeholder="必填">
                     </td>
                 </tr>
-                
+
+                <tr v-show="verrors.has('detail')" class="error">
+                    <td colspan="3">{{ verrors.first('detail') }}</td>
+                </tr>
+               
             </tbody>
 
             <tfoot class="form-footer">
@@ -63,7 +105,7 @@
 <script>
 
     export default {
-        name: 'PopInformation',
+        name: 'PopEvent',
         props: {
             form: {
                 type: Object,
@@ -71,8 +113,11 @@
                     return {
                         id: '',
                         name: '',
-                        content: '',
-                        information_type_id: 0
+                        location: '',
+                        detail: '',
+                        status: 1,
+                        event_level_id: 0,
+                        event_sort_id: 0
                     }
                 }
             },
@@ -89,26 +134,41 @@
                 tmp: {
                     id: '',
                     name: '',
-                    content: '',
-                    information_type_id: 0
+                    location: '',
+                    detail: '',
+                    status: 1,
+                    event_level_id: 0,
+                    event_sort_id: 0
                 },
-                // 机构等级
-                informationLevels: []
+                // 事件等级
+                eventLevels: [],
+                // 事件类别
+                eventSorts: []
             }
         },
         mounted () {
             for(let key of Object.keys(this.form)){
                 this.tmp[key] = this.form[key]
             }
-            this.getinformationLevel()
+            this.getEventLevel()
+            this.getEventSort()
+            this.form.status = this.$route.params.model.split('-')[1]
         },
         methods: {
 
-            getinformationLevel () {
-                axios.get(this.$adminUrl('normal-type?type=4'))
+            getEventLevel () {
+                axios.get(this.$adminUrl('normal-type?type=5'))
                     .then((responce) => {
-                        this.$set(this, 'informationLevels', responce.data)
-                        if(!(this.form.information_type_id))this.form.information_type_id = this.informationLevels[0].id
+                        this.$set(this, 'eventLevels', responce.data)
+                        if(!(this.form.event_level_id))this.form.event_level_id = this.eventLevels[0].id
+                    })
+            },
+
+            getEventSort () {
+                axios.get(this.$adminUrl('normal-type?type=6'))
+                    .then((responce) => {
+                        this.$set(this, 'eventSorts', responce.data)
+                        if(!(this.form.event_sort_id))this.form.event_sort_id = this.eventSorts[0].id
                     })
             },
 
@@ -127,7 +187,7 @@
                     this.form = this.$filterObj(this.form)
 
                     if(this.edit) {
-                        axios.put(this.$adminUrl('information/') + this.form.id, this.form)
+                        axios.put(this.$adminUrl('event/') + this.form.id, this.form)
                         .then((responce) => {
                             if(responce.data) {
                                 this.$message({
@@ -138,7 +198,7 @@
                             }
                         })
                     }else {
-                        axios.post(this.$adminUrl('information'), this.form)
+                        axios.post(this.$adminUrl('event'), this.form)
                         .then((responce) => {
                             if(responce.data) {
                                 this.$message({

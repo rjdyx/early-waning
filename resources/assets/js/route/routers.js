@@ -71,6 +71,16 @@ const routes = [
                 component: newForm,
                 meta: { requiresAuth: true }
             },
+            {
+                path: 'event-handle/:model/:type',
+                component: newForm,
+                meta: { requiresAuth: true }
+            },
+            {
+                path: 'event-progress/:model/:type',
+                component: newForm,
+                meta: { requiresAuth: true }
+            }
         ]
     },
     {

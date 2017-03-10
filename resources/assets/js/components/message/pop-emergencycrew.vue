@@ -198,7 +198,7 @@
 <script>
 
     export default {
-        name: 'PopExpert',
+        name: 'PopEmergency',
         props: {
             form: {
                 type: Object,
