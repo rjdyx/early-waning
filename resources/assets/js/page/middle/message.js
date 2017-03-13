@@ -1,6 +1,6 @@
 import TypeManage from 'components/public/type-manage.vue'
 import Sex from 'components/public/sex.vue'
-import EventType from 'components/message/event-type.vue'
+import EventType from './message/event-type.vue'
 
 export default {
     org:[

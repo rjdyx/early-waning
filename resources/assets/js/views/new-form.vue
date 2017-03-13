@@ -71,15 +71,15 @@
 <script>
 
     import {mapGetters, mapMutations} from 'vuex'
-    import PopOrg from 'components/message/pop-org.vue'
-    import PopExpert from 'components/message/pop-expert.vue'
-    import PopEmergencyCrew from 'components/message/pop-emergencycrew.vue'
-    import PopCondition from 'components/message/pop-condition.vue'
-    import PopPlan from 'components/message/pop-plan.vue'
-    import PopInformation from 'components/message/pop-information.vue'
-    import PopEvent from 'components/reaction/pop-event.vue'
-    import EventHandle from 'components/reaction/event-handle.vue'
-    import EventProgress from 'components/reaction/event-progress.vue'
+    import PopOrg from 'page/middle/components/message/pop-org.vue'
+    import PopExpert from 'page/middle/components/message/pop-expert.vue'
+    import PopEmergencyCrew from 'page/middle/components/message/pop-emergencycrew.vue'
+    import PopCondition from 'page/middle/components/message/pop-condition.vue'
+    import PopPlan from 'page/middle/components/message/pop-plan.vue'
+    import PopInformation from 'page/middle/components/message/pop-information.vue'
+    import PopEvent from 'page/middle/components/reaction/pop-event.vue'
+    import EventHandle from 'page/middle/components/reaction/event-handle.vue'
+    import EventProgress from 'page/middle/components/reaction/event-progress.vue'
 
     export default {
         name: 'NewForm',
