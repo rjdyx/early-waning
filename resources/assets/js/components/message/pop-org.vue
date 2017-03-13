@@ -1,6 +1,5 @@
 <template>
     <pop-form
-        ref="popForm"
         :rows="rows" 
         :editForm="form" 
         :edit="edit"

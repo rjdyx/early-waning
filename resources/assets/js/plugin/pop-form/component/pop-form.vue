@@ -2,6 +2,7 @@
     <form @submit.prevent="validateBeforeSubmit" class="form-pop">
 
         <table class="form-table">
+        
             <tbody class="form-body">
 
                 <template v-for="proto of Object.keys(rows)">
@@ -10,7 +11,6 @@
                             <label :for="proto">{{rows[proto].label}}</label>
                         </td>
                         <td class="form-input" colspan="2">
-                            <el-input type="textarea" v-model="tableForm[proto]" id="proto"></el-input>
                             <component :is="rows[proto].component" @return-value="returnValue"></component>
                         </td>
                     </tr>
@@ -56,8 +56,7 @@
                             </el-select>
                         </td>
                     </tr>
-                </template>
-                
+                </template>   
             </tbody>
 
             <tfoot class="form-footer">
@@ -147,7 +146,7 @@
                     return false
                 }else {
 
-                    this.tableForm = this.$filterObj(this.tableForm)
+                    this.tableForm = this.$filterObj(this.tableForm, this.filterArray)
                     this.$popForm.beforeFn()
 
                     if(this.edit) {

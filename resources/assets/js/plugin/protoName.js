@@ -4,7 +4,8 @@ const api = {
 }
 
 const popForm = {
-	formUrl: 'formUrl'
+	formUrl: 'formUrl',
+	filterArray: 'filterArray'
 }
 
 export { api, popForm }

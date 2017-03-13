@@ -3,22 +3,21 @@ export class PopForm {
 
 	constructor () {
 		this.formUrl = ''
+        this.filterArray = []
 	}
 
 	setFormUrl(formUrl) {
-		this.formUrl = formUrl
-	}
-
-    * beforeFn(fn) {
-        yield fn()
+        this.formUrl = formUrl
     }
 
-    * afterAddFn(fn) {
-        yield fn()
+    setFilterArray(filterArray) {
+        this.filterArray = filterArray
     }
 
-    * afterEditFn(fn) {
-        yield fn()
-    }
+    beforeFn() {}
+
+    afterAddFn() {}
+
+    afterEditFn() {}
 
 }
