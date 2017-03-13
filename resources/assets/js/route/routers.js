@@ -6,21 +6,15 @@ import Router from 'vue-router'
 //=============================顶层组件====================================
 //---------------------------最顶层组件----------------------------------
 const index = resolve => {
-    require.ensure(['../views/index.vue'], () =>{
-        resolve(require('../views/index.vue'));
+    require.ensure(['../page/index/index.vue'], () =>{
+        resolve(require('../page/index/index.vue'));
     }, 'index');
 };
 
-const message = resolve => {
-    require.ensure(['../views/message.vue'], () =>{
-        resolve(require('../views/message.vue'));
-    }, 'message');
-};
-
-const reaction = resolve => {
-    require.ensure(['../views/reaction.vue'], () =>{
-        resolve(require('../views/reaction.vue'));
-    }, 'reaction');
+const middle = resolve => {
+    require.ensure(['../page/middle/middle.vue'], () =>{
+        resolve(require('../page/middle/middle.vue'));
+    }, 'middle');
 };
 
 const newForm = resolve => {
@@ -58,26 +52,13 @@ const routes = [
         children: [
             {
                 path: 'message/:model/:index',
-                component: message,
-                meta: { requiresAuth: true }
-            },
-            {
-                path: 'reaction/:model/:index',
-                component: reaction,
+                alias: 'reaction/:model/:index',
+                component: middle,
                 meta: { requiresAuth: true }
             },
             {
                 path: 'new-form/:model/:type',
-                component: newForm,
-                meta: { requiresAuth: true }
-            },
-            {
-                path: 'event-handle/:model/:type',
-                component: newForm,
-                meta: { requiresAuth: true }
-            },
-            {
-                path: 'event-progress/:model/:type',
+                alias: ['event-handle/:model/:type', 'event-progress/:model/:type'],
                 component: newForm,
                 meta: { requiresAuth: true }
             }

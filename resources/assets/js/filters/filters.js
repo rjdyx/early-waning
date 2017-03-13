@@ -19,3 +19,7 @@ exports.objectToString = (array) => {
     }
     return arrNames.join('、');
 };
+
+exports.rulesToString = (array) => {
+    return array.join('|');
+};

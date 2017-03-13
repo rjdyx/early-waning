@@ -1,20 +1,16 @@
-// Vuex
-import Vuex from 'vuex';
+import Vue from 'vue'
+import Vuex from 'vuex'
+import * as actions from './actions'
+import * as getters from './getters'
+import form from './modules/form'
+import basicModel from './modules/basic-model'
 
-const store = new Vuex.Store({
-    state: {
-        formMsg: null
-    },
-    mutations: {
 
-    	/**
-    	 * 设置表单对象信息
-    	 */
-        setFormMsg(state, formMsg) {
-        	state.formMsg = formMsg;
-        }
-    }
-    
-});
-
-export default store;
+export default new Vuex.Store({
+  actions,
+  getters,
+  modules: {
+    form,
+    basicModel
+  }
+})

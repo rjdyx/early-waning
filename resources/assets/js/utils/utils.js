@@ -123,5 +123,38 @@ export default {
                 return (env.is_server?env.app_ano_url:'') + '/' + url;
             }
         };
+
+        /**
+         * 删除数组的指定项
+         * targetArr和seletedArr数组正序排序
+         * 连续使用splice方法删除targetArr数组里的某一项必须从尾部开始，否则会删错
+         * 此方法虽然使用两个循环，但时间复杂度是O(multipleSelection.length + tableData.length) + k
+         * 而不是O(multipleSelection.length * tableData.length) + k
+         * 
+         * @param  {Array} targetArr  目标数组
+         * @param  {Array} seletedArr 删除数组
+         * @param  {String} proto      比较属性
+         * @return {Array}            删除指定项后的新数组
+         */
+        Vue.prototype.$deleteArrayWith = (targetArr, seletedArr, proto) => {
+
+            targetArr = Vue.prototype.$sortObj(targetArr, 'id')
+            seletedArr = Vue.prototype.$sortObj(seletedArr, 'id')
+
+            let targetArrLength = targetArr.length-1
+            let seletedArrLength = seletedArr.length-1
+
+            for(; seletedArrLength >= 0; seletedArrLength--) {
+                for(; targetArrLength >= 0; targetArrLength--) {
+                    if(seletedArr[seletedArrLength][proto] == targetArr[targetArrLength][proto]) {
+                        targetArr.splice(targetArrLength, 1)
+                        targetArrLength--
+                        break
+                    }
+                }
+            }
+
+            return targetArr
+        };
     }
 };

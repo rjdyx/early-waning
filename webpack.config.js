@@ -86,7 +86,8 @@ let config = {
             'sass': path.resolve(__dirname, './resources/assets/sass'),
             'jsPath': path.resolve(__dirname, './resources/assets/js'),
             'lang': path.resolve(__dirname, './resources/lang'),
-            'components': path.resolve(__dirname, './resources/assets/js/components')
+            'components': path.resolve(__dirname, './resources/assets/js/components'),
+            'page': path.resolve(__dirname, './resources/assets/js/page')
         }
     },
     // 用来配置 loader 模块的解析
@@ -154,7 +155,7 @@ if(process.env.NODE_ENV == 'development') {
             new webpack.DefinePlugin({
                 'process.env.NODE.ENV': "development"
             }),
-            new webpack.HotModuleReplacementPlugin()
+            // new webpack.HotModuleReplacementPlugin()
         ],
         devServer: {
             historyApiFallback: true,

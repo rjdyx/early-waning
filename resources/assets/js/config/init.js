@@ -17,8 +17,8 @@ Vue.component('passport-clients', require('components/passport/Clients.vue'))
 Vue.component('passport-authorized-clients', require('components/passport/AuthorizedClients.vue'))
 Vue.component('passport-personal-access-tokens', require('components/passport/PersonalAccessTokens.vue'))
 Vue.component('my-header', require('components/public/header.vue'))
-Vue.component('slider-bar', require('components/public/slider-bar.vue'))
-Vue.component('basic-model', require('components/public/basic-model.vue'))
+Vue.component('left-menu', require('components/public/left-menu.vue'))
+Vue.component('basic-model', require('page/basicModel/basic-model.vue'))
 Vue.component('type-manage', require('components/public/type-manage.vue'))
 
 
@@ -40,7 +40,7 @@ Object.keys(directive).forEach(k => Vue.directive(k, directive[k]()))
 // 注册全局方法
 import utils from '../utils/utils' 
 Vue.use(utils) 
-
+require('../plugin');
 
 
 // 实例化Vue的filter

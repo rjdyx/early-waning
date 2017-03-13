@@ -10,7 +10,7 @@
     <div class="middle">
     
         <!-- 导航条模块 -->
-        <el-breadcrumb separator="/" id="nav">
+        <el-breadcrumb separator="/" id="nav" v-if="navbarName">
             <el-breadcrumb-item>{{navbarName}}</el-breadcrumb-item>
             <el-breadcrumb-item>{{subNavBarName}}</el-breadcrumb-item>
         </el-breadcrumb>
@@ -160,18 +160,11 @@
 <script>
 
     import Edit from 'components/public/edit.vue'
+    import computed from './computed.js'
 
     export default{
         name:'BasicModel',
         props: {
-            navbarName: {
-                type: String,
-                default: '预警信息管理'
-            },
-            subNavBarName: {
-                type: String,
-                default: '机构管理'
-            },
             models: {
             	type: Array,
             	default () {
@@ -198,6 +191,7 @@
         },
         data () {
         	return {
+                compute: this,
                 // 搜索框内容
         		inputValue: '',
                 // tab模块选择标志
@@ -217,67 +211,9 @@
                     // 每页数目
                     per_page: 0
                 }
-                
         	}
         },
-        computed: {
-
-            modelUrlParams () {
-                return this.$route.params.model
-            },
-
-            key () {
-                return this.models[this.modelIndex].key
-            },
-
-            url () {
-                return this.models[this.modelIndex].url
-            },
-
-            urlParams () {
-                return this.models[this.modelIndex].urlParams
-            },
-
-            searchPlaceholder () {
-                return this.models[this.modelIndex].searchPlaceholder
-            },
-
-            theads () {
-            	return this.models[this.modelIndex].theads
-            },
-
-            protos () {
-            	return this.models[this.modelIndex].protos
-            },
-
-            widths () {
-            	return this.models[this.modelIndex].widths
-            },
-
-            colComponent () {
-            	return this.models[this.modelIndex].colComponent
-            },
-
-            typeComponent () {
-                return this.models[this.modelIndex].typeComponent
-            },
-
-            operateComponent () {
-                return this.models[this.modelIndex].operateComponent
-            },
-
-            hideAddButton () {
-                return this.models[this.modelIndex].hideAddButton
-            },
-
-            hideDeleteButton () {
-                return this.models[this.modelIndex].hideDeleteButton
-            },
-
-            newComponent () {
-            	return this.models[this.modelIndex].newComponent
-            }
-        },
+        mixins: [computed],
         watch: {
             key () {
                 this.tableData = []
@@ -366,25 +302,12 @@
                           message: '成功删除' + responce.data + '条',
                           type: 'success'
                         })
-                        // multipleSelection数组正序排序，tableData数组逆序排序
-                        // 连续使用splice方法删除tableData数组里的某一项需从尾部开始，
-                        // 否则会删错，故multipleSelection从头遍历，tableData从尾部遍历
-                        // 此方法虽然使用两个循环，但时间复杂度是O(multipleSelection.length + tableData.length) + k
-                        // 而不是O(multipleSelection.length * tableData.length) + k
+
                         if(this.tableData.length == this.multipleSelection.length) {
                             this.$set(this, 'tableData', [])
                         } else {
-                            this.multipleSelection = this.$sortObj(this.multipleSelection, 'id')
-                            let tableDataIndex = this.tableData.length - 1
-                            for(let selectItem of this.multipleSelection) {
-                                for(; tableDataIndex >= 0; tableDataIndex--) {
-                                    if(selectItem.id == this.tableData[tableDataIndex].id) {
-                                        this.tableData.splice(tableDataIndex, 1)
-                                        tableDataIndex--
-                                        break
-                                    }
-                                }
-                            }
+                            let newArr = this.$deleteArrayWith(this.tableData, this.multipleSelection, 'id')
+                            this.$set(this, 'tableData', newArr)
                         }
                         this.$set(this, 'multipleSelection', [])
                     })
