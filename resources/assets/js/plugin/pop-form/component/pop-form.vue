@@ -11,7 +11,7 @@
                             <label :for="proto">{{rows[proto].label}}</label>
                         </td>
                         <td class="form-input" colspan="2">
-                            <component :is="rows[proto].component" @return-value="returnValue"></component>
+                            <component :is="rows[proto].component" :value="tableForm[proto]" @return-value="returnValue"></component>
                         </td>
                     </tr>
 
@@ -127,7 +127,7 @@
         methods: {
 
             returnValue ({name, value}) {
-                this.form[name] = value
+                this.tableForm[name] = value
             },
 
             submit () {

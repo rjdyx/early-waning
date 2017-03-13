@@ -9,9 +9,12 @@
 
     export default {
         name:'SelectSex',
+        props: {
+            value: 0
+        },
         data () {
             return {
-                sex: 1
+                sex: this.value
             }
         },
         watch: {
