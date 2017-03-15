@@ -188,6 +188,8 @@ return [
 
         Zizaco\Entrust\EntrustServiceProvider::class,
 
+        // Laravoole\LaravooleServiceProvider::class,
+
     ],
 
     /*
