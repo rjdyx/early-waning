@@ -7,7 +7,18 @@ import router from './route/routers.js';
 require('./config/init')
 
 router.beforeEach((to, from, next) => {
-    next();
+	if (to.matched.some(record => record.meta.requiresAuth)) {
+
+        if (Laravel.user.id) {
+            next();
+        } else {
+            next({
+                path: '/login'
+            });
+        }
+    } else {
+        next();
+    }
 });
 
 router.afterEach(route => {

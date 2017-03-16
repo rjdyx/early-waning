@@ -10,8 +10,13 @@
     <div id="head">
 		<h1 id="title">预警</h1>
 		<div id="content">
-			<ul>
+			<ul class="left">
 				<li>总览</li>
+			</ul>
+			<ul class="right">
+				<li>
+					<el-button @click="logout">退出</el-button>
+				</li>
 			</ul>
 		</div>
     </div>
@@ -45,13 +50,26 @@
 		    height: pxToRem(48);
     		line-height: pxToRem(48);
 
-    		ul {
+    		ul.left {
 			    float: left;
     			// margin-left: 39px;
 
     			li {
 				    width: pxToRem(85);
 					text-align: center;
+    			}
+    		}
+
+    		ul.right {
+    			float: right;
+			    margin-right: 30px;
+
+    			li {
+
+    				button {
+    					color: white;
+    					background: #2f3847;
+    				}
     			}
     		}
 		}
@@ -61,7 +79,18 @@
 <script>
 
     export default{
-        name:'MyHeader'
+        name:'MyHeader',
+        methods: {
+        	logout () {
+        		axios.post('/logout')
+        			.then((responce) => {
+        				if(responce.data) {
+        					Laravel.user = {id: null, name: null, email: null}
+        					this.$router.push('/login')
+        				}
+        			})
+        	}
+        }
     }
 
 </script>

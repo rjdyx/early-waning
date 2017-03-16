@@ -11,15 +11,19 @@
 |
 */
 
-Route::get('/', function () {
-    return view('index');
+Route::get('/', 'IndexController@index');
+
+Route::get('/app', function () {
+    return view('app');
+});
+
+Route::get('/home', function () {
+    return view('home');
 });
 
 Auth::routes();
 
-Route::get('/home', 'HomeController@index');
-
-Route::group(['prefix' => 'admin', 'namespace' => 'Admin'], function () {
+Route::group(['prefix' => 'admin', 'namespace' => 'Admin', 'middleware' => ['auth', 'active']], function () {
 
 	// 类型
 	Route::resource('normal-type', 'NormalTypeController');

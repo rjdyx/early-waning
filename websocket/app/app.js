@@ -2,19 +2,20 @@ import { createWebSocketServer } from './websocket.js'
 
 let messageIndex = 0
 
-function createMessage(type, user, data) {
+function createMessage(type, data) {
     messageIndex ++
     return JSON.stringify({
         id: messageIndex,
         type: type,
-        user: user,
+        // user: user,
         data: data
     })
 }
 
 function onConnect() {
     let user = this.user
-    let msg = createMessage('join', user, `${user.name} joined.`)
+    // let msg = createMessage('join', user, `${user.name} joined.`)
+    let msg = createMessage('join', user, ` joined.`)
     this.wss.broadcast(msg)
     // build user list:
     let users = this.wss.clients.map(function (client) {
@@ -24,17 +25,13 @@ function onConnect() {
 }
 
 function onMessage(message) {
-    console.log(message)
     if (message && message.trim()) {
-        let msg = createMessage('chat', this.user, message.trim())
-        this.wss.broadcast(msg)
+        this.wss.broadcast(message)
     }
 }
 
 function onClose() {
-    let user = this.user
-    let msg = createMessage('left', user, `${user.name} is left.`)
-    this.wss.broadcast(msg)
+    this.wss.broadcast('left')
 }
 
 let wss = createWebSocketServer(onConnect, onMessage, onClose)
