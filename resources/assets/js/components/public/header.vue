@@ -14,6 +14,7 @@
 				<li>总览</li>
 			</ul>
 			<ul class="right">
+				<li>{{user.name}}</li>
 				<li>
 					<el-button @click="logout">退出</el-button>
 				</li>
@@ -57,6 +58,7 @@
     			li {
 				    width: pxToRem(85);
 					text-align: center;
+				    cursor: pointer;
     			}
     		}
 
@@ -65,6 +67,10 @@
 			    margin-right: 30px;
 
     			li {
+				    display: inline-block;
+    				width: pxToRem(85);
+					text-align: center;
+				    cursor: pointer;
 
     				button {
     					color: white;
@@ -72,6 +78,10 @@
     				}
     			}
     		}
+    		
+    		li:hover {
+				background: black;
+			}
 		}
 	}
 </style>
@@ -80,6 +90,11 @@
 
     export default{
         name:'MyHeader',
+        data () {
+        	return {
+        		user: window.Laravel.user
+        	}
+        },
         methods: {
         	logout () {
         		axios.post('/logout')

@@ -20,13 +20,14 @@
 
     import message from './message.js'
     import reaction from './reaction.js'
+    import rbac from './rbac.js'
 
     export default{
         name:'Message',
         data () {
             
             let modelObj = {}
-            Object.assign(modelObj, message, reaction)
+            Object.assign(modelObj, message, reaction, rbac)
 
         	return {
                 models: modelObj
@@ -40,9 +41,6 @@
         beforeRouteUpdate (to, from, next) {
             this.$refs.basicModel.init(to.params.index)
             next()
-        },
-        methods: {
-
         }
     }
 

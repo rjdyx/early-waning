@@ -48,5 +48,16 @@ export default [
                 name:'预警分析子系统'
             },
         ]
+    },
+    {
+        name:'用户管理',
+        role: 'rbac',
+        isEvent: false,
+        children: [
+            {
+                path: '/index/rbac/user/0',
+                name:'用户管理'
+            },
+        ]
     }
 ]

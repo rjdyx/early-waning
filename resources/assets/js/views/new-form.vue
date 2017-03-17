@@ -80,6 +80,7 @@
     import PopEvent from 'page/middle/components/reaction/pop-event.vue'
     import EventHandle from 'page/middle/components/reaction/event-handle.vue'
     import EventProgress from 'page/middle/components/reaction/event-progress.vue'
+    import PopUser from 'page/middle/components/rbac/pop-user.vue'
 
     export default {
         name: 'NewForm',
@@ -149,6 +150,9 @@
                     break
                 case 'progress-5':
                     this.popComponent = EventProgress
+                    break
+                case 'user':
+                    this.popComponent = PopUser
                     break
             }
         },

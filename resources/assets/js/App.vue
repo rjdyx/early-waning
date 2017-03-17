@@ -74,9 +74,7 @@
     }
 </script>
 
-<style scoped>
-	#app {
-		height: 100%;
-	}
+<style lang="less" scoped>
+    @import '~vux/src/styles/reset.less';
 </style>
 

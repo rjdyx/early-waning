@@ -21,7 +21,7 @@ Route::get('/home', function () {
     return view('home');
 });
 
-Auth::routes();
+
 
 Route::group(['prefix' => 'admin', 'namespace' => 'Admin', 'middleware' => ['auth', 'active']], function () {
 
@@ -67,6 +67,36 @@ Route::group(['prefix' => 'admin', 'namespace' => 'Admin', 'middleware' => ['aut
 	// 事件处理
 	Route::get('eventhandle/query', 'EventHandleController@query');
 	Route::resource('eventhandle', 'EventHandleController');
+
+	Route::group(['middleware' => 'admin'], function () {
+
+		// 新增用户
+		Route::post('register', 'AdminController@create');
+
+		// 获取所有用户，包括按搜索条件获取，按状态获取
+        Route::get('user/query', 'AdminController@query');
+        // 冻结或解冻用户
+        Route::get('user/triggleUser/{id}', 'AdminController@triggleUser');
+        // 批量冻结
+        Route::get('user/batchLock', 'AdminController@batchLock');
+        // 批量解冻
+        Route::get('user/batchUnlock', 'AdminController@batchUnlock');
+
+        // 获取所有角色，不分页
+        Route::get('rbac/getAllRoles', 'RBACController@getAllRoles');
+        // 获取所有权限
+        Route::get('rbac/getAllPermission', 'RBACController@getAllPermission');
+        // 按name获取权限
+        Route::get('rbac/getPermissionByName/{name}', 'RBACController@getPermissionByName');
+        // 按权限分类获取所有权限
+        Route::get('rbac/getPermissionByClassification', 'RBACController@getPermissionByClassification');
+        // 角色权限接口
+        //获取用户所拥有的所有的角色的id
+        Route::get('rbac/getUserRole/{id}', 'RBACController@getUserRole');
+        Route::post('rbac/userBindRole', 'RBACController@userBindRole');
+        Route::resource('rbac', 'RBACController');
+    });
+
 });
 
-
+Auth::routes();

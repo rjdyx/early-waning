@@ -4,47 +4,77 @@
  * 超级管理员接口
  */
 
-namespace App\Http\Controllers\Admin\C;
+namespace App\Http\Controllers\Admin;
 
 use App\User;
 use Illuminate\Http\Request;
 use App\Http\Controllers\Controller;
 use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\Validator;
 
 class AdminController extends Controller
 {
+
+    /**
+     * Create a new user instance after a valid registration.
+     *
+     * @param  array  $data
+     * @return User
+     */
+    public function create(Request $request)
+    {
+        $message = [
+            'unique' => ':attribute重复'
+        ];
+        $this->validate($request, [
+            'name' => 'required|max:20|unique:users,name',
+            'email' => 'required|email|max:255|unique:users,email',
+            'password' => 'required|min:6|confirmed'
+        ], $message);
+        $data = $request->all();
+        $user = new User();
+        $user->name = $data['name'];
+        $user->email = $data['email'];
+        $user->password = bcrypt($data['password']);
+        $user->active = 0;
+        $user->save();
+
+        return $user;
+    }
+    
     /**
      * 获取所有用户，包括按搜索条件获取，按状态获取
      * @param Request $request
      * @return mixed
      */
-    public function getAllUser(Request $request)
+    public function query(Request $request)
     {
         //request保存
         $request->flash();
 
         // 没有条件时获取全部
         $users = User::whereRaw('1=1')
-            ->where('name', '<>', 'admin');
+            ->where('name', '<>', 'admin')
+            ->select(
+                'id',  
+                'name', 
+                'email', 
+                'active', 
+                'created_at'
+            );
 
         // 搜索内容
         $param = $request->input('param');
         // 状态
         $active = $request->input('active');
 
-        if($param != null){
-            $users = $users->where('name', 'like', '%'.$param.'%');
-        }
+        $param && $users = $users->where('name', 'like', '%'.$param.'%');
 
-        if($active != null){
-            $users = $users->where('active', $active);
-        }
+        $active && $users = $users->where('active', $active);
 
-        $users = $users->select(
-           'id',  'name', 'email', 'active', 'created_at'
-        )
-        ->orderBy('created_at', 'desc')
-        ->paginate(10);
+        $users = $users
+            ->orderBy('created_at', 'desc')
+            ->paginate(config('app.page_size'));
         
         return $users;
 
@@ -74,7 +104,7 @@ class AdminController extends Controller
             $user->active = 0;
             $user->save();
         }
-        return response()->json('true');
+        return response()->json(true);
     }
 
     /**

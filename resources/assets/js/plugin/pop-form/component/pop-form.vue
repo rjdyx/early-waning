@@ -30,11 +30,27 @@
                         </td>
                         <td class="form-input" colspan="2">
                             <input 
-                            v-model="tableForm[proto]" 
-                            v-validate.initial="tableForm[proto]" 
-                            :data-vv-rules="rows[proto].rules | rulesToString" 
-                            :data-vv-as="rows[proto].label" 
-                            type="text" :id="proto" class="el-input__inner" :name="proto" :placeholder="rows[proto].placeholder">
+                                v-if="rows[proto].type"
+                                v-model="tableForm[proto]" 
+                                v-validate.initial="tableForm[proto]" 
+                                :data-vv-rules="rows[proto].rules | rulesToString" 
+                                :data-vv-as="rows[proto].label" 
+                                type="password" 
+                                :id="proto" 
+                                class="el-input__inner" 
+                                :name="proto" 
+                                :placeholder="rows[proto].placeholder">
+                            <input 
+                                v-else
+                                v-model="tableForm[proto]" 
+                                v-validate.initial="tableForm[proto]" 
+                                :data-vv-rules="rows[proto].rules | rulesToString" 
+                                :data-vv-as="rows[proto].label" 
+                                type="text" 
+                                :id="proto" 
+                                class="el-input__inner" 
+                                :name="proto" 
+                                :placeholder="rows[proto].placeholder">
                         </td>
                     </tr>
 
@@ -161,9 +177,17 @@
                                 this.$router.back()
                             }
                         })
+                        .catch((error) => {
+                            let proto = Object.keys(error.response.data)
+                            if(error.response.status == 422 && proto.length) {
+                                this.$message.error(error.response.data[proto[0]][0]);
+                            }
+                        })
                     }else {
+                        console.log('in');
                         axios.post(this.$adminUrl(this.formUrl), this.tableForm)
                         .then((responce) => {
+                            console.log(responce.data);
                             if(responce.data) {
                                 this.$popForm.afterAddFn()
                                 this.$message({
@@ -171,6 +195,12 @@
                                   type: 'success'
                                 })
                                 this.$emit('addSuccess')
+                            }
+                        })
+                        .catch((error) => {
+                            let proto = Object.keys(error.response.data)
+                            if(error.response.status == 422 && proto.length) {
+                                this.$message.error(error.response.data[proto[0]][0]);
                             }
                         })
                     }

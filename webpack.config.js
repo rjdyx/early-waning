@@ -10,6 +10,7 @@ let config = {
 
     entry: {
         index: 'jsPath/index.js',
+        app: 'jsPath/app.js',
         vendor: [
             'axios',
             'jquery',
@@ -87,7 +88,8 @@ let config = {
             'jsPath': path.resolve(__dirname, './resources/assets/js'),
             'lang': path.resolve(__dirname, './resources/lang'),
             'components': path.resolve(__dirname, './resources/assets/js/components'),
-            'page': path.resolve(__dirname, './resources/assets/js/page')
+            'page': path.resolve(__dirname, './resources/assets/js/page'),
+            'appPage': path.resolve(__dirname, './resources/assets/js/appPage')
         }
     },
     // 用来配置 loader 模块的解析
@@ -145,8 +147,6 @@ let config = {
     node: {
       fs: "empty"
     }
-
-    
 }
 
 if(process.env.NODE_ENV == 'development') {
@@ -184,4 +184,16 @@ if(process.env.NODE_ENV == 'development') {
     })
 }
 
-module.exports = config
+
+const vuxLoader = require('vux-loader')
+module.exports = vuxLoader.merge(config, {
+    options: {},
+    plugins: [
+        {
+            name: 'vux-ui'
+        },
+        {
+            name: 'duplicate-style'
+        }
+    ]
+})

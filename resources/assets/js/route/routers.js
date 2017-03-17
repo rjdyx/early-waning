@@ -54,7 +54,7 @@ const routes = [
         children: [
             {
                 path: 'message/:model/:index',
-                alias: 'reaction/:model/:index',
+                alias: ['reaction/:model/:index', 'rbac/:model/:index'],
                 component: middle,
                 meta: { requiresAuth: true }
             },

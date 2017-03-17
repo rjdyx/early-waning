@@ -2,16 +2,23 @@
     <el-menu
         :router="true" 
         class="left-menu">
-      <el-submenu 
-        v-for="(menu, index) in menus"
-        :index="menu.name">
-            <template slot="title">{{menu.name}}</template>
+        <template v-for="(menu, index) in menus">
+            <el-submenu v-if="menu.children.length" :index="menu.name">
+                <template slot="title">{{menu.name}}</template>
+                <el-menu-item 
+                    v-for="(subMenu, subIndex) in menu.children" 
+                    :index="subMenu.path" @click="clickEvent(menu, subMenu)" exact>
+                    {{subMenu.name}}
+                </el-menu-item>
+            </el-submenu>
             <el-menu-item 
-                v-for="(subMenu, subIndex) in menu.children" 
-                :index="subMenu.path" @click="clickEvent(menu, subMenu)" exact>
-                {{subMenu.name}}
+                v-else 
+                :index="menu.path" 
+                @click="clickEvent(menu, {name: ''})" exact>
+                {{menu.name}}
             </el-menu-item>
-      </el-submenu>
+        </template>
+        
     </el-menu>
 </template>
 

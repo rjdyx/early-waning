@@ -54,6 +54,11 @@
         <script>
             window.Laravel = <?php echo json_encode([
                 'csrfToken' => csrf_token(),
+                'user' => [
+                    'id' => Auth::user()?Auth::user()->id:null,
+                    'name' => Auth::user()?Auth::user()->name:null,
+                    'email' => Auth::user()?Auth::user()->email:null
+                ]
             ]); ?>;
         </script>
     </head>
