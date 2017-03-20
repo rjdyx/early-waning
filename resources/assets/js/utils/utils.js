@@ -156,5 +156,21 @@ export default {
 
             return targetArr
         };
+
+        /**
+         *
+         * 封装Vux的toast
+         *
+         * @param url
+         * @returns {*}
+         */
+        Vue.prototype.$toast = function(text="", width="7.6em") {
+            this.$vux.toast.show({
+                type: 'text',
+                text: text,
+                position: 'bottom',
+                width: width
+            })
+        };
     }
 };

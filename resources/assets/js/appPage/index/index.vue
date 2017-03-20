@@ -9,9 +9,8 @@
 <template>
 
     <div>
-        <group>
-            <cell title="title" value="value"></cell>
-        </group>
+        <x-header :right-options="{showMore: true}" @on-click-more="showMenus = true">{{user}}</x-header>
+        <actionsheet :menus="menus" v-model="showMenus" show-cancel></actionsheet>
     </div>
 </template>
 <style lang="sass" scoped>
@@ -19,13 +18,23 @@
 </style>
 <script>
 
-    import { Group, Cell } from 'vux'
+    import { XHeader, Actionsheet } from 'vux'
 
     export default{
         name:'Index',
+        data () {
+            return {
+                user: Laravel.user.name,
+                menus: {
+                    menu1: 'Take Photo',
+                    menu2: 'Choose from photos'
+                },
+                showMenus: false
+            }
+        },
         components: {
-            Group,
-            Cell
+            XHeader,
+            Actionsheet
         }
     }
 

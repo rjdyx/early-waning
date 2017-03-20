@@ -108,7 +108,12 @@ let config = {
             css: ExtractTextPlugin.extract('vue-style-loader', 'css-loader'),
             sass: ExtractTextPlugin.extract('vue-style-loader', 'css-loader!sass-loader'),
             less: ExtractTextPlugin.extract('vue-style-loader', 'css-loader!less-loader')
-        }
+        },
+        postcss: [
+            require('autoprefixer')({
+                browsers: ['last 2 versions']
+            })
+        ]
     },
 
     // 插件项
@@ -187,7 +192,6 @@ if(process.env.NODE_ENV == 'development') {
 
 const vuxLoader = require('vux-loader')
 module.exports = vuxLoader.merge(config, {
-    options: {},
     plugins: [
         {
             name: 'vux-ui'
