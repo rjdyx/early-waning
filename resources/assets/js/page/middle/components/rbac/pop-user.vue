@@ -9,6 +9,8 @@
 
 <script>
 
+    import SelectRole from './select-role.vue'
+
     export default {
         name: 'PopUser',
         props: {
@@ -52,6 +54,11 @@
                         value: '',
                         type: 'password',
                         placeholder: '必填'
+                    },
+                    role: {
+                        label: '角色',
+                        component: SelectRole,
+                        value: 0
                     }
                 }
             }

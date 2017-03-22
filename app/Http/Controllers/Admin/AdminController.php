@@ -7,6 +7,8 @@
 namespace App\Http\Controllers\Admin;
 
 use App\User;
+use App\Expert;
+use App\EmergencyCrew;
 use Illuminate\Http\Request;
 use App\Http\Controllers\Controller;
 use Illuminate\Support\Facades\Auth;
@@ -37,6 +39,7 @@ class AdminController extends Controller
         $user->email = $data['email'];
         $user->password = bcrypt($data['password']);
         $user->active = 0;
+        $user->role = $data['role'];
         $user->save();
 
         return $user;
@@ -60,6 +63,7 @@ class AdminController extends Controller
                 'name', 
                 'email', 
                 'active', 
+                'role', 
                 'created_at'
             );
 
@@ -67,10 +71,14 @@ class AdminController extends Controller
         $param = $request->input('param');
         // 状态
         $active = $request->input('active');
+        // 角色
+        $role = $request->input('role');
 
         $param && $users = $users->where('name', 'like', '%'.$param.'%');
 
         $active && $users = $users->where('active', $active);
+
+        $role && $users = $users->where('role', $role);
 
         $users = $users
             ->orderBy('created_at', 'desc')
@@ -87,9 +95,6 @@ class AdminController extends Controller
      */
     public function triggleUser($id)
     {
-        if(!Auth::user()->can('user-lock')){
-            return response()->json('false');
-        }
 
         $user = User::where('id', $id)
             ->where('name', '<>', 'admin')
@@ -137,5 +142,29 @@ class AdminController extends Controller
                 'active' => 0
             ]);
         return response()->json($result);
+    }
+
+    /**
+     * 改变用户角色
+     * @param Request $request
+     * @return \Illuminate\Http\JsonResponse
+     */
+    public function changeRole(Request $request)
+    {
+        $id = $request->input('id');
+        $role = $request->input('role');
+        $user = User::where('id', $id)
+            ->where('name', '<>', 'admin')
+            ->first();
+        if($user == null){
+            return response()->json('false');
+        }
+        $user->role = $role;
+        $user->save();
+
+        Expert::where('user_id', $id)->update(['user_id' => null]);
+        EmergencyCrew::where('user_id', $id)->update(['user_id' => null]);
+
+        return response()->json(true);
     }
 }

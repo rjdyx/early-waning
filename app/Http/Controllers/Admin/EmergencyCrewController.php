@@ -33,6 +33,7 @@ class EmergencyCrewController extends Controller
         $exceptIds = $request->input('except_ids');
 
         $emergencyCrews = DB::table('emergency_crews')
+            ->leftJoin('users', 'users.id' , '=', 'emergency_crews.user_id')
             ->join('orgs', 'orgs.id' , '=', 'emergency_crews.org_id')
             ->select(
                 'emergency_crews.id',
@@ -48,7 +49,9 @@ class EmergencyCrewController extends Controller
                 'emergency_crews.org_id',
                 'emergency_crews.created_at as emergency_crew_created_at',
                 'orgs.id as org_id',
-                'orgs.name as org_name'
+                'orgs.name as org_name',
+                'users.id as user_id',
+                'users.name as user_name'
             )
             ->whereRaw('1=1');
 
@@ -191,5 +194,13 @@ class EmergencyCrewController extends Controller
             return response()->json($emergencyCrew->id);
         }
         
+    }
+
+    public function bindUser(Request $request)
+    {
+        $id = $request->input('id');
+        $userId = $request->input('user_id');
+
+        EmergencyCrew::where('id', $id)->update(['user_id' => $userId]);
     }
 }

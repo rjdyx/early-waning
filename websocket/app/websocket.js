@@ -48,15 +48,22 @@ export function createWebSocketServer(onConnection, onMessage, onClose, onError)
             ws.close(4001, 'Invalid user')
         }
 
-        // axios.get('http://www.earlywarning.com/admin/org/query',
-        // {
-        //     headers: {
-        //         Cookie: cookie
-        //     }
-        // })
-        // .then((res) => {
-        //     console.log(res.data);
-        // })
+        axios.get('http://www.earlywarning.com/admin/ws/getUser',
+        {
+            headers: {
+                Cookie: cookie
+            }
+        })
+            .then((res) => {
+                if(res.data.active == 0) {
+                    ws.user = res.data
+                }else {
+                    ws.close(4001, 'Invalid user')
+                }
+            })
+            .catch((error) => {
+                ws.close(4001, 'Invalid user')
+            })
 
         ws.cookie = cookie
         ws.wss = wss

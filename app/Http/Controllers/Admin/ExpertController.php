@@ -32,6 +32,7 @@ class ExpertController extends Controller
         $exceptIds = $request->input('except_ids');
 
         $experts = DB::table('experts')
+            ->leftJoin('users', 'users.id' , '=', 'experts.user_id')
             ->join('normal_types as expert_area', 'expert_area.id' , '=', 'experts.expert_area_id')
             ->join('orgs', 'orgs.id' , '=', 'experts.org_id')
             ->select(
@@ -54,7 +55,9 @@ class ExpertController extends Controller
                 'expert_area.id as expert_area_id',
                 'expert_area.name as expert_area',
                 'orgs.id as org_id',
-                'orgs.name as org_name'
+                'orgs.name as org_name',
+                'users.id as user_id',
+                'users.name as user_name'
             )
             ->whereRaw('1=1');
 
@@ -187,5 +190,13 @@ class ExpertController extends Controller
             return response()->json($expert->id);
         }
         
+    }
+
+    public function bindUser(Request $request)
+    {
+        $id = $request->input('id');
+        $userId = $request->input('user_id');
+
+        Expert::where('id', $id)->update(['user_id' => $userId]);
     }
 }

@@ -33,11 +33,14 @@ class CreateExpertsTable extends Migration
             $table->string('meno', 255)->nullable(); // 备注
             $table->integer('org_id')->unsigned(); // 所属机构
             $table->integer('expert_area_id')->unsigned(); // 专家领域
+            $table->integer('user_id')->unsigned()->nullable(); // 对应用户
             $table->timestamps();
 
             $table->foreign('org_id')->references('id')->on('orgs')
                 ->onUpdate('cascade')->onDelete('cascade');
             $table->foreign('expert_area_id')->references('id')->on('normal_types')
+                ->onUpdate('cascade')->onDelete('cascade');
+            $table->foreign('user_id')->references('id')->on('users')
                 ->onUpdate('cascade')->onDelete('cascade');
         });
     }

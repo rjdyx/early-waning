@@ -1,6 +1,7 @@
 import TypeManage from 'components/public/type-manage.vue'
 import Sex from 'components/public/sex.vue'
 import EventType from './components/message/event-type.vue'
+import CrewHandle from './components/message/crew-handle.vue'
 
 export default {
     org:[
@@ -23,10 +24,10 @@ export default {
             url: 'expert',
             searchPlaceholder: '请输入专家姓名',
             typeComponent: [{component: TypeManage, params: {title: '专家领域管理', type: 2}}],
-            theads: ['姓名', '专家领域','所属机构','性别','学历', '职责', '职务', '住址', '邮编', '单位', '办公电话', '宅电', '手机', '邮箱', '备注'],
-            protos: ['name', 'expert_area', 'org_name', 'sex', 'degree', 'duty', 'title', 'address', 'zipcode', 'company', 'officephone', 'homephone', 'cellphone', 'email', 'meno'],
-            widths: [50, 50, 50, 50, 50, 50, 50, 50, 50, 50, 50, 50, 50, 50, 50],
-            colComponent: {sex: Sex}
+            theads: ['姓名', '专家领域','所属机构','关联账户','性别','学历', '职责', '职务', '住址', '邮编', '单位', '办公电话', '宅电', '手机', '邮箱', '备注'],
+            protos: ['name', 'expert_area', 'org_name', 'user_name', 'sex', 'degree', 'duty', 'title', 'address', 'zipcode', 'company', 'officephone', 'homephone', 'cellphone', 'email', 'meno'],
+            widths: [50, 50, 50, 50, 50, 50, 50, 50, 50, 50, 50, 50, 50, 50, 50, 50],
+            colComponent: {sex: Sex, operation: CrewHandle}
         },
         {
             key: 'emergencyCrewManage',
@@ -34,9 +35,9 @@ export default {
             url: 'emergencycrew',
             searchPlaceholder: '请输入应急人员姓名',
             typeComponent: [{}],
-            theads: ['姓名', '所属机构', '年龄', '性别', '职责', '职务', '固定电话', '手机', '邮箱', '备注'],
-            protos: ['name', 'org_name', 'age', 'sex', 'duty', 'title', 'phone', 'cellphone', 'email', 'meno'],
-            widths: [50, 50, 50, 50, 50, 50, 50, 50, 50, 50],
+            theads: ['姓名', '所属机构', '关联账户', '年龄', '性别', '职责', '职务', '固定电话', '手机', '邮箱', '备注'],
+            protos: ['name', 'org_name', 'user_name', 'age', 'sex', 'duty', 'title', 'phone', 'cellphone', 'email', 'meno'],
+            widths: [50, 50, 50, 50, 50, 50, 50, 50, 50, 50, 50],
             colComponent: {sex: Sex}
         }
     ],

@@ -25,6 +25,8 @@ Route::get('/home', function () {
 
 Route::group(['prefix' => 'admin', 'namespace' => 'Admin', 'middleware' => ['auth', 'active']], function () {
 
+	Route::get('ws/getUser', 'SocketController@getUser');
+
 	// 类型
 	Route::resource('normal-type', 'NormalTypeController');
 
@@ -36,12 +38,14 @@ Route::group(['prefix' => 'admin', 'namespace' => 'Admin', 'middleware' => ['aut
 	// 专家
 	Route::get('expert/query', 'ExpertController@query');
 	Route::delete('expert', 'ExpertController@destroy');
+	Route::post('expert/bindUser', 'ExpertController@bindUser');
 	Route::resource('expert', 'ExpertController');
 
 	// 应急人员
 	Route::get('emergencycrew/query', 'EmergencyCrewController@query');
 	Route::get('emergencycrew/query-crew/{id}', 'EmergencyCrewController@queryCrew');
 	Route::delete('emergencycrew', 'EmergencyCrewController@destroy');
+	Route::post('emergencycrew/bindUser', 'EmergencyCrewController@bindUser');
 	Route::resource('emergencycrew', 'EmergencyCrewController');
 
 	// 预警条件
@@ -81,6 +85,8 @@ Route::group(['prefix' => 'admin', 'namespace' => 'Admin', 'middleware' => ['aut
         Route::get('user/batchLock', 'AdminController@batchLock');
         // 批量解冻
         Route::get('user/batchUnlock', 'AdminController@batchUnlock');
+        // 改变用户角色
+        Route::post('user/changeRole', 'AdminController@changeRole');
 
         // 获取所有角色，不分页
         Route::get('rbac/getAllRoles', 'RBACController@getAllRoles');

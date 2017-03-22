@@ -1,5 +1,6 @@
 import status from './components/rbac/status.vue'
 import lock from './components/rbac/lock.vue'
+import role from './components/rbac/role.vue'
 
 export default {
     'user':[
@@ -10,10 +11,10 @@ export default {
             searchPlaceholder: '请输入用户名',
             hideDeleteButton: true,
             typeComponent: [],
-            theads: ['用户名', '邮箱', '状态', '注册时间'],
-            protos: ['name', 'email', 'active', 'created_at'],
-            widths: [50, 50, 50, 50],
-            colComponent: {active: status, operation: lock}
+            theads: ['用户名', '邮箱', '状态', '角色', '注册时间'],
+            protos: ['name', 'email', 'active', 'role', 'created_at'],
+            widths: [50, 50, 50, 50, 50],
+            colComponent: {active: status, role: role, operation: lock}
         }
     ]
 }

@@ -31,40 +31,19 @@
             this.ws = new WebSocket('ws://www.earlywarning.com:3000/ws/chat')
 
         	this.ws.onmessage = function(event) {
-		        var data = event.data;
-		        console.log('onmessage');
-		        console.log(data);
+		        var data = event.data
+		        console.log('onmessage')
+		        console.log(data)
 		    };
 
 		    this.ws.onclose = function (evt) {
-		        console.log('[closed] ' + evt.code);
-		    };
+		        console.log('[closed] ' + evt.code)
+		    }
 
 		    this.ws.onerror = function (code, msg) {
-		        console.log('[ERROR] ' + code + ': ' + msg);
-		    };
+		        console.log('[ERROR] ' + code + ': ' + msg)
+		    }
 
-            // let params = {
-            //     code: '1',
-            //     description: '1',
-            //     type: 2
-            // }
-
-            // axios.post('http://www.earlywarning.com/admin/waningcondition', {
-            //     code: '1',
-            //     description: '1',
-            //     type: 2,
-            //     headers: {
-            //         Cookie: document.cookie,
-
-            //     }
-            // })
-            //     .then((responce) => {
-            //         console.log(responce.data)
-            //     })
-            //     .catch((error) => {
-            //         console.log(error);
-            //     })
         },
         methods: {
         	sendMsg() {
