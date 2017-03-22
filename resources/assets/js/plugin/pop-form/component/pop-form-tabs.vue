@@ -35,27 +35,27 @@
                         </td>
                         <td class="form-input" colspan="2">
                             <input 
-                                v-if="rows[proto].type"
+                                v-if="rows.requireMsg[proto].type"
                                 v-model="tableForm[proto]" 
                                 v-validate.initial="tableForm[proto]" 
-                                :data-vv-rules="rows[proto].rules | rulesToString" 
-                                :data-vv-as="rows[proto].label" 
+                                :data-vv-rules="rows.requireMsg[proto].rules | rulesToString" 
+                                :data-vv-as="rows.requireMsg[proto].label" 
                                 type="password" 
                                 :id="proto" 
                                 class="el-input__inner" 
                                 :name="proto" 
-                                :placeholder="rows[proto].placeholder">
+                                :placeholder="rows.requireMsg[proto].placeholder">
                             <input 
                                 v-else
                                 v-model="tableForm[proto]" 
                                 v-validate.initial="tableForm[proto]" 
-                                :data-vv-rules="rows[proto].rules | rulesToString" 
-                                :data-vv-as="rows[proto].label" 
+                                :data-vv-rules="rows.requireMsg[proto].rules | rulesToString" 
+                                :data-vv-as="rows.requireMsg[proto].label" 
                                 type="text" 
                                 :id="proto" 
                                 class="el-input__inner" 
                                 :name="proto" 
-                                :placeholder="rows[proto].placeholder">
+                                :placeholder="rows.requireMsg[proto].placeholder">
                         </td>
                     </tr>
 

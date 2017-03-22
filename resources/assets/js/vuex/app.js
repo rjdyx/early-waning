@@ -4,23 +4,25 @@ import Vue from 'vue';
 
 const store = new Vuex.Store({
     state: {
-        userInfo: {userId: ''}
+        showBack: false,
+        menu: null
     },
     mutations: {
 
-        /**
-         * 设置用户登录信息
-         */
-        setUserInfo(state, userInfo) {
-            state.userInfo.userId = userInfo;
-        }
-    },
-    
-    actions: {
-        setUserInfo(context, user) {
-            context.commit('setUserInfo', user);
+        setShowBack(state, showBack) {
+            state.showBack = showBack
+        },
+
+        setMenu(state, menu) {
+            state.menu = menu
         }
     }
+    
+    // actions: {
+    //     setUserInfo(context, user) {
+    //         context.commit('setUserInfo', user);
+    //     }
+    // }
     
 });
 

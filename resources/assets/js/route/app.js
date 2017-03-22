@@ -11,6 +11,18 @@ const index = resolve => {
     }, 'app-index');
 };
 
+const list = resolve => {
+    require.ensure(['../appPage/index/components/list.vue'], () =>{
+        resolve(require('../appPage/index/components/list.vue'));
+    }, 'list');
+};
+
+const detail = resolve => {
+    require.ensure(['../appPage/index/components/detail.vue'], () =>{
+        resolve(require('../appPage/index/components/detail.vue'));
+    }, 'detail');
+};
+
 //---------------------------登录组件----------------------------------
 const login = resolve => {
     require.ensure(['../views/app-login.vue'], () =>{
@@ -33,7 +45,19 @@ const routes = [
         path: '/',
         name: 'index',
         component: index,
-        meta: { requiresAuth: true }
+        meta: { requiresAuth: true },
+        children: [
+            {
+                path: '',
+                component: list,
+                meta: { requiresAuth: true }
+            },
+            {
+                path: 'detail/:id',
+                component: detail,
+                meta: { requiresAuth: true }
+            }
+        ]
     },
     {
         path: '/login',

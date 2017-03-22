@@ -10,14 +10,14 @@
                         <el-switch
                           v-model="reset"
                           on-text=""
-                          off-text="">
+                          off-text=""></el-switch>
                     </li>
                     <li>
                         提交后不返回
                         <el-switch
                           v-model="back"
                           on-text=""
-                          off-text="">
+                          off-text=""></el-switch>
                     </li>
                     
                 </ul>

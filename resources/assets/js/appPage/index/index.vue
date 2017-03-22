@@ -9,32 +9,72 @@
 <template>
 
     <div>
-        <x-header :right-options="{showMore: true}" @on-click-more="showMenus = true">{{user}}</x-header>
-        <actionsheet :menus="menus" v-model="showMenus" show-cancel></actionsheet>
+        <my-header></my-header>
+        <router-view></router-view>
     </div>
 </template>
 <style lang="sass" scoped>
+    .swiper {
+        margin-bottom: 1px;
+    }
 
+    .event-list {
+
+        font-size: 14px;
+
+        li {
+            overflow: hidden;
+            background: linear-gradient(180deg,#e5e5e5,#e5e5e5,hsla(0,0%,90%,0)) 0 100% no-repeat;
+            background-size: 100% 1px;
+
+            .left {
+                float: left;
+                padding: 10px;
+
+                h3 {
+                    width: 200px;
+                    margin-bottom: 6px;
+                    text-overflow: ellipsis;
+                    white-space: nowrap;
+                    overflow: hidden;
+                    word-break: keep-all;
+                }
+
+                p {
+                    width: 230px;
+                    font-size: 13px;
+                    text-overflow: ellipsis;
+                    white-space: nowrap;
+                    overflow: hidden;
+                    word-break: keep-all;
+                }
+            }
+
+            .right {
+                float: right;
+                padding: 10px;
+            }
+        }
+    }
 </style>
 <script>
 
-    import { XHeader, Actionsheet } from 'vux'
+    import header from './components/header.vue'
+    import list from './components/list.vue'
 
     export default{
         name:'Index',
         data () {
             return {
-                user: Laravel.user.name,
-                menus: {
-                    menu1: 'Take Photo',
-                    menu2: 'Choose from photos'
-                },
-                showMenus: false
+
             }
         },
         components: {
-            XHeader,
-            Actionsheet
+            'my-header': header,
+            list
+        },
+        methods: {
+
         }
     }
 

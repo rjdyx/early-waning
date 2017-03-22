@@ -10,9 +10,10 @@ require('animate.css') // 动画css插件
 import VueRouter from 'vue-router'
 Vue.use(VueRouter)
 
-import  { ToastPlugin, LoadingPlugin } from 'vux'
+import  { ToastPlugin, LoadingPlugin, ConfirmPlugin } from 'vux'
 Vue.use(ToastPlugin)
 Vue.use(LoadingPlugin)
+Vue.use(ConfirmPlugin)
 
 
 /**
@@ -41,14 +42,6 @@ axios.interceptors.response.use(function (response) {
 
 // 注册全局组件
 // Vue.component('passport-clients', require('components/passport/Clients.vue'))
-
-
-
-
-// 注册自定义验证规则
-import { Validator } from 'vee-validate'
-import validates from '../utils/validate.js'
-Object.keys(validates).forEach(k => Validator.extend(k, validates[k]())) 
 
 
 
