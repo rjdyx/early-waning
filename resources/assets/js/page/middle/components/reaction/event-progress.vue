@@ -7,6 +7,7 @@
                 <el-button @click="expertDialogVisible=true">参与专家</el-button>
                 <el-button type="success" icon="plus" @click="progressDialogVisible=true">更新进度</el-button>
                 <el-button type="danger" icon="warning" @click="closeEvent">结束事件</el-button>
+
             </div>
         </div>
         <div class="event-progress">
@@ -89,14 +90,17 @@
             PopProgress
         },
         mounted () {
-            this.getEventHandleMsg()
-            this.getEventProgress()
+            this.$nextTick(() => {
+                this.getEventHandleMsg()
+                this.getEventProgress()
+            })
         },
         methods: {
 
             ...mapMutations([
                 'setProgress',
-                'pushProgress'
+                'pushProgress',
+                'spliceProgress'
             ]),
 
             getEventHandleMsg () {
@@ -158,7 +162,7 @@
                                 type: 'success',
                                 message: '删除成功!'
                             })
-                            this.progress.splice(index, 1)
+                            this.spliceProgress(index)
                         }
                     })
             },
@@ -169,7 +173,7 @@
                         if(responce.data.data.length) {
                             console.log(responce.data.data);
                             let arr = this.progress.concat(responce.data.data)
-                            this.$set(this, 'progress', arr)
+                            this.setProgress(arr)
                         }else {
                             this.page--
                             this.$message({

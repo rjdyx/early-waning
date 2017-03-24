@@ -247,9 +247,6 @@
             Plan,
             Information
         },
-        mounted () {
-            console.log();
-        },
         methods: {
 
 
@@ -459,5 +456,4 @@
             }
         }
     }
-    
 </style>

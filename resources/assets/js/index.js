@@ -17,7 +17,6 @@ router.beforeEach((to, from, next) => {
               store.getters.ws.onmessage = function(event) {
                 let s = JSON.parse(event.data)
                 console.log('onmessage')
-                console.log(s);
                 if(s.type == 'progress') {
                   store.commit('pushProgress', s.msg)
                 }

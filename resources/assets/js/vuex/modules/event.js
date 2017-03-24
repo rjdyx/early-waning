@@ -20,7 +20,12 @@ const mutations = {
 
   pushProgress(state, progress) {
     state.progress.unshift(progress)
+  },
+
+  spliceProgress(state, index) {
+    state.progress.splice(index, 1)
   }
+
 }
 
 export default {
