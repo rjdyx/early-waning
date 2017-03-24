@@ -14,10 +14,15 @@ router.beforeEach((to, from, next) => {
             if(!store.getters.ws) {
               store.commit('setWS', new WebSocket('ws://www.earlywarning.com:3000/ws/chat'))
               store.getters.ws.onmessage = function(event) {
-                let data = JSON.parse(event.data)
+                let s = JSON.parse(event.data)
                 console.log('onmessage')
-                store.commit('pushData', data)
-                $('.vux-swiper').css('height', store.getters.data.length * 66 + 'px')
+                if(s.type == 'event') {
+                  store.commit('pushData', s.msg)
+                  $('.vux-swiper').css('height', store.getters.data.length * 66 + 'px')
+                } else {
+                  store.commit('pushProgress', s.msg)
+                }
+                
               };
 
               store.getters.ws.onclose = function (evt) {

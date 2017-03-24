@@ -13,3 +13,7 @@ export const subNavBarName = state => {
 export const ws = state => {
   return state.websocket.ws
 }
+
+export const progress = state => {
+  return state.event.progress
+}

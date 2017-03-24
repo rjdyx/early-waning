@@ -3,6 +3,7 @@
 namespace App\Http\Controllers\Admin;
 
 use App\Org;
+use App\User;
 use App\EmergencyCrew;
 use App\EmergencyCrewPlan;
 use Illuminate\Http\Request;
@@ -90,11 +91,14 @@ class EmergencyCrewController extends Controller
             if($emergencyCrew->title == 2) array_push($subLeaders, $emergencyCrew);
             if($emergencyCrew->title == 3) array_push($members, $emergencyCrew);
         }
+        $users = User::where('role', 0)->get();
+
         return response()->json([
             'leader' => $leaders,
             'subLeader' => $subLeaders,
-            'member' => $members
-            ]);
+            'member' => $members,
+            'users' => $users
+        ]);
     }
 
 

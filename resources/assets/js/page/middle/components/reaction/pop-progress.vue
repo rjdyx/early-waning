@@ -31,6 +31,14 @@
         methods: {
 
             publishProgress () {
+
+                if(this.content == '') {
+                    this.$message({
+                        type: 'error',
+                        message: '请输入内容!'
+                    })
+                    return false
+                }
                 
                 let params = {
                     content: this.content,

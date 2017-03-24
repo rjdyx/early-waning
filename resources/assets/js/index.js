@@ -12,11 +12,15 @@ router.beforeEach((to, from, next) => {
         if (Laravel.user.id) {
 
             if(!store.getters.ws) {
+              console.log('in ws');
               store.commit('setWS', new WebSocket('ws://www.earlywarning.com:3000/ws/chat'))
               store.getters.ws.onmessage = function(event) {
-                var data = event.data
+                let s = JSON.parse(event.data)
                 console.log('onmessage')
-                console.log(data)
+                console.log(s);
+                if(s.type == 'progress') {
+                  store.commit('pushProgress', s.msg)
+                }
               };
 
               store.getters.ws.onclose = function (evt) {

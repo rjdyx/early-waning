@@ -31,6 +31,7 @@ class EventProgressController extends Controller
                 'users.id as user_id',
                 'users.name as user_name'
             )
+            ->where('event_id', $eventId)
             ->orderBy('event_progresses_created_at', 'desc')
             ->orderBy('id', 'desc')
             ->paginate(config('app.page_size'));

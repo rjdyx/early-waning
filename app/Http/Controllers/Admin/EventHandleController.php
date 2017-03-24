@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers\Admin;
 
+
 use App\Event;
 use App\Plan;
 use App\Information;
@@ -29,6 +30,8 @@ class EventHandleController extends Controller
         //request保存
         $request->flash();
 
+        $eventId = $request->input('event_id');
+
         $events = DB::table('event_handles')
             ->join('plans', 'plans.id' , '=', 'event_handles.plan_id')
             ->join('informations', 'informations.id' , '=', 'event_handles.information_id')
@@ -45,7 +48,7 @@ class EventHandleController extends Controller
                 'experts.id as expert_id',
                 'experts.name as expert_name'
             )
-            ->whereRaw('1=1')
+            ->where('event_handles.event_id', $eventId)
             ->get();
 
         if(sizeof($events)) {
@@ -70,6 +73,8 @@ class EventHandleController extends Controller
             $expert->name = $event->expert_name;
             array_push($experts, $expert);
         }
+
+        
 
         return response()->json([
                 'plan' => $plan,

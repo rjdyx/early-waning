@@ -379,23 +379,9 @@
                         if(type == 4) {
                             _this.$router.push('/index/reaction/emergency/1')
                         }
-                        let broadcast = []
-                        for(let item of _this.expert) {
-                            broadcast.push({
-                                id: item.id,
-                                name: item.name,
-                                role: 1
-                            })
-                        }
-                        for(let proto of Object.keys(emergencycrews.data)) {
-                            for(let item of emergencycrews.data[proto]) {
-                                broadcast.push({
-                                    id: item.id,
-                                    name: item.name,
-                                    role: 2
-                                })
-                            }
-                        }
+
+                        let broadcast = _this.$broadcast(_this.expert, emergencycrews.data)
+
                         if(_this.formMsg.status == 1) {
                             _this.formMsg.status = 2
                         }
@@ -403,7 +389,7 @@
                             _this.formMsg.status = 5
                         }
                         _this.ws.send(JSON.stringify({
-                            event: _this.formMsg,
+                            msg: _this.formMsg,
                             broadcast: broadcast,
                             type: 'event'
                         }))

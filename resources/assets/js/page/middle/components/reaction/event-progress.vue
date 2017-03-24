@@ -51,7 +51,7 @@
 
 <script>
 
-    import { mapGetters } from 'vuex'
+    import { mapGetters, mapMutations } from 'vuex'
     import Plan from './plan.vue'
     import Information from './information.vue'
     import Expert from './expert.vue'
@@ -64,7 +64,6 @@
                 plan: {name: '食品安全'},
                 information: {name: '食品安全'},
                 experts: [],
-                progress: [],
                 // 是否显示预案详情弹窗
                 planDialogVisible: false,
                 // 是否显示专题详情弹窗
@@ -78,7 +77,9 @@
         },
         computed: {
             ...mapGetters([
-                'formMsg'
+                'formMsg',
+                'ws',
+                'progress'
             ])
         },
         components: {
@@ -93,8 +94,13 @@
         },
         methods: {
 
+            ...mapMutations([
+                'setProgress',
+                'pushProgress'
+            ]),
+
             getEventHandleMsg () {
-                axios.get(this.$adminUrl('eventhandle/query'))
+                axios.get(this.$adminUrl('eventhandle/query?event_id=') + this.formMsg.id)
                     .then((responce) => {
                         this.plan = responce.data.plan
                         this.information = responce.data.information
@@ -105,7 +111,7 @@
             getEventProgress () {
                 axios.get(this.$adminUrl('eventprogress/query?event_id=') + this.formMsg.id)
                     .then((responce) => {
-                        this.$set(this, 'progress', responce.data.data)
+                        this.setProgress(responce.data.data)
                     })
             },
 
@@ -124,12 +130,24 @@
             },
 
             addProgress (progress) {
-                this.progress.unshift({
+                let msg = {
                     id: progress.id,
                     user_name: Laravel.user.name,
                     content: progress.content,
                     event_progresses_created_at: progress.created_at
-                })
+                }
+
+                axios.get(this.$adminUrl('emergencycrew/query-crew/') + this.plan.id)
+                    .then((responce) => {
+                        
+                        let broadcast = this.$broadcast(this.experts, responce.data)
+                        
+                        this.ws.send(JSON.stringify({
+                            msg: msg,
+                            broadcast: broadcast,
+                            type: 'progress'
+                        }))
+                    }) 
             },
 
             deleteProgress (id, index) {
@@ -163,6 +181,9 @@
                     })
             }
 
+        },
+        destroyed () {
+            this.setProgress([])
         }
     }
 </script>

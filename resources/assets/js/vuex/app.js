@@ -7,7 +7,8 @@ const store = new Vuex.Store({
         showBack: false,
         menu: null,
         ws: null,
-        data: [{name: '', location: '无数据', status: 0}]
+        data: [{name: '', location: '无数据', status: 0}],
+        progress: []
     },
 
     getters: {
@@ -17,6 +18,10 @@ const store = new Vuex.Store({
 
         data: (state) => {
             return state.data
+        },
+
+        progress: (state) => {
+            return state.progress
         }
     },
 
@@ -40,6 +45,14 @@ const store = new Vuex.Store({
 
         pushData(state, data) {
             state.data.unshift(data)
+        },
+
+        setProgress(state, progress) {
+            state.progress = progress
+        },
+
+        pushProgress(state, progress) {
+            state.progress.unshift(progress)
         }
     }
     

@@ -17,11 +17,18 @@ export function createWebSocketServer(onConnection, onMessage, onClose, onError)
         wss.clients.forEach(function each(client) {
             let s = JSON.parse(data);
             for(let user of s.broadcast){
-                if(user.id == client.user.role_id && 
+                if(client.user.role == 0) {
+                    if(user.id == client.user.id && 
+                        user.name == client.user.name && 
+                        user.role == client.user.role) {
+                        client.send(JSON.stringify(s))
+                    }
+                }else if(user.id == client.user.role_id && 
                     user.name == client.user.role_name && 
                     user.role == client.user.role) {
-                    client.send(JSON.stringify(s.event))
+                    client.send(JSON.stringify(s))
                 }
+                
             }
             
         });

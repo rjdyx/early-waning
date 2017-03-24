@@ -172,5 +172,26 @@ export default {
                 width: width
             })
         };
+
+        Vue.prototype.$broadcast = function(experts=[], emergencycrews=[]) {
+            let broadcast = []
+            for(let item of experts) {
+                broadcast.push({
+                    id: item.id,
+                    name: item.name,
+                    role: 1
+                })
+            }
+            for(let proto of Object.keys(emergencycrews)) {
+                for(let item of emergencycrews[proto]) {
+                    broadcast.push({
+                        id: item.id,
+                        name: item.name,
+                        role: proto=='users'?0:2
+                    })
+                }
+            }
+            return broadcast
+        };
     }
 };

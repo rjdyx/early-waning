@@ -55,15 +55,23 @@
 <script>
 
     import { Grid, GridItem, Divider, Timeline, TimelineItem, XInput, Group, XButton } from 'vux'
-    import { mapMutations } from 'vuex'
+    import { mapGetters, mapMutations } from 'vuex'
 
     export default{
         name:'Detail',
         data () {
             return {
                 message: '',
-                progress: []
+                eventId: this.$route.params.id,
+                plan: null,
+                experts: []
             }
+        },
+        computed: {
+            ...mapGetters([
+                'progress',
+                'ws'
+            ])
         },
         components: {
             Grid,
@@ -83,19 +91,30 @@
                     value: 'flesh'
                 }
             ])
+            this.getEventHandleMsg()
             this.getEventProgress()
         },
         methods: {
 
             ...mapMutations([
                 'setShowBack',
-                'setMenu'
+                'setMenu',
+                'setProgress',
+                'pushProgress'
             ]),
 
-            getEventProgress () {
-                axios.get(this.$adminUrl('eventprogress/query?event_id=') + this.$route.params.id)
+            getEventHandleMsg () {
+                axios.get(this.$adminUrl('eventhandle/query?event_id=') + this.eventId)
                     .then((responce) => {
-                        this.$set(this, 'progress', responce.data.data)
+                        this.plan = responce.data.plan
+                        this.$set(this, 'experts', responce.data.experts)
+                    })
+            },
+
+            getEventProgress () {
+                axios.get(this.$adminUrl('eventprogress/query?event_id=') + this.eventId)
+                    .then((responce) => {
+                        this.setProgress(responce.data.data)
                     })
             },
 
@@ -103,21 +122,37 @@
                 
                 let params = {
                     content: this.message,
-                    event_id: this.$route.params.id,
+                    event_id: this.eventId,
                     user_id: Laravel.user.id
                 }
-                axios.post(this.$adminUrl('eventprogress'), params)
-                    .then((responce) => {
-                        if(responce.data) {
-                            this.$toast('新增成功')
-                            this.message = ''
-                            this.progress.unshift({
-                                id: responce.data.id,
-                                user_name: Laravel.user.name,
-                                content: responce.data.content
-                            })
+
+                let _this = this
+                axios.all([
+                    axios.get(this.$adminUrl('emergencycrew/query-crew/') + this.plan.id),
+                    axios.post(this.$adminUrl('eventprogress'), params)
+                ])
+                .then(axios.spread(function (emergencycrews, responce) {
+                    if(responce.data) {
+
+                        let msg = {
+                            id: responce.data.id,
+                            user_name: Laravel.user.name,
+                            content: responce.data.content,
+                            event_progresses_created_at: responce.data.created_at
                         }
-                    })
+
+                        _this.$toast('新增成功')
+                        _this.message = ''
+
+                        let broadcast = _this.$broadcast(_this.expert, emergencycrews.data)
+
+                        _this.ws.send(JSON.stringify({
+                            msg: msg,
+                            broadcast: broadcast,
+                            type: 'progress'
+                        }))
+                    }
+                }))
             }
 
         }

@@ -4,6 +4,7 @@ import * as actions from './actions'
 import * as getters from './getters'
 import websocket from './modules/websocket'
 import form from './modules/form'
+import event from './modules/event'
 import basicModel from './modules/basic-model'
 
 
@@ -13,6 +14,7 @@ export default new Vuex.Store({
   modules: {
   	websocket,
     form,
+    event,
     basicModel
   }
 })
