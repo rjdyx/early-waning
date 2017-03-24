@@ -19,16 +19,16 @@
         <divider>事件进度</divider>
         <div>
             <timeline>
-                <timeline-item v-for="(i, index) in 13" :key="index">
-                    <h3>苏锐佳</h3>
-                    <p>这是第一个步骤，请好好执行</p>
+                <timeline-item v-for="(item, index) in progress" :key="index">
+                    <h3>{{item.user_name}}</h3>
+                    <p>{{item.content}}</p>
                 </timeline-item>
             </timeline>
         </div>
         <div class="msg">
             <group>
                 <x-input v-model="message">
-                <x-button slot="right" type="primary" mini>发送</x-button>
+                    <x-button slot="right" type="primary" @click.native="publishProgress" mini>发送</x-button>
                 </x-input>
             </group>
         </div>
@@ -61,7 +61,8 @@
         name:'Detail',
         data () {
             return {
-                message: ''
+                message: '',
+                progress: []
             }
         },
         components: {
@@ -82,13 +83,42 @@
                     value: 'flesh'
                 }
             ])
+            this.getEventProgress()
         },
         methods: {
 
             ...mapMutations([
                 'setShowBack',
                 'setMenu'
-            ])
+            ]),
+
+            getEventProgress () {
+                axios.get(this.$adminUrl('eventprogress/query?event_id=') + this.$route.params.id)
+                    .then((responce) => {
+                        this.$set(this, 'progress', responce.data.data)
+                    })
+            },
+
+            publishProgress () {
+                
+                let params = {
+                    content: this.message,
+                    event_id: this.$route.params.id,
+                    user_id: Laravel.user.id
+                }
+                axios.post(this.$adminUrl('eventprogress'), params)
+                    .then((responce) => {
+                        if(responce.data) {
+                            this.$toast('新增成功')
+                            this.message = ''
+                            this.progress.unshift({
+                                id: responce.data.id,
+                                user_name: Laravel.user.name,
+                                content: responce.data.content
+                            })
+                        }
+                    })
+            }
 
         }
     }

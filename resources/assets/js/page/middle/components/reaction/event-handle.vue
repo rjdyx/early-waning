@@ -404,7 +404,8 @@
                         }
                         _this.ws.send(JSON.stringify({
                             event: _this.formMsg,
-                            broadcast: broadcast
+                            broadcast: broadcast,
+                            type: 'event'
                         }))
                     }
                 }))

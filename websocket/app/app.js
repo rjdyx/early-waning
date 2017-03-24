@@ -31,7 +31,7 @@ function onMessage(message) {
 }
 
 function onClose() {
-    this.wss.broadcast(JSON.stringify({event: null, broadcast: []}))
+    this.wss.broadcast(JSON.stringify({event: null, broadcast: [], type: 'event'}))
 }
 
 let wss = createWebSocketServer(onConnect, onMessage, onClose)
