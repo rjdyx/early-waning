@@ -5,8 +5,21 @@ import Vue from 'vue';
 const store = new Vuex.Store({
     state: {
         showBack: false,
-        menu: null
+        menu: null,
+        ws: null,
+        data: [{name: '', location: '无数据', status: 0}]
     },
+
+    getters: {
+        ws: (state) => {
+            return state.ws
+        },
+
+        data: (state) => {
+            return state.data
+        }
+    },
+
     mutations: {
 
         setShowBack(state, showBack) {
@@ -15,6 +28,18 @@ const store = new Vuex.Store({
 
         setMenu(state, menu) {
             state.menu = menu
+        },
+
+        setWS(state, ws) {
+            state.ws = ws
+        },
+
+        setData(state, data) {
+            state.data = data
+        },
+
+        pushData(state, data) {
+            state.data.unshift(data)
         }
     }
     

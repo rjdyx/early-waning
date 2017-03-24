@@ -2,7 +2,10 @@
 
 namespace App\Http\Controllers\Admin;
 
+use Auth;
 use App\Event;
+use App\Expert;
+use App\EmergencyCrew;
 use App\NormalType;
 use Illuminate\Http\Request;
 use App\Http\Controllers\Controller;
@@ -62,6 +65,113 @@ class EventController extends Controller
         $results = $events->orderBy('events_created_at', 'desc')
             ->orderBy('id', 'desc')
             ->paginate(config('app.page_size'));
+
+        return $results;
+    }
+
+    /**
+     * Display a listing of the resource from app.
+     *
+     * @param  \Illuminate\Http\Request  $request
+     * @return \Illuminate\Http\Response
+     */
+    public function appQuery(Request $request)
+    {
+
+        $this->validate($request, [
+            'status' => 'required|array'
+        ]);
+
+        //request保存
+        $request->flash();
+
+        $user = Auth::user();
+        // 用户未登录
+        if(!$user) {
+            return response()->json('please login first');
+        }
+        // 用户角色为管理者
+        if($user->role == 0) {
+            return response()->json(false);
+        }
+        
+        // 事件状态:
+        // 1：待处理预警事件
+        // 2：正处理预警事件
+        // 3：历史预警事件
+        // 4：待处理突发事件
+        // 5：正处理突发事件
+        // 6：历史突发事件
+        // 7：科学评价后的突发事件
+        $status = $request->input('status');
+        //禁止获取待处理相关的事件
+        foreach ($status as $item) {
+            if($item == 1 || $item == 4) {
+                return response()->json(false);
+            }
+        }
+
+        if($user->role == 1) {
+            $expert = Expert::where('user_id', $user->id)->first();
+            $expert && $events = DB::table('events')
+                ->join('normal_types as event_level', 'event_level.id' , '=', 'events.event_level_id')
+                ->join('normal_types as event_sort', 'event_sort.id' , '=', 'events.event_sort_id')
+                ->join('event_handles', 'event_handles.event_id' , '=', 'events.id')
+                ->select(
+                    'events.id',
+                    'events.name',
+                    'events.location',
+                    'events.detail',
+                    'events.status',
+                    'events.created_at as events_created_at',
+                    'event_level.id as event_level_id',
+                    'event_level.name as event_level_name',
+                    'event_sort.id as event_sort_id',
+                    'event_sort.name as event_sort_name'
+                )
+                ->where('event_handles.expert_id', $expert->id)
+                ->whereIn('events.status', $status);
+        }else {
+            $emergencyCrew = EmergencyCrew::where('user_id', $user->id)->first();
+            $emergencyCrew && $plans = DB::table('plans')
+                ->join('emergency_crew_plans', 'emergency_crew_plans.plan_id' , '=', 'plans.id')
+                ->join('event_handles', 'event_handles.plan_id' , '=', 'plans.id')
+                ->select(
+                    'plans.id as plan_id',
+                    'event_handles.event_id'
+                )
+                ->where('emergency_crew_plans.emergency_crew_id', $emergencyCrew->id)
+                ->get();
+
+            $eventIds = array();
+            foreach ($plans as $plan) {
+                array_push($eventIds, $plan->event_id);
+            }
+
+            $events = DB::table('events')
+                ->join('normal_types as event_level', 'event_level.id' , '=', 'events.event_level_id')
+                ->join('normal_types as event_sort', 'event_sort.id' , '=', 'events.event_sort_id')
+                ->select(
+                    'events.id',
+                    'events.name',
+                    'events.location',
+                    'events.detail',
+                    'events.status',
+                    'events.created_at as events_created_at',
+                    'event_level.id as event_level_id',
+                    'event_level.name as event_level_name',
+                    'event_sort.id as event_sort_id',
+                    'event_sort.name as event_sort_name'
+                )
+                ->whereIn('events.id', $eventIds)
+                ->whereIn('events.status', $status);
+
+        }
+
+        $results = $events->orderBy('status')
+            ->orderBy('events_created_at', 'desc')
+            ->orderBy('id', 'desc')
+            ->get();
 
         return $results;
     }

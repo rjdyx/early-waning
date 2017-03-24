@@ -117,6 +117,7 @@
         	}
         },
         computed: {
+
             userNamePlaceholder () {
                 if(this.verrors.has('email')) {
                     this.isNameError = true;
@@ -138,6 +139,7 @@
         	}
         },
         methods: {
+
         	login () {
         		// 验证表单
                 this.$validator.validateAll();

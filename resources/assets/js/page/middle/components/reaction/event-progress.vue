@@ -11,33 +11,14 @@
         </div>
         <div class="event-progress">
             <ul>
-                <li>
-                    <div>苏锐佳<span>2017/03/09 21:13</span></div>
-                    <div>这是第一个步骤，请好好执行</div>
-                </li>
-                <li>
-                    <div>苏锐佳<span>2017/03/09 21:13</span></div>
-                    <div>这是第一个步骤，请好好执行</div>
-                </li>
-                <li>
-                    <div>苏锐佳<span>2017/03/09 21:13</span></div>
-                    <div>这是第一个步骤，请好好执行</div>
-                </li>
-                <li>
-                    <div>苏锐佳<span>2017/03/09 21:13</span></div>
-                    <div>这是第一个步骤，请好好执行</div>
-                </li>
-                <li>
-                    <div>苏锐佳<span>2017/03/09 21:13</span></div>
-                    <div>这是第一个步骤，请好好执行</div>
-                </li>
-                <li>
-                    <div>苏锐佳<span>2017/03/09 21:13</span></div>
-                    <div>这是第一个步骤，请好好执行</div>
+                <li v-for="(item, index) of progress">
+                    <div>{{item.user_name}}<span>{{item.event_progresses_created_at}}</span></div>
+                    <div>{{item.content}}</div>
+                    <i class="el-icon-close" @click="deleteProgress(item.id, index)"></i>
                 </li>
             </ul>
-            <div class="btn">
-                <el-button size="small">more</el-button>
+            <div class="btn" v-if="progress.length">
+                <el-button size="small" @click="moreProgress">more</el-button>
             </div>
         </div>
 
@@ -60,7 +41,9 @@
         </expert>
 
         <pop-progress
+            :event="formMsg" 
             :dialogVisible="progressDialogVisible"
+            @callback="addProgress"
             @cancel="progressDialogVisible=false">
         </pop-progress>
     </div>
@@ -68,7 +51,7 @@
 
 <script>
 
-    import { mapState } from 'vuex'
+    import { mapGetters } from 'vuex'
     import Plan from './plan.vue'
     import Information from './information.vue'
     import Expert from './expert.vue'
@@ -81,6 +64,7 @@
                 plan: {name: '食品安全'},
                 information: {name: '食品安全'},
                 experts: [],
+                progress: [],
                 // 是否显示预案详情弹窗
                 planDialogVisible: false,
                 // 是否显示专题详情弹窗
@@ -88,11 +72,12 @@
                 // 是否显示专家弹窗
                 expertDialogVisible: false,
                 // 是否显示新增进度弹窗
-                progressDialogVisible: false
+                progressDialogVisible: false,
+                page: 1
             }
         },
         computed: {
-            ...mapState([
+            ...mapGetters([
                 'formMsg'
             ])
         },
@@ -104,6 +89,7 @@
         },
         mounted () {
             this.getEventHandleMsg()
+            this.getEventProgress()
         },
         methods: {
 
@@ -113,6 +99,13 @@
                         this.plan = responce.data.plan
                         this.information = responce.data.information
                         this.$set(this, 'experts', responce.data.experts)
+                    })
+            },
+
+            getEventProgress () {
+                axios.get(this.$adminUrl('eventprogress/query?event_id=') + this.formMsg.id)
+                    .then((responce) => {
+                        this.$set(this, 'progress', responce.data.data)
                     })
             },
 
@@ -127,6 +120,47 @@
                         message: '事件处理完成!'
                     })
                 })
+                .catch((error) => {})
+            },
+
+            addProgress (progress) {
+                this.progress.unshift({
+                    id: progress.id,
+                    user_name: Laravel.user.name,
+                    content: progress.content,
+                    event_progresses_created_at: progress.created_at
+                })
+            },
+
+            deleteProgress (id, index) {
+                axios.delete(this.$adminUrl('eventprogress/') + id)
+                    .then((responce) => {
+                        if(responce.data) {
+                            this.$message({
+                                type: 'success',
+                                message: '删除成功!'
+                            })
+                            this.progress.splice(index, 1)
+                        }
+                    })
+            },
+
+            moreProgress() {
+                axios.get(this.$adminUrl('eventprogress/query?event_id=') + this.formMsg.id + '&page=' + (++this.page))
+                    .then((responce) => {
+                        if(responce.data.data.length) {
+                            console.log(responce.data.data);
+                            let arr = this.progress.concat(responce.data.data)
+                            this.$set(this, 'progress', arr)
+                        }else {
+                            this.page--
+                            this.$message({
+                                type: 'info',
+                                message: '没有更多数据了'
+                            })
+                        }
+                        
+                    })
             }
 
         }
@@ -159,6 +193,7 @@
                 margin-bottom: 35px;
 
                 li {
+                    position: relative;
                     width: 100%;
                     padding: 10px;
                     padding-left: 18px;
@@ -175,10 +210,24 @@
                         font-size: 12px;
                         color: #9E9E9E;
                     }
+
+                    i {
+                        display: none;
+                        position: absolute;
+                        top: 10px;
+                        right: 10px;
+                    }
                 }
                 li:nth-child(1) {
                     border: 1px solid rgba(0, 154, 97, 0.48);
                     border-left: 7px solid rgba(0, 154, 97, 0.48);
+                }
+                li:hover {
+                    cursor: pointer;
+
+                    i {
+                        display: inline-block;
+                    }
                 }
             }
         }

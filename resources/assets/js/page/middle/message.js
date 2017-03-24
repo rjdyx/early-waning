@@ -38,7 +38,7 @@ export default {
             theads: ['姓名', '所属机构', '关联账户', '年龄', '性别', '职责', '职务', '固定电话', '手机', '邮箱', '备注'],
             protos: ['name', 'org_name', 'user_name', 'age', 'sex', 'duty', 'title', 'phone', 'cellphone', 'email', 'meno'],
             widths: [50, 50, 50, 50, 50, 50, 50, 50, 50, 50, 50],
-            colComponent: {sex: Sex}
+            colComponent: {sex: Sex, operation: CrewHandle}
         }
     ],
     condition:[

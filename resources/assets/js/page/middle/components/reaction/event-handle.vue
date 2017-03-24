@@ -202,7 +202,7 @@
 
 <script>
 
-    import { mapState } from 'vuex'
+    import { mapGetters } from 'vuex'
     import Plan from './plan.vue'
     import Information from './information.vue'
 
@@ -238,13 +238,17 @@
             }
         },
         computed: {
-            ...mapState([
-                'formMsg'
+            ...mapGetters([
+                'formMsg',
+                'ws'
             ])
         },
         components: {
             Plan,
             Information
+        },
+        mounted () {
+            console.log();
         },
         methods: {
 
@@ -361,10 +365,49 @@
                     information_id: this.information.id,
                     expert_ids: ids
                 }
-                axios.post(this.$adminUrl('eventhandle'), params)
-                    .then((responce) => {
-                        console.log(responce.data);
-                    })
+                let _this = this
+                axios.all([
+                    axios.get(this.$adminUrl('emergencycrew/query-crew/') + this.plan.id),
+                    axios.post(this.$adminUrl('eventhandle'), params)
+                ])
+                .then(axios.spread(function (emergencycrews, responce) {
+                    if(responce.data) {
+                        let type = _this.$route.params.model.split('-')[1]
+                        if(type == 1) {
+                            _this.$router.push('/index/reaction/early-warning/1')
+                        }
+                        if(type == 4) {
+                            _this.$router.push('/index/reaction/emergency/1')
+                        }
+                        let broadcast = []
+                        for(let item of _this.expert) {
+                            broadcast.push({
+                                id: item.id,
+                                name: item.name,
+                                role: 1
+                            })
+                        }
+                        for(let proto of Object.keys(emergencycrews.data)) {
+                            for(let item of emergencycrews.data[proto]) {
+                                broadcast.push({
+                                    id: item.id,
+                                    name: item.name,
+                                    role: 2
+                                })
+                            }
+                        }
+                        if(_this.formMsg.status == 1) {
+                            _this.formMsg.status = 2
+                        }
+                        if(_this.formMsg.status == 4) {
+                            _this.formMsg.status = 5
+                        }
+                        _this.ws.send(JSON.stringify({
+                            event: _this.formMsg,
+                            broadcast: broadcast
+                        }))
+                    }
+                }))
             }
 
         }

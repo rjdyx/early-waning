@@ -1,11 +1,16 @@
 <template>
     <el-dialog title="发布进度" v-model="dialogVisible" size="tiny" :show-close="false" :close-on-click-modal=false>
         <div>
-        <el-input type="textarea":rows="4" placeholder="请输入内容"></el-input>
+            <el-input 
+                v-model="content" 
+                type="textarea" 
+                :rows="4" 
+                placeholder="请输入内容">
+            </el-input>
         </div>
         <span slot="footer" class="dialog-footer">
             <el-button @click="cancel">返 回</el-button>
-            <el-button @click="cancel" type="primary">确 定</el-button>
+            <el-button @click="publishProgress" type="primary">确 定</el-button>
         </span>
     </el-dialog>
 </template>
@@ -16,10 +21,38 @@
         name: 'PopProgress',
         props: {
             dialogVisible: false,
+            event: null
+        },
+        data () {
+            return {
+                content: ''
+            }
         },
         methods: {
 
+            publishProgress () {
+                
+                let params = {
+                    content: this.content,
+                    event_id: this.event.id,
+                    user_id: Laravel.user.id
+                }
+                axios.post(this.$adminUrl('eventprogress'), params)
+                    .then((responce) => {
+                        if(responce.data) {
+                            this.$message({
+                                type: 'success',
+                                message: '发布成功!'
+                            })
+                            this.content = ''
+                            this.$emit('callback', responce.data)
+                        }
+                    })
+                this.cancel()
+            },
+
             cancel () {
+                this.content = ''
                 this.$emit('cancel')
             }
 

@@ -23,3 +23,14 @@ exports.objectToString = (array) => {
 exports.rulesToString = (array) => {
     return array.join('|');
 };
+
+exports.eventStatus = (status) => {
+	switch(status) {
+		case 2:
+		case 5:
+			return '进行中'
+		case 3:
+		case 6:
+			return '已完成'
+	}
+};

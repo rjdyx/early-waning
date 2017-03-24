@@ -9,3 +9,7 @@ export const navbarName = state => {
 export const subNavBarName = state => {
   return state.basicModel.subNavBarName
 }
+
+export const ws = state => {
+  return state.websocket.ws
+}

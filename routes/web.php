@@ -65,12 +65,17 @@ Route::group(['prefix' => 'admin', 'namespace' => 'Admin', 'middleware' => ['aut
 
 	// 事件
 	Route::get('event/query', 'EventController@query');
+	Route::get('event/appQuery', 'EventController@appQuery');
 	Route::delete('event', 'EventController@destroy');
 	Route::resource('event', 'EventController');
 
 	// 事件处理
 	Route::get('eventhandle/query', 'EventHandleController@query');
 	Route::resource('eventhandle', 'EventHandleController');
+
+	// 事件进度
+	Route::get('eventprogress/query', 'EventProgressController@query');
+	Route::resource('eventprogress', 'EventProgressController');
 
 	Route::group(['middleware' => 'admin'], function () {
 

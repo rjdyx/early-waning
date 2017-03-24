@@ -11,7 +11,7 @@
         <tab :line-width=2 custom-bar-width="70px" active-color='#04be02' v-model="index">
             <tab-item class="vux-center" :selected="selectedItem === item" v-for="(item, index) in list" @click="selectedItem = item" :key="index">{{item}}</tab-item>
         </tab>
-        <swiper v-model="index" :height="height" :show-dots="false" class="swiper">
+        <swiper v-model="index" :show-dots="false" class="swiper">
             <swiper-item v-for="(item, index) in list" :key="index">
                 <ul class="event-list">
                     <router-link :to="'/detail/' + item.id" v-for="item in data" tag="li" exact>
@@ -19,7 +19,7 @@
                             <h3>{{item.name}}</h3>
                             <p>{{item.location}}</p>
                         </div>
-                        <div class="right">{{item.status}}</div>
+                        <div class="right">{{item.status | eventStatus}}</div>
                     </router-link>
                 </ul>
             </swiper-item>
@@ -73,7 +73,7 @@
 <script>
 
     import { Tab, TabItem, Swiper, SwiperItem } from 'vux'
-    import { mapMutations } from 'vuex'
+    import { mapGetters, mapMutations } from 'vuex'
 
     export default{
         name:'List',
@@ -81,77 +81,19 @@
             return {
                 list: ['预警事件', '突发事件'],
                 index: 0,
-                selectedItem: '预警事件',
-                height: '66px',
-                data: [
-                    {
-                        name: '食物中毒',
-                        location: '广州',
-                        status: '进行中'
-                    },
-                    {
-                        name: '食物中毒',
-                        location: '广州',
-                        status: '进行中'
-                    },
-                    {
-                        name: '食物中毒',
-                        location: '广州',
-                        status: '进行中'
-                    },
-                    {
-                        name: '食物中毒',
-                        location: '广州',
-                        status: '进行中'
-                    },
-                    {
-                        name: '食物中毒',
-                        location: '广州',
-                        status: '进行中'
-                    },
-                    {
-                        name: '食物中毒',
-                        location: '广州',
-                        status: '进行中'
-                    },
-                    {
-                        name: '食物中毒',
-                        location: '广州',
-                        status: '进行中'
-                    },
-                    {
-                        name: '食物中毒',
-                        location: '广州',
-                        status: '进行中'
-                    },
-                    {
-                        name: '食物中毒',
-                        location: '广州',
-                        status: '进行中'
-                    },
-                    {
-                        name: '食物中毒',
-                        location: '广州',
-                        status: '进行中'
-                    },
-                    {
-                        name: '食物中毒',
-                        location: '广州',
-                        status: '进行中'
-                    }
-                ]
+                selectedItem: '预警事件'
             }
+        },
+        computed: {
+            ...mapGetters([
+                'data'
+            ])
         },
         components: {
             Tab, 
             TabItem,
             Swiper, 
             SwiperItem
-        },
-        watch: {
-            data () {
-                this.height = this.data.length * 66 + 'px'
-            }
         },
         mounted () {
             this.height = this.data.length * 66 + 'px'
@@ -162,13 +104,24 @@
                     value: 'logout'
                 }
             ])
+            this.getEvents()
+            
         },
         methods: {
 
             ...mapMutations([
                 'setShowBack',
-                'setMenu'
-            ])
+                'setMenu',
+                'setData'
+            ]),
+
+            getEvents (status=[2,3]) {
+                axios.get(this.$adminUrl('event/appQuery'), {params: {status: [2,3]}})
+                    .then((responce) => {
+                        this.setData(responce.data)
+                        $('.vux-swiper').css('height', this.data.length * 66 + 'px')
+                    })
+            }
         }
     }
 
