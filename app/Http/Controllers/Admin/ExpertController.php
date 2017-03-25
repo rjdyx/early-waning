@@ -5,6 +5,7 @@ namespace App\Http\Controllers\Admin;
 use App\Org;
 use App\Expert;
 use App\NormalType;
+use App\EventHandle;
 use Illuminate\Http\Request;
 use App\Http\Controllers\Controller;
 use Illuminate\Support\Facades\DB;
@@ -108,6 +109,12 @@ class ExpertController extends Controller
     public function destroy(Request $request)
     {
         $ids = $request->input('ids');
+
+        $eventHandles = EventHandle::whereIn('expert_id', $ids)->get();
+        if(sizeof($eventHandles)) {
+            return response()->json(false);
+        }
+
         $results = Expert::destroy($ids);
         return response()->json($results);
     }

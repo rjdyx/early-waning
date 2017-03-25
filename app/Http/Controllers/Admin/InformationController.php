@@ -4,6 +4,7 @@ namespace App\Http\Controllers\Admin;
 
 use App\Information;
 use App\NormalType;
+use App\EventHandle;
 use Illuminate\Http\Request;
 use App\Http\Controllers\Controller;
 use Illuminate\Support\Facades\DB;
@@ -85,6 +86,12 @@ class InformationController extends Controller
     public function destroy(Request $request)
     {
         $ids = $request->input('ids');
+
+        $eventHandles = EventHandle::whereIn('information_id', $ids)->get();
+        if(sizeof($eventHandles)) {
+            return response()->json(false);
+        }
+
         $results = Information::destroy($ids);
         return response()->json($results);
     }

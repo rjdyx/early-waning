@@ -136,6 +136,12 @@ class EmergencyCrewController extends Controller
     public function destroy(Request $request)
     {
         $ids = $request->input('ids');
+
+        $emergencyCrewPlans = EmergencyCrewPlan::whereIn('emergency_crew_id', $ids)->get();
+        if(sizeof($emergencyCrewPlans)) {
+            return response()->json(false);
+        }
+
         $results = EmergencyCrew::destroy($ids);
         return response()->json($results);
     }

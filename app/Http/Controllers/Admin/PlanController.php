@@ -4,6 +4,7 @@ namespace App\Http\Controllers\Admin;
 
 use App\Plan;
 use App\NormalType;
+use App\EventHandle;
 use App\EmergencyCrewPlan;
 use Illuminate\Http\Request;
 use App\Http\Controllers\Controller;
@@ -86,6 +87,12 @@ class PlanController extends Controller
     public function destroy(Request $request)
     {
         $ids = $request->input('ids');
+
+        $eventHandles = EventHandle::whereIn('plan_id', $ids)->get();
+        if(sizeof($eventHandles)) {
+            return response()->json(false);
+        }
+
         $results = Plan::destroy($ids);
         foreach ($ids as $id) {
             EmergencyCrewPlan::where('plan_id', $id)->delete();
