@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers\Admin;
 
+use App\Event;
 use App\EventProgress;
 use Illuminate\Http\Request;
 use App\Http\Controllers\Controller;
@@ -58,14 +59,25 @@ class EventProgressController extends Controller
         $event_id = $request->input('event_id');
         $user_id = $request->input('user_id');
 
-        $eventProgress = new EventProgress();
+        $event = Event::find($event_id);
+        if($event && ($event->status == 2 || $event->status == 5)) {
 
-        $eventProgress->content = $content;
-        $eventProgress->event_id = $event_id;
-        $eventProgress->user_id = $user_id;
-        $eventProgress->save();
+            $eventProgress = new EventProgress();
 
-        return response()->json($eventProgress);
+            $eventProgress->content = $content;
+            $eventProgress->event_id = $event_id;
+            $eventProgress->user_id = $user_id;
+            $eventProgress->save();
+
+            return response()->json($eventProgress);
+
+        }else {
+
+            return response()->json(false);
+
+        }
+
+        
     }
 
 
@@ -77,6 +89,14 @@ class EventProgressController extends Controller
      */
     public function destroy($id)
     {
-        return EventProgress::destroy($id);
+        $eventProgress = EventProgress::find($id);
+        $event = null;
+        $eventProgress && $event = Event::find($eventProgress->event_id);
+        if($event && ($event->status == 2 || $event->status == 5)) {
+            return EventProgress::destroy($id);
+        }else {
+            return 0;
+        }
+        
     }
 }

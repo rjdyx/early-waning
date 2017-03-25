@@ -10,10 +10,11 @@ require('animate.css') // 动画css插件
 import VueRouter from 'vue-router'
 Vue.use(VueRouter)
 
-import  { ToastPlugin, LoadingPlugin, ConfirmPlugin } from 'vux'
+import  { ToastPlugin, LoadingPlugin, ConfirmPlugin, AlertPlugin } from 'vux'
 Vue.use(ToastPlugin)
 Vue.use(LoadingPlugin)
 Vue.use(ConfirmPlugin)
+Vue.use(AlertPlugin)
 
 
 /**

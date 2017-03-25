@@ -4,6 +4,7 @@ import Vue from 'vue';
 
 const store = new Vuex.Store({
     state: {
+        formMsg: null,
         showBack: false,
         menu: null,
         ws: null,
@@ -12,6 +13,11 @@ const store = new Vuex.Store({
     },
 
     getters: {
+
+        formMsg: (state) => {
+            return state.formMsg
+        },
+        
         ws: (state) => {
             return state.ws
         },
@@ -26,6 +32,13 @@ const store = new Vuex.Store({
     },
 
     mutations: {
+
+        /**
+          * 设置表单对象信息
+          */
+        setFormMsg(state, formMsg) {
+            state.formMsg = formMsg;
+        },
 
         setShowBack(state, showBack) {
             state.showBack = showBack
@@ -53,6 +66,16 @@ const store = new Vuex.Store({
 
         pushProgress(state, progress) {
             state.progress.unshift(progress)
+        },
+
+        changeEventStatus(state, event) {
+            for(let item of state.data) {
+                console.log(item);
+                console.log(event);
+                if(item.id == event.id) {
+                    item.status = event.status
+                }
+            }
         }
     }
     

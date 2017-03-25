@@ -71,6 +71,7 @@ Route::group(['prefix' => 'admin', 'namespace' => 'Admin', 'middleware' => ['aut
 
 	// 事件处理
 	Route::get('eventhandle/query', 'EventHandleController@query');
+	Route::post('eventhandle/changeEventStatus/{id}', 'EventHandleController@changeEventStatus');
 	Route::resource('eventhandle', 'EventHandleController');
 
 	// 事件进度

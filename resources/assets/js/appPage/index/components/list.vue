@@ -14,13 +14,13 @@
         <swiper v-model="index" :show-dots="false" class="swiper">
             <swiper-item v-for="(item, index) in list" :key="index">
                 <ul class="event-list">
-                    <router-link :to="'/detail/' + item.id" v-for="item in data" tag="li" exact>
+                    <li @click="goDetail(item)" v-for="item in data">
                         <div class="left">
                             <h3>{{item.name}}</h3>
                             <p>{{item.location}}</p>
                         </div>
                         <div class="right">{{item.status | eventStatus}}</div>
-                    </router-link>
+                    </li>
                 </ul>
             </swiper-item>
         </swiper>
@@ -112,15 +112,22 @@
             ...mapMutations([
                 'setShowBack',
                 'setMenu',
-                'setData'
+                'setData',
+                'setFormMsg'
             ]),
 
             getEvents (status=[2,3]) {
                 axios.get(this.$adminUrl('event/appQuery'), {params: {status: [2,3]}})
                     .then((responce) => {
+                        console.log('in');
                         this.setData(responce.data)
                         $('.vux-swiper').css('height', this.data.length * 66 + 'px')
                     })
+            },
+
+            goDetail (item) {
+                this.setFormMsg(item)
+                this.$router.push('/detail/' + item.id)
             }
         }
     }

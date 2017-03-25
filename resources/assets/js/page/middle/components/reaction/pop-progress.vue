@@ -54,6 +54,11 @@
                             })
                             this.content = ''
                             this.$emit('callback', responce.data)
+                        }else {
+                            this.$message({
+                                type: 'info',
+                                message: '事件已结束!'
+                            })
                         }
                     })
                 this.cancel()

@@ -5,8 +5,8 @@
                 <el-button @click="planDialogVisible=true">预案</el-button>
                 <el-button @click="informationDialogVisible=true">专题知识</el-button>
                 <el-button @click="expertDialogVisible=true">参与专家</el-button>
-                <el-button type="success" icon="plus" @click="progressDialogVisible=true">更新进度</el-button>
-                <el-button type="danger" icon="warning" @click="closeEvent">结束事件</el-button>
+                <el-button v-if="status" type="success" icon="plus" @click="progressDialogVisible=true">更新进度</el-button>
+                <el-button v-if="status" type="danger" icon="warning" @click="closeEvent">结束事件</el-button>
 
             </div>
         </div>
@@ -15,7 +15,7 @@
                 <li v-for="(item, index) of progress">
                     <div>{{item.user_name}}<span>{{item.event_progresses_created_at}}</span></div>
                     <div>{{item.content}}</div>
-                    <i class="el-icon-close" @click="deleteProgress(item.id, index)"></i>
+                    <i v-if="status" class="el-icon-close" @click="deleteProgress(item.id, index)"></i>
                 </li>
             </ul>
             <div class="btn" v-if="progress.length">
@@ -81,7 +81,14 @@
                 'formMsg',
                 'ws',
                 'progress'
-            ])
+            ]),
+            status () {
+                if(this.formMsg.status == 2 || this.formMsg.status == 5) {
+                    return true
+                }else {
+                    return false
+                }
+            }
         },
         components: {
             Plan,
@@ -125,10 +132,29 @@
                     cancelButtonText: '取消',
                     type: 'warning'
                 }).then(() => {
-                    this.$message({
-                        type: 'success',
-                        message: '事件处理完成!'
-                    })
+
+                    axios.all([
+                        axios.post(this.$adminUrl('eventhandle/changeEventStatus/') + this.formMsg.id),
+                        axios.get(this.$adminUrl('emergencycrew/query-crew/') + this.plan.id)
+                    ])
+                        .then(axios.spread((responce, crews) => {
+                            if(responce.data) {
+                                this.formMsg.status++
+                                this.$message({
+                                    type: 'success',
+                                    message: '事件处理完成!'
+                                })
+                                
+                                let broadcast = this.$broadcast(this.experts, crews.data)
+                                
+                                this.ws.send(JSON.stringify({
+                                    msg: this.formMsg,
+                                    broadcast: broadcast,
+                                    type: 'closeEvent'
+                                }))
+                            }
+                        }))
+                    
                 })
                 .catch((error) => {})
             },
@@ -163,6 +189,11 @@
                                 message: '删除成功!'
                             })
                             this.spliceProgress(index)
+                        }else {
+                            this.$message({
+                                type: 'info',
+                                message: '事件已结束!'
+                            })
                         }
                     })
             },

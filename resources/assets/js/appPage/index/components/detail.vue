@@ -25,7 +25,7 @@
                 </timeline-item>
             </timeline>
         </div>
-        <div class="msg">
+        <div v-if="status" class="msg">
             <group>
                 <x-input v-model="message">
                     <x-button slot="right" type="primary" @click.native="publishProgress" mini>发送</x-button>
@@ -69,9 +69,17 @@
         },
         computed: {
             ...mapGetters([
+                'formMsg',
                 'progress',
                 'ws'
-            ])
+            ]),
+            status () {
+                if(this.formMsg.status == 2 || this.formMsg.status == 5) {
+                    return true
+                }else {
+                    return false
+                }
+            }
         },
         components: {
             Grid,
@@ -100,7 +108,8 @@
                 'setShowBack',
                 'setMenu',
                 'setProgress',
-                'pushProgress'
+                'pushProgress',
+                'setFormMsg'
             ]),
 
             getEventHandleMsg () {
@@ -155,6 +164,10 @@
                 }))
             }
 
+        },
+        destroyed () {
+            this.setProgress([])
+            this.setFormMsg(null)
         }
     }
 

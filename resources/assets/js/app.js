@@ -19,8 +19,22 @@ router.beforeEach((to, from, next) => {
                 if(s.type == 'event') {
                   store.commit('pushData', s.msg)
                   $('.vux-swiper').css('height', store.getters.data.length * 66 + 'px')
-                } else {
+                }
+                if(s.type == 'progress'){
                   store.commit('pushProgress', s.msg)
+                }
+                if(s.type == 'closeEvent'){
+                  if(store.getters.formMsg) {
+                    if(store.getters.formMsg.id == s.msg.id) {
+                      Vue.$vux.alert.show({
+                        title: '通知',
+                        content: '事件：' + s.msg.name + ' 已完成'
+                      })
+                      store.commit('setFormMsg', s.msg)
+                    }
+                  }else {
+                    store.commit('changeEventStatus', s.msg)
+                  }
                 }
                 
               };

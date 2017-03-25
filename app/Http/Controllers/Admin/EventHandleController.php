@@ -83,7 +83,6 @@ class EventHandleController extends Controller
             ]);
     }
 
-
     /**
      * Store a newly created resource in storage.
      *
@@ -128,7 +127,20 @@ class EventHandleController extends Controller
         
 
         return response()->json(true);
+    }
 
+    public function changeEventStatus($id)
+    {
+        $event = Event::find($id);
+        if($event->status == 2) {
+            $event->status = 3;
+        }else if($event->status == 5) {
+            $event->status = 6;
+        }else {
+            return response()->json(false);
+        }
+        $event->save();
+        return response()->json(true);
     }
 
 }
