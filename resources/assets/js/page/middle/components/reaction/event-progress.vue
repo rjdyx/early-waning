@@ -2,6 +2,7 @@
     <div class="content">
         <div class="event-handle">
             <div>
+                <el-button @click="eventDialogVisible=true">事件详情</el-button>
                 <el-button @click="planDialogVisible=true">预案</el-button>
                 <el-button @click="informationDialogVisible=true">专题知识</el-button>
                 <el-button @click="expertDialogVisible=true">参与专家</el-button>
@@ -23,11 +24,17 @@
             </div>
         </div>
 
+        <event-detail
+            :dialogVisible="eventDialogVisible" 
+            :event="formMsg" 
+            @cancel="eventDialogVisible=false">
+        </event-detail>
+
         <plan 
             :dialogVisible="planDialogVisible" 
             :msg="plan" 
-            @cancel="planDialogVisible=false">
-        </plan>
+            @cancel="planDialogVisible=false"
+        ></plan>
 
         <information 
             :dialogVisible="informationDialogVisible" 
@@ -53,6 +60,7 @@
 <script>
 
     import { mapGetters, mapMutations } from 'vuex'
+    import EventDetail from './event-detail.vue'
     import Plan from './plan.vue'
     import Information from './information.vue'
     import Expert from './expert.vue'
@@ -65,6 +73,8 @@
                 plan: {name: '食品安全'},
                 information: {name: '食品安全'},
                 experts: [],
+                // 是否显示事件详情弹窗
+                eventDialogVisible: false,
                 // 是否显示预案详情弹窗
                 planDialogVisible: false,
                 // 是否显示专题详情弹窗
@@ -91,6 +101,7 @@
             }
         },
         components: {
+            EventDetail,
             Plan,
             Information,
             Expert,

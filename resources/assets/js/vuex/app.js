@@ -8,8 +8,10 @@ const store = new Vuex.Store({
         showBack: false,
         menu: null,
         ws: null,
-        data: [{name: '', location: '无数据', status: 0}],
-        progress: []
+        earlyWaningData: [{name: '', location: '无数据', status: 0}],
+        emergencyData: [{name: '', location: '无数据', status: 0}],
+        progress: [],
+        selectedItem: '预警事件'
     },
 
     getters: {
@@ -22,12 +24,20 @@ const store = new Vuex.Store({
             return state.ws
         },
 
-        data: (state) => {
-            return state.data
+        earlyWaningData: (state) => {
+            return state.earlyWaningData
+        },
+
+        emergencyData: (state) => {
+            return state.emergencyData
         },
 
         progress: (state) => {
             return state.progress
+        },
+
+        selectedItem: (state) => {
+            return state.selectedItem
         }
     },
 
@@ -52,12 +62,20 @@ const store = new Vuex.Store({
             state.ws = ws
         },
 
-        setData(state, data) {
-            state.data = data
+        setEarlyWaningData(state, data) {
+            state.earlyWaningData = data
         },
 
-        pushData(state, data) {
-            state.data.unshift(data)
+        pushEarlyWaningData(state, data) {
+            state.earlyWaningData.unshift(data)
+        },
+
+        setEmergencyData(state, data) {
+            state.emergencyData = data
+        },
+
+        pushEmergencyData(state, data) {
+            state.emergencyData.unshift(data)
         },
 
         setProgress(state, progress) {
@@ -69,13 +87,26 @@ const store = new Vuex.Store({
         },
 
         changeEventStatus(state, event) {
-            for(let item of state.data) {
-                console.log(item);
-                console.log(event);
-                if(item.id == event.id) {
-                    item.status = event.status
+            if(event.status == 3) {
+                for(let item of state.earlyWaningData) {
+                    if(item.id == event.id) {
+                        item.status = event.status
+                    }
                 }
             }
+
+            if(event.status == 6) {
+                for(let item of state.emergencyData) {
+                    if(item.id == event.id) {
+                        item.status = event.status
+                    }
+                }
+            }
+            
+        },
+
+        setSelectedItem(state, selectedItem) {
+            state.selectedItem = selectedItem
         }
     }
     

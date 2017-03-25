@@ -17,8 +17,16 @@ router.beforeEach((to, from, next) => {
                 let s = JSON.parse(event.data)
                 console.log('onmessage')
                 if(s.type == 'event') {
-                  store.commit('pushData', s.msg)
-                  $('.vux-swiper').css('height', store.getters.data.length * 66 + 'px')
+                  if(s.msg.status == 2 || s.msg.status == 3) {
+                    store.commit('pushEarlyWaningData', s.msg)
+                  }else {
+                    store.commit('pushEmergencyData', s.msg)
+                  }
+                  if(store.getters.earlyWaningData.length > store.getters.emergencyData.length) {
+                    $('.vux-swiper').css('height', store.getters.earlyWaningData.length * 66 + 'px')
+                  }else {
+                    $('.vux-swiper').css('height', store.getters.emergencyData.length * 66 + 'px')
+                  }
                 }
                 if(s.type == 'progress'){
                   store.commit('pushProgress', s.msg)

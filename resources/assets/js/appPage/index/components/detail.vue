@@ -8,16 +8,23 @@
  */
 <template>
 
-    <div>
-        <div class="btns">
-            <grid>
-              <grid-item label="预案"></grid-item>
-              <grid-item label="专题知识"></grid-item>
-              <grid-item label="参与专家"></grid-item>
-            </grid>
-        </div>
+    <div class="detail">
+        <panel header="事件详情" :list="list" type="2"></panel>
+
+        <!-- 按钮组 -->
+        <sticky>
+            <div class="btns">
+                <grid>
+                  <grid-item label="预案" @on-item-click="planDialogVisible=true"></grid-item>
+                  <grid-item label="专题知识" @on-item-click="informationDialogVisible=true"></grid-item>
+                  <grid-item label="参与专家" @on-item-click="expertDialogVisible=true"></grid-item>
+                </grid>
+            </div>
+        </sticky>
+
+        <!-- 事件进度 -->
         <divider>事件进度</divider>
-        <div>
+        <div class="progress">
             <timeline>
                 <timeline-item v-for="(item, index) in progress" :key="index">
                     <h3>{{item.user_name}}</h3>
@@ -25,6 +32,8 @@
                 </timeline-item>
             </timeline>
         </div>
+
+        <!-- 发送模块 -->
         <div v-if="status" class="msg">
             <group>
                 <x-input v-model="message">
@@ -32,39 +41,84 @@
                 </x-input>
             </group>
         </div>
+
+        <plan 
+            :dialogVisible="planDialogVisible" 
+            :msg="plan" 
+            @cancel="planDialogVisible=false"
+        ></plan>
+
+        <information 
+            :dialogVisible="informationDialogVisible" 
+            :msg="information" 
+            @cancel="informationDialogVisible=false">
+        </information>
+
+        <expert 
+            :dialogVisible="expertDialogVisible" 
+            :experts="experts" 
+            @cancel="expertDialogVisible=false">
+        </expert>
+
     </div>
 
 </template>
 <style lang="sass" scoped>
-    .btns {
-        margin-bottom: 20px;
+
+    .detail {
+        background: #fbf9fe;
+
+        .btns {
+            margin: 10px 0;
+            background: white;
+        }
+
+        p {
+            margin-top: 5px;
+        }
+
+        .msg {
+            position: fixed;
+            bottom: 0;
+            width: 100%;
+            background: white;
+            z-index: 19920219;
+        }
+
+        .progress {
+            background: white;
+        }
     }
 
-    p {
-        margin-top: 5px;
-    }
-
-    .msg {
-        position: fixed;
-        bottom: 0;
-        width: 100%;
-        background: white;
-        z-index: 19920219;
-    }
+    
 </style>
 <script>
 
-    import { Grid, GridItem, Divider, Timeline, TimelineItem, XInput, Group, XButton } from 'vux'
+    import { Grid, GridItem, Divider, Timeline, TimelineItem, XInput, Group, XButton, Panel, Sticky } from 'vux'
     import { mapGetters, mapMutations } from 'vuex'
+    import Plan from './plan.vue'
+    import Information from './information.vue'
+    import Expert from './expert.vue'
 
     export default{
         name:'Detail',
         data () {
+            console.log(this.formMsg);
             return {
+                list: [],
                 message: '',
                 eventId: this.$route.params.id,
-                plan: null,
-                experts: []
+                plan: {id: 0, name: '', content: ''},
+                information: {name: '食品安全', content: ''},
+                experts: [],
+                // 是否显示事件详情弹窗
+                eventDialogVisible: false,
+                // 是否显示预案详情弹窗
+                planDialogVisible: false,
+                // 是否显示专题详情弹窗
+                informationDialogVisible: false,
+                // 是否显示专家弹窗
+                expertDialogVisible: false
             }
         },
         computed: {
@@ -89,7 +143,12 @@
             TimelineItem,
             XInput,
             Group,
-            XButton
+            XButton,
+            Plan,
+            Information,
+            Expert,
+            Panel,
+            Sticky
         },
         mounted () {
             this.setShowBack(true)
@@ -101,6 +160,7 @@
             ])
             this.getEventHandleMsg()
             this.getEventProgress()
+            this.list.push({ title: this.formMsg.name, desc: this.formMsg.detail })
         },
         methods: {
 
@@ -116,6 +176,7 @@
                 axios.get(this.$adminUrl('eventhandle/query?event_id=') + this.eventId)
                     .then((responce) => {
                         this.plan = responce.data.plan
+                        this.information = responce.data.information
                         this.$set(this, 'experts', responce.data.experts)
                     })
             },

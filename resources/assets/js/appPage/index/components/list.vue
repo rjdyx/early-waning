@@ -9,12 +9,23 @@
 <template>
     <div>
         <tab :line-width=2 custom-bar-width="70px" active-color='#04be02' v-model="index">
-            <tab-item class="vux-center" :selected="selectedItem === item" v-for="(item, index) in list" @click="selectedItem = item" :key="index">{{item}}</tab-item>
+            <tab-item class="vux-center" :selected="selectedItem === item" v-for="(item, index) in list" @on-item-click="tabClick(item)" :key="index">{{item}}</tab-item>
         </tab>
         <swiper v-model="index" :show-dots="false" class="swiper">
-            <swiper-item v-for="(item, index) in list" :key="index">
-                <ul class="event-list">
-                    <li @click="goDetail(item)" v-for="item in data">
+            <swiper-item :key="0">
+                <ul class="event-list event-list-1">
+                    <li @click="goDetail(item)" v-for="item in earlyWaningData">
+                        <div class="left">
+                            <h3>{{item.name}}</h3>
+                            <p>{{item.location}}</p>
+                        </div>
+                        <div class="right">{{item.status | eventStatus}}</div>
+                    </li>
+                </ul>
+            </swiper-item>
+            <swiper-item :key="1">
+                <ul class="event-list event-list-2">
+                    <li @click="goDetail(item)" v-for="item in emergencyData">
                         <div class="left">
                             <h3>{{item.name}}</h3>
                             <p>{{item.location}}</p>
@@ -80,13 +91,14 @@
         data () {
             return {
                 list: ['预警事件', '突发事件'],
-                index: 0,
-                selectedItem: '预警事件'
+                index: 0
             }
         },
         computed: {
             ...mapGetters([
-                'data'
+                'earlyWaningData',
+                'emergencyData',
+                'selectedItem'
             ])
         },
         components: {
@@ -96,7 +108,6 @@
             SwiperItem
         },
         mounted () {
-            this.height = this.data.length * 66 + 'px'
             this.setShowBack(false)
             this.setMenu([
                 {
@@ -112,22 +123,42 @@
             ...mapMutations([
                 'setShowBack',
                 'setMenu',
-                'setData',
-                'setFormMsg'
+                'setEarlyWaningData',
+                'setEmergencyData',
+                'setFormMsg',
+                'setSelectedItem'
             ]),
 
             getEvents (status=[2,3]) {
-                axios.get(this.$adminUrl('event/appQuery'), {params: {status: [2,3]}})
+                axios.get(this.$adminUrl('event/appQuery'), {params: {status: status}})
                     .then((responce) => {
-                        console.log('in');
-                        this.setData(responce.data)
-                        $('.vux-swiper').css('height', this.data.length * 66 + 'px')
+                        if(status[0] == 2) {
+                            this.setEarlyWaningData(responce.data)
+                        }else {
+                            this.setEmergencyData(responce.data)
+                        }
+
+                        if(this.earlyWaningData.length > this.emergencyData.length) {
+                            $('.vux-swiper').css('height', this.earlyWaningData.length * 66 + 'px')
+                        }else {
+                            $('.vux-swiper').css('height', this.emergencyData.length * 66 + 'px')
+                        }
+                        
                     })
             },
 
             goDetail (item) {
                 this.setFormMsg(item)
                 this.$router.push('/detail/' + item.id)
+            },
+
+            tabClick (item) {
+                this.setSelectedItem(item)
+                if(item === '预警事件') {
+                    this.getEvents()
+                }else {
+                    this.getEvents([5, 6])
+                }
             }
         }
     }
