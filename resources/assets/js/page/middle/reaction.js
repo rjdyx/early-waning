@@ -34,30 +34,67 @@ export default {
             protos: ['event_level_name', 'event_sort_name', 'name', 'location', 'detail'],
             widths: [50, 50, 50, 50, 50],
             colComponent: {operation: EventDetail}
+        },
+        {
+            key: 'doneWarningManage',
+            tab: '已完成事件',
+            url: 'event',
+            urlParams: {status: 3},
+            searchPlaceholder: '请输入已完成事件名称',
+            operateComponent: [],
+            hideAddButton: true,
+            hideDeleteButton: true,
+            typeComponent: [],
+            theads: ['事件等级', '事件类别', '事件名称', '发生地区', '事件详情'],
+            protos: ['event_level_name', 'event_sort_name', 'name', 'location', 'detail'],
+            widths: [50, 50, 50, 50, 50],
+            colComponent: {operation: EventDetail}
         }
     ],
     emergency:[
         {
-            key: 'expertManage',
-            tab: '专家管理',
-            url: 'expert',
-            searchPlaceholder: '请输入专家姓名',
-            typeComponent: [{component: TypeManage, params: {title: '专家领域管理', type: 2}}],
-            theads: ['姓名', '专家领域','所属机构','性别','学历', '职责', '职务', '住址', '邮编', '单位', '办公电话', '宅电', '手机', '邮箱', '备注'],
-            protos: ['name', 'expert_area', 'org_name', 'sex', 'degree', 'duty', 'title', 'address', 'zipcode', 'company', 'officephone', 'homephone', 'cellphone', 'email', 'meno'],
-            widths: [50, 50, 50, 50, 50, 50, 50, 50, 50, 50, 50, 50, 50, 50, 50],
-            colComponent: {sex: Sex}
+            key: 'undoWarningManage',
+            tab: '待处理事件',
+            url: 'event',
+            urlParams: {status: 4},
+            searchPlaceholder: '请输入待处理事件名称',
+            operateComponent: [{component: Add, params: {status: 4}}],
+            hideAddButton: true,
+            typeComponent: [],
+            theads: ['事件等级', '事件类别', '事件名称', '发生地区', '事件详情'],
+            protos: ['event_level_name', 'event_sort_name', 'name', 'location', 'detail'],
+            widths: [50, 50, 50, 50, 50],
+            colComponent: {operation: EventHandle}
         },
         {
-            key: 'emergencyCrewManage',
-            tab: '应急人员管理',
-            url: 'emergencycrew',
-            searchPlaceholder: '请输入应急人员姓名',
-            typeComponent: [{}],
-            theads: ['姓名', '所属机构', '年龄', '性别', '职责', '职务', '固定电话', '手机', '邮箱', '备注'],
-            protos: ['name', 'org_name', 'age', 'sex', 'duty', 'title', 'phone', 'cellphone', 'email', 'meno'],
-            widths: [50, 50, 50, 50, 50, 50, 50, 50, 50, 50],
-            colComponent: {sex: Sex}
+            key: 'doingWarningManage',
+            tab: '正处理事件',
+            url: 'event',
+            urlParams: {status: 5},
+            searchPlaceholder: '请输入正处理事件名称',
+            operateComponent: [],
+            hideAddButton: true,
+            hideDeleteButton: true,
+            typeComponent: [],
+            theads: ['事件等级', '事件类别', '事件名称', '发生地区', '事件详情'],
+            protos: ['event_level_name', 'event_sort_name', 'name', 'location', 'detail'],
+            widths: [50, 50, 50, 50, 50],
+            colComponent: {operation: EventDetail}
+        },
+        {
+            key: 'doneWarningManage',
+            tab: '已完成事件',
+            url: 'event',
+            urlParams: {status: 6},
+            searchPlaceholder: '请输入已完成事件名称',
+            operateComponent: [],
+            hideAddButton: true,
+            hideDeleteButton: true,
+            typeComponent: [],
+            theads: ['事件等级', '事件类别', '事件名称', '发生地区', '事件详情'],
+            protos: ['event_level_name', 'event_sort_name', 'name', 'location', 'detail'],
+            widths: [50, 50, 50, 50, 50],
+            colComponent: {operation: EventDetail}
         }
     ]
 }

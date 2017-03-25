@@ -134,21 +134,17 @@
                     this.popComponent = PopInformation
                     break
                 case 'event-1':
-                    this.popComponent = PopEvent
-                    break
                 case 'event-4':
                     this.popComponent = PopEvent
                     break
                 case 'handle-1':
-                    this.popComponent = EventHandle
-                    break
                 case 'handle-4':
                     this.popComponent = EventHandle
                     break
                 case 'progress-2':
-                    this.popComponent = EventProgress
-                    break
+                case 'progress-3':
                 case 'progress-5':
+                case 'progress-6':
                     this.popComponent = EventProgress
                     break
                 case 'user':
