@@ -21,7 +21,4 @@
     }
 </script>
 
-<style lang="less" scoped>
-    @import '~vux/src/styles/reset.less';
-</style>
 

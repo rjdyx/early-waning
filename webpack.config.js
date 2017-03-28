@@ -58,10 +58,6 @@ let config = {
                 loader: ExtractTextPlugin.extract('style-loader', 'css-loader!sass-loader?sourceMap')
             },
             {
-                test: /\.less$/,
-                loader: ExtractTextPlugin.extract('style-loader', 'css-loader!less-loader?sourceMap')
-            },
-            {
                 test: /\.(eot|svg|ttf|woff|woff2)(\?\S*)?$/,
                 loader: 'file-loader'
             },
@@ -88,14 +84,8 @@ let config = {
             'jsPath': path.resolve(__dirname, './resources/assets/js'),
             'lang': path.resolve(__dirname, './resources/lang'),
             'components': path.resolve(__dirname, './resources/assets/js/components'),
-            'page': path.resolve(__dirname, './resources/assets/js/page'),
-            'appPage': path.resolve(__dirname, './resources/assets/js/appPage')
+            'page': path.resolve(__dirname, './resources/assets/js/page')
         }
-    },
-    // 用来配置 loader 模块的解析
-    resolveLoader: {
-        // 解决当出现 Node.js 模块依赖查找失败的情况
-        fallback: [path.join(__dirname, '../node_modules')]
     },
 
     // vue-loader 配置
@@ -106,8 +96,7 @@ let config = {
             js: 'babel',
             // 将vue里面的css、sass和less抽离出来组成一个独立的css文件
             css: ExtractTextPlugin.extract('vue-style-loader', 'css-loader'),
-            sass: ExtractTextPlugin.extract('vue-style-loader', 'css-loader!sass-loader'),
-            less: ExtractTextPlugin.extract('vue-style-loader', 'css-loader!less-loader')
+            sass: ExtractTextPlugin.extract('vue-style-loader', 'css-loader!sass-loader')
         },
         postcss: [
             require('autoprefixer')({
@@ -179,6 +168,9 @@ if(process.env.NODE_ENV == 'development') {
 }else {
     config = merge(config, {
         plugins: [
+            new webpack.DefinePlugin({
+                'process.env.NODE.ENV': "development"
+            }),
             // minify JS
             new webpack.optimize.UglifyJsPlugin({
               compress: {
@@ -192,12 +184,7 @@ if(process.env.NODE_ENV == 'development') {
 
 const vuxLoader = require('vux-loader')
 module.exports = vuxLoader.merge(config, {
-    plugins: [
-        {
-            name: 'vux-ui'
-        },
-        {
-            name: 'duplicate-style'
-        }
-    ]
+    plugins: ['vux-ui', 'progress-bar', 'duplicate-style']
 })
+
+// module.exports = config
