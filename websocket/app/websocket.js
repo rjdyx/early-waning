@@ -1,4 +1,5 @@
 import { parseCookie } from './util.js'
+import env from '../../env.js'
 
 const url = require('url')
 
@@ -10,7 +11,7 @@ const axios = require('axios')
 
 export function createWebSocketServer(onConnection, onMessage, onClose, onError) {
     let wss = new WebSocketServer({
-        host: 'www.earlywarning.com',
+        host: env.app_url,
         port: 3000
     });
     wss.broadcast = function broadcast(data) {

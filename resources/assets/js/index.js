@@ -1,8 +1,9 @@
 import 'es6-promise/auto'
 import Vue from 'vue'
-import App from './App.vue';
-import store from './vuex/index.js';
-import router from './route/routers.js';
+import App from './App.vue'
+import store from './vuex/index.js'
+import router from './route/routers.js'
+import env from 'projectRoot/env.js'
 
 require('./config/init')
 
@@ -13,7 +14,7 @@ router.beforeEach((to, from, next) => {
 
             if(!store.getters.ws) {
               console.log('in ws');
-              store.commit('setWS', new WebSocket('ws://www.earlywarning.com:3000/ws/chat'))
+              store.commit('setWS', new WebSocket('ws://'+ env.app_url +':3000/ws/chat'))
               store.getters.ws.onmessage = function(event) {
                 let s = JSON.parse(event.data)
                 console.log('onmessage')

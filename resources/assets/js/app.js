@@ -1,8 +1,9 @@
 import 'es6-promise/auto'
 import Vue from 'vue'
-import App from './App.vue';
-import store from './vuex/app.js';
-import router from './route/app.js';
+import App from './App.vue'
+import store from './vuex/app.js'
+import router from './route/app.js'
+import env from 'projectRoot/env.js'
 
 require('./config/app')
 
@@ -12,7 +13,7 @@ router.beforeEach((to, from, next) => {
         if (Laravel.user.id) {
 
             if(!store.getters.ws) {
-              store.commit('setWS', new WebSocket('ws://www.earlywarning.com:3000/ws/chat'))
+              store.commit('setWS', new WebSocket('ws://'+ env.app_url +':3000/ws/chat'))
               store.getters.ws.onmessage = function(event) {
                 let s = JSON.parse(event.data)
                 console.log('onmessage')
