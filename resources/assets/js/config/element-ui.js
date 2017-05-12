@@ -23,6 +23,8 @@ export
   	Select,
   	Option,
   	RadioGroup,
-  	RadioButton
+  	RadioButton,
+    Tooltip,
+    Upload
 } 
 from 'element-ui'

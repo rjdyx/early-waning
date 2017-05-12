@@ -40,23 +40,31 @@ export default [
     },
     {
         name:'分析系统',
-        role: 'beast',
+        role: 'analyse',
         isEvent: false,
         children: [
             {
-                path: '/webapp/beast',
-                name:'预警分析子系统'
+                path: '/index/model',
+                name:'模型构建'
             },
+            {
+                path: '/index/analyse',
+                name:'预警分析'
+            }
         ]
     },
     {
-        name:'用户管理',
+        name:'系统管理',
         role: 'rbac',
         isEvent: false,
         children: [
             {
                 path: '/index/rbac/user/0',
                 name:'用户管理'
+            },
+            {
+                path: '/index/rbac/system/0',
+                name:'系统配置'
             },
         ]
     }
