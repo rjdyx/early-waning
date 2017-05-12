@@ -35,6 +35,10 @@ export default [
             {
                 path: '/index/reaction/emergency/0',
                 name:'突发事件管理'
+            },
+            {
+                path: '/index/reaction/meeting/0',
+                name:'会议管理'
             }
         ]
     },

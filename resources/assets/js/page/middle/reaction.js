@@ -96,5 +96,51 @@ export default {
             widths: [50, 50, 50, 50, 50],
             colComponent: {operation: EventDetail}
         }
+    ],
+    meeting:[
+        {
+            key: 'undoMeetingManage',
+            tab: '待处理会议',
+            url: 'meeting',
+            urlParams: {status: 1},
+            searchPlaceholder: '请输入待处理会议名称',
+            operateComponent: [{component: Add, params: {status: 1}}],
+            hideAddButton: true,
+            typeComponent: [],
+            theads: ['事件等级', '事件类别', '事件名称', '发生地区', '事件详情'],
+            protos: ['event_level_name', 'event_sort_name', 'name', 'location', 'detail'],
+            widths: [50, 50, 50, 50, 50],
+            colComponent: {operation: EventHandle}
+        },
+        {
+            key: 'doingMeetingManage',
+            tab: '正处理事件',
+            url: 'meeting',
+            urlParams: {status: 2},
+            searchPlaceholder: '请输入正处理会议名称',
+            operateComponent: [],
+            hideAddButton: true,
+            hideDeleteButton: true,
+            typeComponent: [],
+            theads: ['事件等级', '事件类别', '事件名称', '发生地区', '事件详情'],
+            protos: ['event_level_name', 'event_sort_name', 'name', 'location', 'detail'],
+            widths: [50, 50, 50, 50, 50],
+            colComponent: {operation: EventDetail}
+        },
+        {
+            key: 'doneMeetingManage',
+            tab: '已完成事件',
+            url: 'meeting',
+            urlParams: {status: 3},
+            searchPlaceholder: '请输入已完成会议名称',
+            operateComponent: [],
+            hideAddButton: true,
+            hideDeleteButton: true,
+            typeComponent: [],
+            theads: ['事件等级', '事件类别', '事件名称', '发生地区', '事件详情'],
+            protos: ['event_level_name', 'event_sort_name', 'name', 'location', 'detail'],
+            widths: [50, 50, 50, 50, 50],
+            colComponent: {operation: EventDetail}
+        }
     ]
 }

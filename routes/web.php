@@ -78,6 +78,13 @@ Route::group(['prefix' => 'admin', 'namespace' => 'Admin', 'middleware' => ['aut
 	Route::get('eventprogress/query', 'EventProgressController@query');
 	Route::resource('eventprogress', 'EventProgressController');
 
+    // 会议
+    Route::get('meeting/query', 'MeetingController@query');
+    Route::get('meeting/query-crew/{id}', 'MeetingController@queryCrew');
+    Route::get('meeting/appQuery', 'MeetingController@appQuery');
+    Route::delete('meeting', 'MeetingController@destroy');
+    Route::resource('meeting', 'MeetingController');
+
 	Route::group(['middleware' => 'admin'], function () {
 
 		// 新增用户

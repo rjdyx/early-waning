@@ -26,6 +26,7 @@ class CreateMeetingsTable extends Migration
             $table->string('title', 50); // 会议主题
             $table->text('content'); // 会议内容
             $table->string('meno', 255)->nullable(); // 备注
+            $table->integer('status'); // 会议状态，1：待处理会议，2：正处理会议，3：历史会议
             $table->timestamps();
         });
     }

@@ -25,6 +25,7 @@ export
   	RadioGroup,
   	RadioButton,
     Tooltip,
-    Upload
+    Upload,
+    DatePicker
 } 
 from 'element-ui'

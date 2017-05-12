@@ -80,6 +80,7 @@
     import PopEvent from 'page/middle/components/reaction/pop-event.vue'
     import EventHandle from 'page/middle/components/reaction/event-handle.vue'
     import EventProgress from 'page/middle/components/reaction/event-progress.vue'
+    import PopMeeting from 'page/middle/components/reaction/pop-meeting.vue'
     import PopUser from 'page/middle/components/rbac/pop-user.vue'
 
     export default {
@@ -132,6 +133,9 @@
                     break
                 case 'information':
                     this.popComponent = PopInformation
+                    break
+                case 'meeting-1':
+                    this.popComponent = PopMeeting
                     break
                 case 'event-1':
                 case 'event-4':
